@@ -7,6 +7,9 @@ import android.os.Handler
 import android.os.Looper
 import com.example.demoapp.R
 
+/**
+ * Splash screen  activity of demo app
+ */
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

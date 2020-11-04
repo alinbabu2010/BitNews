@@ -2,11 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_color"
-    tools:context=".fragments.ProfileFragment">
+    tools:context=".fragments.ProfileFragment"
+    tools:ignore="Overdraw">
 
     <TextView
         android:id="@+id/textView2"
@@ -34,7 +34,6 @@
         app:layout_constraintTop_toBottomOf="@+id/textView2">
 
         <TextView
-            android:id="@+id/username_label"
             style="@style/dashboard_text_style"
             android:layout_width="4dp"
             android:layout_height="match_parent"
@@ -62,7 +61,6 @@
         app:layout_constraintTop_toBottomOf="@+id/username_field">
 
         <TextView
-            android:id="@+id/name_label"
             style="@style/dashboard_text_style"
             android:layout_width="6dp"
             android:layout_height="match_parent"
@@ -75,7 +73,6 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/email_field"
         android:layout_width="273dp"
         android:layout_height="42dp"
         android:layout_marginTop="32dp"
@@ -85,7 +82,6 @@
         app:layout_constraintTop_toBottomOf="@+id/name_field">
 
         <TextView
-            android:id="@+id/email_label"
             style="@style/dashboard_text_style"
             android:layout_width="4dp"
             android:layout_height="match_parent"

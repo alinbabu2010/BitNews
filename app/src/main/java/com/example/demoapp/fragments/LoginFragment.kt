@@ -1,6 +1,5 @@
 package com.example.demoapp.fragments
 
-import android.graphics.Color
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
@@ -11,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.demoapp.R
 
@@ -27,7 +25,7 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val inflatedView =  inflater.inflate(R.layout.fragment_login, container, false)
+        val inflatedView = inflater.inflate(R.layout.fragment_login, container, false)
 
         val forgotTextView = inflatedView.findViewById<TextView>(R.id.forgot_password)
         val ss = SpannableString(forgotTextView.text.toString())
@@ -41,7 +39,7 @@ class LoginFragment : Fragment() {
                 ds.isUnderlineText = false
             }
         }
-        ss.setSpan(clickableSpan1, 0,forgotTextView.text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        ss.setSpan(clickableSpan1, 0, forgotTextView.text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         forgotTextView.text = ss
         forgotTextView.movementMethod = LinkMovementMethod.getInstance()
         return inflatedView
