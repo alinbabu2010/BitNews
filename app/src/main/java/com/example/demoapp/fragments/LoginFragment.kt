@@ -1,10 +1,11 @@
-package com.example.demoapp
+package com.example.demoapp.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.demoapp.R
 
 /**
  * A simple [Fragment] subclass for login
