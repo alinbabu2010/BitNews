@@ -6,12 +6,17 @@ import android.text.Spanned
 import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.demoapp.R
+import com.google.android.material.textfield.TextInputEditText
+import kotlin.properties.Delegates
 
 
 /**
@@ -32,6 +37,11 @@ class LoginFragment : Fragment() {
         val forgotTextView = inflatedView.findViewById<TextView>(R.id.forgot_password)
         clickableText(forgotTextView)
 
+        inflatedView.findViewById<Button>(R.id.login_button).setOnClickListener {
+            val userName = inflatedView.findViewById<TextInputEditText>(R.id.username_input).text.toString()
+            val password = inflatedView.findViewById<TextInputEditText>(R.id.password_input).text.toString()
+            loginUser(userName,password)
+        }
         return inflatedView
     }
 
@@ -75,12 +85,34 @@ class LoginFragment : Fragment() {
     }
 
     // Data class for users
-    data class Users(val username:String,val name:String,val email:String)
+    data class Users(val username:String, val password: String,val name:String?, val email: String?)
 
+    // Array list of users
     private val users:ArrayList<Users> = arrayListOf(
-        Users("alex","Alex John","alexjohn485@gmail.com"),
-        Users("bob","Bob Thomas","bobt@outlook.com"),
-        Users("alice1452","Alice Sanda","alics8752@gmail.com"),
-        Users("Kevin","Kevin Dapper","kevind@rediffmail.com")
+        Users("alex","alex123","Alex John","alexjohn485@gmail.com"),
+        Users("bob","bob321","Bob Thomas","bobt@outlook.com"),
+        Users("alice1452","alice1452","Alice Sanda","alics8752@gmail.com"),
+        Users("Kevin","k987321","Kevin Dapper","kevind@rediffmail.com")
     )
+
+    /**
+     * Method to check user provided login credentials and move to dashboard if it is true
+     */
+    private fun loginUser(userName: String, password: String) {
+        var user by Delegates.notNull<Boolean>()
+        users.forEach {
+            if(it.username.contentEquals(userName) and it.password.contentEquals(password)){
+                    user = true
+            }
+        }
+
+        if (user){
+            Log.i("MainActivity","Found")
+        } else {
+            Toast.makeText(context,"Incorrect credentials entered.$user",Toast.LENGTH_LONG).show()
+        }
+
+
+
+    }
 }
