@@ -74,4 +74,13 @@ class LoginFragment : Fragment() {
         fragmentTransaction?.commit()
     }
 
+    data class Users(val username:String,val name:String,val email:String)
+
+    private val users:ArrayList<Users> = arrayListOf(
+        Users("alex","Alex John","alexjohn485@gmail.com"),
+        Users("bob","Bob Thomas","bobt@outlook.com"),
+        Users("alice1452","Alice Sanda","alics8752@gmail.com"),
+        Users("Kevin","Kevin Dapper","kevind@rediffmail.com")
+    )
+
 }
