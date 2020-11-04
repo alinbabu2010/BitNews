@@ -17,6 +17,7 @@ import com.example.demoapp.R
 /**
  * A simple [Fragment] subclass for login
  */
+@Suppress("DEPRECATION")
 class LoginFragment : Fragment() {
 
 
@@ -24,11 +25,22 @@ class LoginFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         // Inflate the layout for this fragment
         val inflatedView = inflater.inflate(R.layout.fragment_login, container, false)
 
         val forgotTextView = inflatedView.findViewById<TextView>(R.id.forgot_password)
-        val ss = SpannableString(forgotTextView.text.toString())
+        clickableText(forgotTextView)
+
+        return inflatedView
+    }
+
+    /**
+     * Method to set the forgotTextView as clickable span
+     */
+    private fun clickableText(forgotTextView: TextView?) {
+
+        val spannableString = SpannableString(forgotTextView?.text.toString())
         val clickableSpan1: ClickableSpan = object : ClickableSpan() {
             override fun onClick(widget: View) {
                 forgotPassword()
@@ -39,12 +51,22 @@ class LoginFragment : Fragment() {
                 ds.isUnderlineText = false
             }
         }
-        ss.setSpan(clickableSpan1, 0, forgotTextView.text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        forgotTextView.text = ss
-        forgotTextView.movementMethod = LinkMovementMethod.getInstance()
-        return inflatedView
+        if (forgotTextView != null) {
+            forgotTextView.text?.length?.let {
+                spannableString.setSpan(
+                    clickableSpan1, 0,
+                    it, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+            }
+        }
+        forgotTextView?.text = spannableString
+        forgotTextView?.movementMethod = LinkMovementMethod.getInstance()
+
     }
 
+    /**
+     * Method to replace the login fragment to forgot password fragment on clickable span
+     */
     private fun forgotPassword() {
         val fragmentTransaction = fragmentManager?.beginTransaction()
         fragmentTransaction?.replace(R.id.fragment_container, ForgotPasswordFragment())
