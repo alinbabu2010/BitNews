@@ -44,6 +44,7 @@
         style="@style/input_layout_style">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/username_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName" />
@@ -71,6 +72,7 @@
         app:startIconTint="@color/secondary_dark">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/password_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword" />
