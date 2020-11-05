@@ -1,5 +1,7 @@
 package com.example.demoapp.fragments
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
@@ -15,6 +17,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.demoapp.R
+import com.example.demoapp.activities.DashboardActivity
 import com.google.android.material.textfield.TextInputEditText
 import kotlin.properties.Delegates
 
@@ -107,9 +110,12 @@ class LoginFragment : Fragment() {
         }
 
         if (user){
-            Log.i("MainActivity","Found")
+            val intent = Intent(context,DashboardActivity::class.java)
+            startActivity(intent)
+            activity?.finish()
+
         } else {
-            Toast.makeText(context,"Incorrect credentials entered.$user",Toast.LENGTH_LONG).show()
+            Toast.makeText(context,"Incorrect credentials entered",Toast.LENGTH_LONG).show()
         }
 
 
