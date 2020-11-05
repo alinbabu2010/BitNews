@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import com.example.demoapp.R
+import com.example.demoapp.utils.startNewActivity
 
 /**
  * Splash screen  activity of demo app
@@ -16,8 +17,7 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
 
         Handler(Looper.getMainLooper()).postDelayed({
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            startNewActivity(this,MainActivity())
             this.finish()
         }, 2000)
 

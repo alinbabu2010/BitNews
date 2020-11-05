@@ -1,14 +1,11 @@
 package com.example.demoapp.fragments
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,8 +15,11 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.demoapp.R
 import com.example.demoapp.activities.DashboardActivity
+import com.example.demoapp.utils.replaceFragment
+import com.example.demoapp.utils.sharedPreferenceVariable
+import com.example.demoapp.utils.startNewActivity
+import com.example.demoapp.utils.users
 import com.google.android.material.textfield.TextInputEditText
-import kotlin.properties.Delegates
 
 
 /**
@@ -53,10 +53,10 @@ class LoginFragment : Fragment() {
      */
     private fun clickableText(forgotTextView: TextView?) {
 
-        val spannableString = SpannableString(forgotTextView?.text.toString())
-        val clickableSpan1: ClickableSpan = object : ClickableSpan() {
+        val spannableTextView = SpannableString(forgotTextView?.text.toString())
+        val clickableSpanTextView: ClickableSpan = object : ClickableSpan() {
             override fun onClick(widget: View) {
-                forgotPassword()
+                navigateToForgotPassword()
             }
 
             override fun updateDrawState(ds: TextPaint) {
@@ -66,13 +66,13 @@ class LoginFragment : Fragment() {
         }
         if (forgotTextView != null) {
             forgotTextView.text?.length?.let {
-                spannableString.setSpan(
-                    clickableSpan1, 0,
+                spannableTextView.setSpan(
+                    clickableSpanTextView, 0,
                     it, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
                 )
             }
         }
-        forgotTextView?.text = spannableString
+        forgotTextView?.text = spannableTextView
         forgotTextView?.movementMethod = LinkMovementMethod.getInstance()
 
     }
@@ -80,23 +80,9 @@ class LoginFragment : Fragment() {
     /**
      * Method to replace the login fragment to forgot password fragment on clickable span
      */
-    private fun forgotPassword() {
-        val fragmentTransaction = fragmentManager?.beginTransaction()
-        fragmentTransaction?.replace(R.id.fragment_container, ForgotPasswordFragment())
-        fragmentTransaction?.addToBackStack(null)
-        fragmentTransaction?.commit()
+    private fun navigateToForgotPassword() {
+        fragmentManager?.let { replaceFragment(ForgotPasswordFragment(),R.id.fragment_container, it) }
     }
-
-    // Data class for users
-    data class Users(val username:String, val password: String,val name:String?, val email: String?)
-
-    // Array list of users
-    private val users:ArrayList<Users> = arrayListOf(
-        Users("alex","alex123","Alex John","alexjohn485@gmail.com"),
-        Users("bob","bob321","Bob Thomas","bobt@outlook.com"),
-        Users("alice1452","alice1452","Alice Sanda","alics8752@gmail.com"),
-        Users("Kevin","k987321","Kevin Dapper","kevind@rediffmail.com")
-    )
 
     /**
      * Method to check user provided login credentials and move to dashboard if it is true
@@ -114,14 +100,12 @@ class LoginFragment : Fragment() {
         }
 
         if (user){
-            val sharedPreferences = context?.getSharedPreferences("MainActivity",Context.MODE_PRIVATE)
-            val editor = sharedPreferences?.edit()
+            val editor = (context?.let { sharedPreferenceVariable(it) })?.edit()
             editor?.putString("username",userName)
             editor?.putString("name",name)
             editor?.putString("email",email)
             editor?.apply()
-            val intent = Intent(context,DashboardActivity::class.java)
-            startActivity(intent)
+            context?.let { startNewActivity(it,DashboardActivity()) }
             activity?.finish()
 
         } else {

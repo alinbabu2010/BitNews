@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.toColor
 import com.example.demoapp.R
 import com.example.demoapp.fragments.ProfileFragment
+import com.example.demoapp.utils.addFragment
 
 
 /**
@@ -28,8 +29,6 @@ class DashboardActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
-        val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.add(R.id.dashboard_container, ProfileFragment())
-        fragmentTransaction.commit()
+        addFragment(ProfileFragment(),R.id.dashboard_container,supportFragmentManager)
     }
 }
