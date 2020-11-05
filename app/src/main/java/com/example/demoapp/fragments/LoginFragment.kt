@@ -41,9 +41,11 @@ class LoginFragment : Fragment() {
         clickableText(forgotTextView)
 
         inflatedView.findViewById<Button>(R.id.login_button).setOnClickListener {
-            val userName = inflatedView.findViewById<TextInputEditText>(R.id.username_input).text.toString()
-            val password = inflatedView.findViewById<TextInputEditText>(R.id.password_input).text.toString()
-            loginUser(userName,password)
+            val userName =
+                inflatedView.findViewById<TextInputEditText>(R.id.username_input).text.toString()
+            val password =
+                inflatedView.findViewById<TextInputEditText>(R.id.password_input).text.toString()
+            loginUser(userName, password)
         }
         return inflatedView
     }
@@ -81,7 +83,13 @@ class LoginFragment : Fragment() {
      * Method to replace the login fragment to forgot password fragment on clickable span
      */
     private fun navigateToForgotPassword() {
-        fragmentManager?.let { replaceFragment(ForgotPasswordFragment(),R.id.fragment_container, it) }
+        fragmentManager?.let {
+            replaceFragment(
+                ForgotPasswordFragment(),
+                R.id.fragment_container,
+                it
+            )
+        }
     }
 
     /**
@@ -90,28 +98,27 @@ class LoginFragment : Fragment() {
     private fun loginUser(userName: String, password: String) {
         var user = false
         var name: String? = null
-        var email:String? = null
+        var email: String? = null
         users.forEach {
-            if(it.username.contentEquals(userName) and it.password.contentEquals(password)){
+            if (it.username.contentEquals(userName) and it.password.contentEquals(password)) {
                 user = true
                 name = it.name
                 email = it.email
             }
         }
 
-        if (user){
+        if (user) {
             val editor = (context?.let { sharedPreferenceVariable(it) })?.edit()
-            editor?.putString("username",userName)
-            editor?.putString("name",name)
-            editor?.putString("email",email)
+            editor?.putString("username", userName)
+            editor?.putString("name", name)
+            editor?.putString("email", email)
             editor?.apply()
-            context?.let { startNewActivity(it,DashboardActivity()) }
+            context?.let { startNewActivity(it, DashboardActivity()) }
             activity?.finish()
 
         } else {
-            Toast.makeText(context,"Incorrect credentials entered",Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "Incorrect credentials entered", Toast.LENGTH_LONG).show()
         }
-
 
 
     }

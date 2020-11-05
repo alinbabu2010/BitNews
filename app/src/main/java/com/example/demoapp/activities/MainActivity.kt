@@ -1,9 +1,9 @@
 package com.example.demoapp.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.demoapp.fragments.LoginFragment
+import androidx.appcompat.app.AppCompatActivity
 import com.example.demoapp.R
+import com.example.demoapp.fragments.LoginFragment
 import com.example.demoapp.utils.addFragment
 
 /**

@@ -5,7 +5,6 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.graphics.toColor
 import com.example.demoapp.R
 import com.example.demoapp.fragments.ProfileFragment
 import com.example.demoapp.utils.addFragment
@@ -32,17 +31,17 @@ class DashboardActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
-        addFragment(ProfileFragment(),R.id.dashboard_container,supportFragmentManager)
+        addFragment(ProfileFragment(), R.id.dashboard_container, supportFragmentManager)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.itemId == R.id.logout_option ){
-            startNewActivity(this,MainActivity())
+        return if (item.itemId == R.id.logout_option) {
+            startNewActivity(this, MainActivity())
             sharedPreferenceVariable(this)?.edit()?.clear()?.apply()
             finish()
-            return true
+            true
         } else {
-            return false
+            false
         }
     }
 }

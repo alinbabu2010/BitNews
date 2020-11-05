@@ -5,7 +5,6 @@
     <string name="password_text">Password</string>
     <string name="forgot_password_text">Forgotten password?</string>
     <string name="back_text">Back</string>
-    <string name="title_activity_dashboard">DashboardActivity</string>
     <string name="profile_text">Profile</string>
     <string name="email_dashboard">Email:</string>
     <string name="name_dashboard">Name:</string>

@@ -1,12 +1,11 @@
 package com.example.demoapp.fragments
 
-import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import com.example.demoapp.R
 import com.example.demoapp.utils.sharedPreferenceVariable
 
@@ -21,13 +20,13 @@ class ProfileFragment : Fragment() {
     ): View? {
 
         // Inflate the layout for this fragment
-        val inflatedView =  inflater.inflate(R.layout.fragment_profile, container, false)
+        val inflatedView = inflater.inflate(R.layout.fragment_profile, container, false)
 
         // Get the user details from shared preferences
         val sharedPreferences = context?.let { sharedPreferenceVariable(it) }
-        val username = sharedPreferences?.getString("username",null)
-        val name = sharedPreferences?.getString("name",null)
-        val email = sharedPreferences?.getString("email",null)
+        val username = sharedPreferences?.getString("username", null)
+        val name = sharedPreferences?.getString("name", null)
+        val email = sharedPreferences?.getString("email", null)
 
         // Display the values get from shared preference to TextView
         inflatedView.findViewById<TextView>(R.id.username_display).text = username
