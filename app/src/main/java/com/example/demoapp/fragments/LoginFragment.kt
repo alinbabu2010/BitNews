@@ -102,10 +102,14 @@ class LoginFragment : Fragment() {
      * Method to check user provided login credentials and move to dashboard if it is true
      */
     private fun loginUser(userName: String, password: String) {
-        var user by Delegates.notNull<Boolean>()
+        var user = false
+        var name: String? = null
+        var email:String? = null
         users.forEach {
             if(it.username.contentEquals(userName) and it.password.contentEquals(password)){
-                    user = true
+                user = true
+                name = it.name
+                email = it.email
             }
         }
 
@@ -113,6 +117,8 @@ class LoginFragment : Fragment() {
             val sharedPreferences = context?.getSharedPreferences("MainActivity",Context.MODE_PRIVATE)
             val editor = sharedPreferences?.edit()
             editor?.putString("username",userName)
+            editor?.putString("name",name)
+            editor?.putString("email",email)
             editor?.apply()
             val intent = Intent(context,DashboardActivity::class.java)
             startActivity(intent)
