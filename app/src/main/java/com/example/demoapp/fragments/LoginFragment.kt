@@ -110,6 +110,10 @@ class LoginFragment : Fragment() {
         }
 
         if (user){
+            val sharedPreferences = context?.getSharedPreferences("MainActivity",Context.MODE_PRIVATE)
+            val editor = sharedPreferences?.edit()
+            editor?.putString("username",userName)
+            editor?.apply()
             val intent = Intent(context,DashboardActivity::class.java)
             startActivity(intent)
             activity?.finish()
