@@ -10,4 +10,5 @@
     <string name="email_dashboard">Email:</string>
     <string name="name_dashboard">Name:</string>
     <string name="username_dashboard">Username:</string>
+    <string name="logout_string">Logout</string>
 </resources>
