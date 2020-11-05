@@ -40,7 +40,7 @@ fun sharedPreferenceVariable(context: Context): SharedPreferences? {
  */
 fun startNewActivity(context: Context, activity: AppCompatActivity){
     val intent = Intent(context, activity::class.java)
-    activity.startActivity(intent)
+    context.startActivity(intent)
 }
 
 /**
