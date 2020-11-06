@@ -25,7 +25,6 @@ import com.google.android.material.textfield.TextInputEditText
 /**
  * A simple [Fragment] subclass for login
  */
-@Suppress("DEPRECATION")
 class LoginFragment : Fragment() {
 
 
@@ -83,13 +82,7 @@ class LoginFragment : Fragment() {
      * Method to replace the login fragment to forgot password fragment on clickable span
      */
     private fun navigateToForgotPassword() {
-        fragmentManager?.let {
-            replaceFragment(
-                ForgotPasswordFragment(),
-                R.id.fragment_container,
-                it
-            )
-        }
+        replaceFragment(ForgotPasswordFragment(), R.id.fragment_container, parentFragmentManager)
     }
 
     /**
