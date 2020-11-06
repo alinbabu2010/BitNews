@@ -17,8 +17,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.demoapp.R
 import com.example.demoapp.activities.DashboardActivity
+import com.example.demoapp.models.users
 import com.example.demoapp.utils.replaceFragment
-import com.example.demoapp.utils.users
 import com.google.android.material.textfield.TextInputEditText
 
 
