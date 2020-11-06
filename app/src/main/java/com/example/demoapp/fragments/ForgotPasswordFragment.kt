@@ -15,7 +15,6 @@ import com.google.android.material.textfield.TextInputEditText
 /**
  * A simple [Fragment] subclass for forgot password fragment
  */
-
 class ForgotPasswordFragment : Fragment() {
 
     private val emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"
@@ -47,14 +46,14 @@ class ForgotPasswordFragment : Fragment() {
         return inflatedView
     }
 
+    /**
+     * Extension function for ArrayList<Users> to check the email is with any user or not
+     */
+    private fun ArrayList<Users>.isValid(predicate: (Users) -> Boolean?): Users? {
+        for (element in this) if (predicate(element)!!) {
+            return element
+        }
+        return null
+    }
 }
 
-/**
- * Extension function for ArrayList<Users> to check the email is with any user or not
- */
-fun ArrayList<Users>.isValid(predicate: (Users) -> Boolean?): Users? {
-    for (element in this) if (predicate(element)!!) {
-        return element
-    }
-    return null
-}
