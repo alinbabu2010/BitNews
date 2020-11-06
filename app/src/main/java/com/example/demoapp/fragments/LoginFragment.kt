@@ -57,7 +57,7 @@ class LoginFragment : Fragment() {
         val spannableTextView = SpannableString(forgotTextView?.text.toString())
         val clickableSpanTextView: ClickableSpan = object : ClickableSpan() {
             override fun onClick(widget: View) {
-                navigateToForgotPassword()
+                replaceFragment(ForgotPasswordFragment(), R.id.fragment_container, parentFragmentManager)
             }
 
             override fun updateDrawState(ds: TextPaint) {
@@ -76,13 +76,6 @@ class LoginFragment : Fragment() {
         forgotTextView?.text = spannableTextView
         forgotTextView?.movementMethod = LinkMovementMethod.getInstance()
 
-    }
-
-    /**
-     * Method to replace the login fragment to forgot password fragment on clickable span
-     */
-    private fun navigateToForgotPassword() {
-        replaceFragment(ForgotPasswordFragment(), R.id.fragment_container, parentFragmentManager)
     }
 
     /**
