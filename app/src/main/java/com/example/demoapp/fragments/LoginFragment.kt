@@ -1,5 +1,6 @@
 package com.example.demoapp.fragments
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableString
@@ -17,7 +18,6 @@ import androidx.fragment.app.Fragment
 import com.example.demoapp.R
 import com.example.demoapp.activities.DashboardActivity
 import com.example.demoapp.utils.replaceFragment
-import com.example.demoapp.utils.sharedPreferenceVariable
 import com.example.demoapp.utils.users
 import com.google.android.material.textfield.TextInputEditText
 
@@ -101,7 +101,7 @@ class LoginFragment : Fragment() {
         }
 
         if (user) {
-            val editor = (context?.let { sharedPreferenceVariable(it) })?.edit()
+            val editor = context?.getSharedPreferences("app-userInfo", Context.MODE_PRIVATE)?.edit()
             editor?.putString("username", userName)
             editor?.putString("name", name)
             editor?.putString("email", email)
