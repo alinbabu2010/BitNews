@@ -59,20 +59,8 @@ class LoginFragment : Fragment() {
             override fun onClick(widget: View) {
                 replaceFragment(ForgotPasswordFragment(), R.id.fragment_container, parentFragmentManager)
             }
-
-            override fun updateDrawState(ds: TextPaint) {
-                super.updateDrawState(ds)
-                ds.isUnderlineText = false
-            }
         }
-        if (forgotTextView != null) {
-            forgotTextView.text?.length?.let {
-                spannableTextView.setSpan(
-                    clickableSpanTextView, 0,
-                    it, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                )
-            }
-        }
+        spannableTextView.setSpan(clickableSpanTextView, 28, 32, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         forgotTextView?.text = spannableTextView
         forgotTextView?.movementMethod = LinkMovementMethod.getInstance()
 
