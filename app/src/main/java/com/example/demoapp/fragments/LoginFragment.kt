@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
-import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.LayoutInflater
@@ -44,7 +43,11 @@ class LoginFragment : Fragment() {
                 inflatedView.findViewById<TextInputEditText>(R.id.username_input).text.toString()
             val password =
                 inflatedView.findViewById<TextInputEditText>(R.id.password_input).text.toString()
-            loginUser(userName, password)
+            if (userName.isBlank() && password.isBlank()) {
+                Toast.makeText(context, "Fields cannot be empty", Toast.LENGTH_SHORT).show()
+            } else {
+                loginUser(userName, password)
+            }
         }
         return inflatedView
     }
@@ -57,7 +60,11 @@ class LoginFragment : Fragment() {
         val spannableTextView = SpannableString(forgotTextView?.text.toString())
         val clickableSpanTextView: ClickableSpan = object : ClickableSpan() {
             override fun onClick(widget: View) {
-                replaceFragment(ForgotPasswordFragment(), R.id.fragment_container, parentFragmentManager)
+                replaceFragment(
+                    ForgotPasswordFragment(),
+                    R.id.fragment_container,
+                    parentFragmentManager
+                )
             }
         }
         spannableTextView.setSpan(clickableSpanTextView, 28, 32, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -70,10 +77,11 @@ class LoginFragment : Fragment() {
      * Method to check user provided login credentials and move to dashboard if it is true
      */
     private fun loginUser(userName: String, password: String) {
-        val user = users.find { it.username.contentEquals(userName) and it.password.contentEquals(password) }
-        if (user == null){
+        val user =
+            users.find { it.username.contentEquals(userName) and it.password.contentEquals(password) }
+        if (user == null) {
             Toast.makeText(context, "Incorrect credentials entered", Toast.LENGTH_LONG).show()
-        }  else {
+        } else {
             val editor = context?.getSharedPreferences("app-userInfo", Context.MODE_PRIVATE)?.edit()
             editor?.putString("username", user.username)
             editor?.putString("name", user.name)
@@ -81,7 +89,6 @@ class LoginFragment : Fragment() {
             editor?.apply()
             startActivity(Intent(context, DashboardActivity::class.java))
             activity?.finish()
-
         }
     }
 }
