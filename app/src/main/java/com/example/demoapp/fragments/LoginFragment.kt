@@ -89,30 +89,18 @@ class LoginFragment : Fragment() {
      * Method to check user provided login credentials and move to dashboard if it is true
      */
     private fun loginUser(userName: String, password: String) {
-        var user = false
-        var name: String? = null
-        var email: String? = null
-        users.forEach {
-            if (it.username.contentEquals(userName) and it.password.contentEquals(password)) {
-                user = true
-                name = it.name
-                email = it.email
-            }
-        }
-
-        if (user) {
+        val user = users.find { it.username.contentEquals(userName) and it.password.contentEquals(password) }
+        if (user == null){
+            Toast.makeText(context, "Incorrect credentials entered", Toast.LENGTH_LONG).show()
+        }  else {
             val editor = context?.getSharedPreferences("app-userInfo", Context.MODE_PRIVATE)?.edit()
-            editor?.putString("username", userName)
-            editor?.putString("name", name)
-            editor?.putString("email", email)
+            editor?.putString("username", user.username)
+            editor?.putString("name", user.name)
+            editor?.putString("email", user.email)
             editor?.apply()
             startActivity(Intent(context, DashboardActivity::class.java))
             activity?.finish()
 
-        } else {
-            Toast.makeText(context, "Incorrect credentials entered", Toast.LENGTH_LONG).show()
         }
-
-
     }
 }
