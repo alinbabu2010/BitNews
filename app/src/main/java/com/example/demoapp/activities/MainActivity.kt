@@ -2,6 +2,7 @@ package com.example.demoapp.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
 import com.example.demoapp.R
 import com.example.demoapp.fragments.LoginFragment
 import com.example.demoapp.utils.addFragment
@@ -16,5 +17,21 @@ class MainActivity : AppCompatActivity() {
 
         // Adding login fragment to activity layout
         addFragment(LoginFragment(), R.id.fragment_container, supportFragmentManager)
+
+        /**
+         * Enable back button in actionbar only  if there are entries in the back stack
+         */
+        supportFragmentManager.addOnBackStackChangedListener {
+            val callback: Boolean = supportFragmentManager.backStackEntryCount > 0
+            supportActionBar?.setDisplayHomeAsUpEnabled(callback)
+        }
+    }
+
+    /**
+     * This method is called when the back button in actionbar  is pressed.
+      */
+    override fun onSupportNavigateUp(): Boolean {
+        supportFragmentManager.popBackStack()
+        return true
     }
 }
