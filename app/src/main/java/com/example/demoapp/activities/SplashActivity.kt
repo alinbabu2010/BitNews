@@ -24,12 +24,12 @@ class SplashActivity : AppCompatActivity() {
         // Check the values in shared preference is null or not
         if (username.isNullOrBlank() && password.isNullOrBlank()) {
             Handler(Looper.getMainLooper()).postDelayed({
-                startActivity(Intent(this,MainActivity::class.java))
+                startActivity(Intent(this, MainActivity::class.java))
                 this.finish()
             }, 2000)
         } else {
             Handler(Looper.getMainLooper()).postDelayed({
-                startActivity(Intent(this,DashboardActivity::class.java))
+                startActivity(Intent(this, DashboardActivity::class.java))
                 this.finish()
             }, 2000)
         }

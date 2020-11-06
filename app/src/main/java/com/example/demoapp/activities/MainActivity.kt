@@ -2,7 +2,6 @@ package com.example.demoapp.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentManager
 import com.example.demoapp.R
 import com.example.demoapp.fragments.LoginFragment
 import com.example.demoapp.utils.addFragment
@@ -29,7 +28,7 @@ class MainActivity : AppCompatActivity() {
 
     /**
      * This method is called when the back button in actionbar  is pressed.
-      */
+     */
     override fun onSupportNavigateUp(): Boolean {
         supportFragmentManager.popBackStack()
         return true

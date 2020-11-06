@@ -36,7 +36,7 @@ class DashboardActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return if (item.itemId == R.id.logout_option) {
-            startActivity(Intent(this,MainActivity::class.java))
+            startActivity(Intent(this, MainActivity::class.java))
             getSharedPreferences("app-userInfo", Context.MODE_PRIVATE).edit().clear().apply()
             finish()
             true

@@ -30,15 +30,21 @@ class ForgotPasswordFragment : Fragment() {
         val inflatedView = inflater.inflate(R.layout.fragment_forgot_password, container, false)
 
         inflatedView.findViewById<Button>(R.id.reset_button).setOnClickListener {
-            val email = inflatedView.findViewById<TextInputEditText>(R.id.email_input).text.toString()
+            val email =
+                inflatedView.findViewById<TextInputEditText>(R.id.email_input).text.toString()
 
             // Checking email is valid or not
-            if (email.matches(emailPattern.toRegex())){
+            if (email.matches(emailPattern.toRegex())) {
                 val validUser = users.isValid { it.email?.contentEquals(email) }
                 if (validUser == null) {
-                    Toast.makeText(context, "Email not associated with any account", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        "Email not associated with any account",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 } else {
-                    Toast.makeText(context, "Password reset link send to email", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Password reset link send to email", Toast.LENGTH_SHORT)
+                        .show()
                     parentFragmentManager.popBackStack()
                 }
 
