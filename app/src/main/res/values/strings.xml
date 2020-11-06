@@ -4,10 +4,11 @@
     <string name="login_string">Login</string>
     <string name="password_text">Password</string>
     <string name="forgot_password_text">Forgot your password. Click here to reset</string>
-    <string name="back_text">Back</string>
     <string name="profile_text">Profile</string>
     <string name="email_dashboard">Email:</string>
     <string name="name_dashboard">Name:</string>
     <string name="username_dashboard">Username:</string>
     <string name="logout_string">Logout</string>
+    <string name="reset_password_string">Reset Password</string>
+    <string name="email_text">Enter your email</string>
 </resources>
