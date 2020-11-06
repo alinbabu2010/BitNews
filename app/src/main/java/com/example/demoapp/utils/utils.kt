@@ -36,14 +36,6 @@ fun sharedPreferenceVariable(context: Context): SharedPreferences? {
 }
 
 /**
- * Function to start a new activity
- */
-fun startNewActivity(context: Context, activity: AppCompatActivity) {
-    val intent = Intent(context, activity::class.java)
-    context.startActivity(intent)
-}
-
-/**
  * Function to replace a fragment by another
  */
 fun replaceFragment(fragment: Fragment, id: Int, fragmentManager: FragmentManager) {
