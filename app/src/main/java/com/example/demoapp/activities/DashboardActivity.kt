@@ -1,5 +1,6 @@
 package com.example.demoapp.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -9,7 +10,6 @@ import com.example.demoapp.R
 import com.example.demoapp.fragments.ProfileFragment
 import com.example.demoapp.utils.addFragment
 import com.example.demoapp.utils.sharedPreferenceVariable
-import com.example.demoapp.utils.startNewActivity
 
 
 /**
@@ -36,7 +36,7 @@ class DashboardActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return if (item.itemId == R.id.logout_option) {
-            startNewActivity(this, MainActivity())
+            startActivity(Intent(this,MainActivity::class.java))
             sharedPreferenceVariable(this)?.edit()?.clear()?.apply()
             finish()
             true

@@ -1,12 +1,12 @@
 package com.example.demoapp.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.example.demoapp.R
 import com.example.demoapp.utils.sharedPreferenceVariable
-import com.example.demoapp.utils.startNewActivity
 
 /**
  * Splash screen  activity of demo app
@@ -24,12 +24,12 @@ class SplashActivity : AppCompatActivity() {
         // Check the values in shared preference is null or not
         if (username.isNullOrBlank() && password.isNullOrBlank()) {
             Handler(Looper.getMainLooper()).postDelayed({
-                startNewActivity(this, MainActivity())
+                startActivity(Intent(this,MainActivity::class.java))
                 this.finish()
             }, 2000)
         } else {
             Handler(Looper.getMainLooper()).postDelayed({
-                startNewActivity(this, DashboardActivity())
+                startActivity(Intent(this,DashboardActivity::class.java))
                 this.finish()
             }, 2000)
         }

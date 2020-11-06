@@ -1,5 +1,6 @@
 package com.example.demoapp.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
@@ -17,7 +18,6 @@ import com.example.demoapp.R
 import com.example.demoapp.activities.DashboardActivity
 import com.example.demoapp.utils.replaceFragment
 import com.example.demoapp.utils.sharedPreferenceVariable
-import com.example.demoapp.utils.startNewActivity
 import com.example.demoapp.utils.users
 import com.google.android.material.textfield.TextInputEditText
 
@@ -106,7 +106,7 @@ class LoginFragment : Fragment() {
             editor?.putString("name", name)
             editor?.putString("email", email)
             editor?.apply()
-            context?.let { startNewActivity(it, DashboardActivity()) }
+            startActivity(Intent(context, DashboardActivity::class.java))
             activity?.finish()
 
         } else {
