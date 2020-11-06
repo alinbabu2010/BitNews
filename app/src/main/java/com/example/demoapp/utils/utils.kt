@@ -29,13 +29,6 @@ fun addFragment(fragment: Fragment, id: Int, fragmentManager: FragmentManager) {
 }
 
 /**
- * Function to return the shared preferences variable
- */
-fun sharedPreferenceVariable(context: Context): SharedPreferences? {
-    return context.getSharedPreferences("MainActivity", Context.MODE_PRIVATE)
-}
-
-/**
  * Function to replace a fragment by another
  */
 fun replaceFragment(fragment: Fragment, id: Int, fragmentManager: FragmentManager) {
