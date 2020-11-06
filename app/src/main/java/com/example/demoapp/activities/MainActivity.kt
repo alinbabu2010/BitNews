@@ -12,9 +12,9 @@ import com.example.demoapp.utils.addFragment
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
         // Adding login fragment to activity layout
         addFragment(LoginFragment(), R.id.fragment_container, supportFragmentManager)
-        setContentView(R.layout.activity_main)
     }
 }

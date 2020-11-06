@@ -3,4 +3,14 @@
     <issue id="IconLocation">
         <ignore path="src/main/res/drawable/logo.png" />
     </issue>
+    <issue id="IconXmlAndPng">
+        <ignore path="src/main/res/drawable-hdpi/ic_password.png" />
+        <ignore path="src/main/res/drawable-hdpi/ic_user.png" />
+        <ignore path="src/main/res/drawable-mdpi/ic_password.png" />
+        <ignore path="src/main/res/drawable-mdpi/ic_user.png" />
+        <ignore path="src/main/res/drawable-xhdpi/ic_password.png" />
+        <ignore path="src/main/res/drawable-xhdpi/ic_user.png" />
+        <ignore path="src/main/res/drawable-xxhdpi/ic_password.png" />
+        <ignore path="src/main/res/drawable-xxhdpi/ic_user.png" />
+    </issue>
 </lint>
