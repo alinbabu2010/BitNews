@@ -32,6 +32,9 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
+        activity?.actionBar?.setDisplayShowTitleEnabled(true)
+        activity?.title = "Login"
+
         // Inflate the layout for this fragment
         val inflatedView = inflater.inflate(R.layout.fragment_login, container, false)
 

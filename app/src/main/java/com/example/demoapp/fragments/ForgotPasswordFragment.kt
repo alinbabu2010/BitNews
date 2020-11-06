@@ -23,6 +23,9 @@ class ForgotPasswordFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        activity?.title = "Reset Password"
+
         // Inflate the layout for this fragment
         val inflatedView = inflater.inflate(R.layout.fragment_forgot_password, container, false)
 

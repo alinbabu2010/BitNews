@@ -14,7 +14,7 @@
     </style>
     <style name="SplashTheme" parent="Theme.MaterialComponents.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/primary_dark</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="android:windowBackground">@color/primary_light</item>
     </style>
 </resources>

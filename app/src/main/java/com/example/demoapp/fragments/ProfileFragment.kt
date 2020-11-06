@@ -19,6 +19,9 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
+        activity?.actionBar?.setDisplayShowTitleEnabled(true)
+        activity?.title = "User Profile"
+
         // Inflate the layout for this fragment
         val inflatedView = inflater.inflate(R.layout.fragment_profile, container, false)
 
