@@ -87,8 +87,6 @@ class LoginFragment : Fragment() {
         } else {
             val editor = context?.getSharedPreferences("app-userInfo", Context.MODE_PRIVATE)?.edit()
             editor?.putString("username", user.username)
-            editor?.putString("name", user.name)
-            editor?.putString("email", user.email)
             editor?.apply()
             startActivity(Intent(context, DashboardActivity::class.java))
             activity?.finish()

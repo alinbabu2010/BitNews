@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.demoapp.R
+import com.example.demoapp.models.users
 
 /**
  * A simple [Fragment] subclass for showing logged in user profile
@@ -27,14 +28,13 @@ class ProfileFragment : Fragment() {
 
         // Get the user details from shared preferences
         val sharedPreferences = context?.getSharedPreferences("app-userInfo", Context.MODE_PRIVATE)
-        val username = sharedPreferences?.getString("username", null)
-        val name = sharedPreferences?.getString("name", null)
-        val email = sharedPreferences?.getString("email", null)
+        val username = sharedPreferences?.getString("username", null).toString()
+        val user = users.find{ it.username.contentEquals(username)}
 
         // Display the values get from shared preference to TextView
-        inflatedView.findViewById<TextView>(R.id.username_display).text = username
-        inflatedView.findViewById<TextView>(R.id.name_display).text = name
-        inflatedView.findViewById<TextView>(R.id.email_display).text = email
+        inflatedView.findViewById<TextView>(R.id.username_display).text = user?.username
+        inflatedView.findViewById<TextView>(R.id.name_display).text = user?.name
+        inflatedView.findViewById<TextView>(R.id.email_display).text = user?.email
 
         return inflatedView
     }

@@ -19,10 +19,9 @@ class SplashActivity : AppCompatActivity() {
         // Get the values in shared preferences
         val sharedPreferences = getSharedPreferences("app-userInfo", Context.MODE_PRIVATE)
         val username = sharedPreferences.getString("username", null)
-        val password = sharedPreferences.getString("password", null)
 
         // Check the values in shared preference is null or not
-        if (username.isNullOrBlank() && password.isNullOrBlank()) {
+        if (username.isNullOrBlank() ) {
             Handler(Looper.getMainLooper()).postDelayed({
                 startActivity(Intent(this, MainActivity::class.java))
                 this.finish()
@@ -33,7 +32,6 @@ class SplashActivity : AppCompatActivity() {
                 this.finish()
             }, 2000)
         }
-
 
     }
 }
