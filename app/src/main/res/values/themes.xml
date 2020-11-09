@@ -18,4 +18,11 @@
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="android:windowBackground">@color/primary_light</item>
     </style>
+
+    <style name="DialogBoxTheme" parent="Theme.MaterialComponents.Light.Dialog">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/design_default_color_error</item>
+        <item name="android:colorForeground">@color/secondary_dark</item>
+        <item name="android:colorBackground">@color/secondary_light</item>
+    </style>
 </resources>
