@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.demoapp.R
+import com.example.demoapp.fragments.NewsFragment
 import com.example.demoapp.fragments.ProfileFragment
 import com.example.demoapp.utils.addFragment
 
@@ -36,7 +37,7 @@ class DashboardActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
-        addFragment(ProfileFragment(), R.id.dashboard_container, supportFragmentManager)
+        addFragment(NewsFragment(), R.id.dashboard_container, supportFragmentManager)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
