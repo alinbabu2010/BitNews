@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardCornerRadius="4dp"
     android:layout_margin="8dp"
-    app:strokeWidth="5dp"
-    app:cardElevation="5dp">
+    android:background="@color/secondary_light"
+    app:cardBackgroundColor="@color/secondary_light"
+    app:cardCornerRadius="4dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
-        android:padding="6dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="2dp">
 
         <ImageView
             android:id="@+id/news_image"
@@ -44,6 +44,37 @@
             android:textColor="@android:color/tertiary_text_light"
             android:textSize="14sp"
             android:textStyle="normal" />
+
+        <LinearLayout
+            android:layout_width="83dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            android:padding="2dp">
+
+            <ImageButton
+                android:id="@+id/like_button"
+                style="@android:style/Widget.DeviceDefault.ImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#00FFFFFF"
+                android:contentDescription="@string/like_button"
+                android:tint="@color/secondary_dark"
+                app:srcCompat="@drawable/ic_like" />
+
+            <ImageButton
+                android:id="@+id/share_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#00FFFFFF"
+                android:contentDescription="@string/share_button"
+                android:tint="@color/secondary_dark"
+                app:srcCompat="?attr/actionModeShareDrawable" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
