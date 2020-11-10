@@ -2,4 +2,4 @@ package com.example.demoapp.models
 
 import android.media.Image
 
-data class News(val newsImage: Image,  val newTitle: String, val newsDesc : String )
+data class News(val newsImage: String,  val newsTitle: String, val newsDesc : String )
