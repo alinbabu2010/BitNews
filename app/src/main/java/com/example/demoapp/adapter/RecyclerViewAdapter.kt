@@ -4,28 +4,56 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.demoapp.R
+import com.example.demoapp.fragments.NewsFragment
+import com.example.demoapp.models.News
+import com.squareup.picasso.Picasso
 
-class RecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private  val TAG = "RecyclerViewAdapter"
+/**
+ * Adapter class for RecyclerView of [NewsFragment]
+ */
+class RecyclerViewAdapter(
+    private val news: ArrayList<News>,
+) : RecyclerView.Adapter<RecyclerViewAdapter.NewsViewHolder>() {
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        val newsImage = itemView.findViewById<ImageView>(R.id.news_image)
-        val newsTitle= itemView.findViewById<ImageView>(R.id.news_title)
-        val newsDesc = itemView.findViewById<ImageView>(R.id.news_desc)
+    /**
+     * A subclass for providing a reference to the views for each data item
+     */
+    class NewsViewHolder(view: View) : RecyclerView.ViewHolder(view){
+        val newsImage: ImageView = view.findViewById(R.id.news_image)
+        val newsTitle: TextView = view.findViewById(R.id.news_title)
+        val newsDesc: TextView = view.findViewById(R.id.news_desc)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val adapterLayout = LayoutInflater.from(parent.context).inflate(R.layout.news_item, parent, false)
-        return ViewHolder(adapterLayout)
+    /**
+     * Create new views (invoked by the layout manager)
+     */
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsViewHolder{
+        val adapterLayout = LayoutInflater.from(parent.context).inflate(
+            R.layout.news_item,
+            parent,
+            false
+        )
+        return NewsViewHolder(adapterLayout)
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-
+    /**
+     * Replace the contents of a view from news ArrayList (invoked by the layout manager)
+     */
+    override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
+        val item = news[position]
+        Picasso.get().load(item.newsImage).fit().into(holder.newsImage)
+        holder.newsTitle.text = item.newsTitle
+        holder.newsDesc.text = item.newsDesc
     }
 
+    /**
+     * Return the size of your dataset (invoked by the layout manager)
+     */
     override fun getItemCount(): Int {
-        return 0
+        return news.size
     }
+
 }
