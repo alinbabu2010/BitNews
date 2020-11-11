@@ -22,8 +22,6 @@ class NewsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        activity?.actionBar?.setDisplayShowTitleEnabled(true)
-        activity?.title = "News"
 
         // Inflate the layout for this fragment
         val inflatedView = inflater.inflate(R.layout.fragment_news, container, false)

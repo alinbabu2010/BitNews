@@ -9,11 +9,14 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.viewpager.widget.ViewPager
+import androidx.fragment.app.Fragment
 import com.example.demoapp.R
-import com.example.demoapp.adapter.PageAdapter
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayout.*
+import com.example.demoapp.fragments.FavouritesFragment
+import com.example.demoapp.fragments.NewsFragment
+import com.example.demoapp.fragments.ProfileFragment
+import com.example.demoapp.utils.addFragment
+import com.example.demoapp.utils.replaceFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
 /**
@@ -35,36 +38,26 @@ class DashboardActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
-        addTabLayout()
-
+        addFragment(NewsFragment(),R.id.fragment_container,supportFragmentManager)
+        addNavBarLayout()
     }
 
     /**
-     * Method to add tab layout to the activity
+     * Method to bottom navigation view to the activity
      */
-    private fun addTabLayout() {
-
-        val tabLayout = findViewById<TabLayout>(R.id.tablayout)
-        val viewPager= findViewById<ViewPager>(R.id.dashboard_viewpager)
-
-        // Set the adapter for each tab item
-        val pageAdapter = PageAdapter(supportFragmentManager, tabLayout.tabCount)
-        viewPager.adapter = pageAdapter
-        viewPager.addOnPageChangeListener(TabLayoutOnPageChangeListener(tabLayout))
-
-        // Listen to each tab item to set the fragment
-        tabLayout.addOnTabSelectedListener(object : OnTabSelectedListener {
-            override fun onTabSelected(tab: Tab) {
-                viewPager.currentItem = tab.position
+    private fun addNavBarLayout() {
+        val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        val navlistener = BottomNavigationView.OnNavigationItemSelectedListener {
+            lateinit var fragment: Fragment
+            when (it.itemId) {
+                R.id.page_news -> fragment = NewsFragment()
+                R.id.page_favourites -> fragment = FavouritesFragment()
+                R.id.page_profile -> fragment = ProfileFragment()
             }
-
-            override fun onTabUnselected(tab: Tab?) {}
-
-            override fun onTabReselected(tab: Tab?) {
-                tab?.let{ viewPager.currentItem = it.position }
-            }
-
-        })
+            replaceFragment(fragment, R.id.fragment_container, supportFragmentManager)
+            return@OnNavigationItemSelectedListener true
+        }
+        bottomNav.setOnNavigationItemSelectedListener(navlistener)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -79,17 +72,17 @@ class DashboardActivity : AppCompatActivity() {
     /*
      * Function to show alert dialog box after button click.
      */
-    private fun showAlert(){
+    private fun showAlert() {
         val builder = AlertDialog.Builder(this, R.style.DialogBoxTheme)
         builder.setTitle("Logout")
         builder.setMessage("Do you really want to logout?")
         builder.setIcon(android.R.drawable.ic_dialog_alert)
-        builder.setPositiveButton("Yes"){ _, _ ->
+        builder.setPositiveButton("Yes") { _, _ ->
             startActivity(Intent(this, MainActivity::class.java))
             getSharedPreferences("app-userInfo", Context.MODE_PRIVATE).edit().clear().apply()
             finish()
         }
-        builder.setNegativeButton("No"){ _: DialogInterface, _: Int -> }
+        builder.setNegativeButton("No") { _: DialogInterface, _: Int -> }
         val alertDialog: AlertDialog = builder.create()
         alertDialog.setCancelable(false)
         alertDialog.show()
