@@ -1,5 +1,6 @@
 package com.example.demoapp.models
 
-import android.media.Image
-
+/**
+ * Data class for news
+ */
 data class News(val newsImage: String,  val newsTitle: String, val newsDesc : String )

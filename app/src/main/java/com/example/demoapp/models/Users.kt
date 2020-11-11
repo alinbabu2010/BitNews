@@ -1,9 +1,14 @@
 package com.example.demoapp.models
 
-// Data class for users
+/**
+ * Data class for users
+ */
+
 data class Users(val username: String, val password: String, val name: String?, val email: String?)
 
-// Array list of users
+/**
+ * Array list of users
+ */
 val users: ArrayList<Users> = arrayListOf(
     Users("alex", "alex123", "Alex John", "alexjohn485@gmail.com"),
     Users("bob", "bob321", "Bob Thomas", "bobt@outlook.com"),
