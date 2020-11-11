@@ -16,4 +16,6 @@
     <string name="news_image">News Image</string>
     <string name="like_button">like_button_image</string>
     <string name="share_button">share_button_image</string>
+    <string name="favourites">Favourites</string>
+    <string name="news">News</string>
 </resources>
