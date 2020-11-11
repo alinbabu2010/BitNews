@@ -4,6 +4,7 @@
         <ignore path="src/main/res/drawable/logo.png" />
     </issue>
     <issue id="IconXmlAndPng">
+        <ignore path="src/main/res/drawable-hdpi/ic_like.png" />
         <ignore path="src/main/res/drawable-hdpi/ic_password.png" />
         <ignore path="src/main/res/drawable-hdpi/ic_user.png" />
         <ignore path="src/main/res/drawable-mdpi/ic_password.png" />

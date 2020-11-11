@@ -1,5 +1,6 @@
 package com.example.demoapp.adapter
 
+import android.content.Context
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
@@ -8,10 +9,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.demoapp.R
+import com.example.demoapp.activities.DashboardActivity
 import com.example.demoapp.fragments.NewsFragment
 import com.example.demoapp.models.News
-import com.squareup.picasso.Picasso
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -34,6 +36,7 @@ class RecyclerViewAdapter(
         val newsSrc: TextView = view.findViewById(R.id.source_textview)
         val newsAuthor: TextView = view.findViewById(R.id.author_textview)
         val newsDate: TextView = view.findViewById(R.id.publish_textview)
+        val context: Context = view.context
     }
 
     /**
@@ -54,7 +57,7 @@ class RecyclerViewAdapter(
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
         val item = news.articles[position]
-        Picasso.get().load(item.urlToImage).fit().into(holder.newsImage)
+        Glide.with(holder.context).load(item.urlToImage).dontTransform().into(holder.newsImage)
         holder.newsTitle.text = item.title
         holder.newsDesc.text = item.description
 
