@@ -55,7 +55,7 @@
 
             <ImageButton
                 android:id="@+id/like_button"
-                style="@android:style/Widget.DeviceDefault.ImageButton"
+                style="@android:style/Widget.Material.ImageButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
