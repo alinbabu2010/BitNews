@@ -52,7 +52,5 @@ class RecyclerViewAdapter(
     /**
      * Return the size of your data set (invoked by the layout manager)
      */
-    override fun getItemCount(): Int {
-        return news.articles.size
-    }
+    override fun getItemCount(): Int = news.articles.size
 }
