@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
 import com.example.demoapp.R
 import com.example.demoapp.adapter.PageAdapter
-import com.google.android.material.tabs.TabItem
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.*
 
@@ -36,8 +35,15 @@ class DashboardActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
+        addTabLayout()
 
-        // Getting tablayout and viewpager
+    }
+
+    /**
+     * Method to add tab layout to the activity
+     */
+    private fun addTabLayout() {
+
         val tabLayout = findViewById<TabLayout>(R.id.tablayout)
         val viewPager= findViewById<ViewPager>(R.id.dashboard_viewpager)
 
