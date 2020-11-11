@@ -38,7 +38,7 @@ class DashboardActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
-        addFragment(NewsFragment(),R.id.fragment_container,supportFragmentManager)
+        addFragment(NewsFragment(), R.id.fragment_container, supportFragmentManager)
         addNavBarLayout()
     }
 

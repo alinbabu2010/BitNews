@@ -26,7 +26,7 @@ class ProfileFragment : Fragment() {
         // Get the user details from shared preferences
         val sharedPreferences = context?.getSharedPreferences("app-userInfo", Context.MODE_PRIVATE)
         val username = sharedPreferences?.getString("username", null).toString()
-        val user = users.find{ it.username.contentEquals(username)}
+        val user = users.find { it.username.contentEquals(username) }
 
         // Display the values get from shared preference to TextView
         inflatedView.findViewById<TextView>(R.id.username_display).text = user?.username

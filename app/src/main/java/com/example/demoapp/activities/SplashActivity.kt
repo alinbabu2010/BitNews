@@ -21,7 +21,7 @@ class SplashActivity : AppCompatActivity() {
         val username = sharedPreferences.getString("username", null)
 
         // Check the values in shared preference is null or not
-        if (username.isNullOrBlank() ) {
+        if (username.isNullOrBlank()) {
             Handler(Looper.getMainLooper()).postDelayed({
                 startActivity(Intent(this, MainActivity::class.java))
                 this.finish()

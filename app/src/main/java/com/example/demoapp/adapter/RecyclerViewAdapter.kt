@@ -12,8 +12,9 @@ import com.example.demoapp.R
 import com.example.demoapp.fragments.NewsFragment
 import com.example.demoapp.models.News
 import com.squareup.picasso.Picasso
-import java.sql.Date
-import java.time.*
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 /**
@@ -30,9 +31,9 @@ class RecyclerViewAdapter(
         val newsImage: ImageView = view.findViewById(R.id.news_image)
         val newsTitle: TextView = view.findViewById(R.id.news_title)
         val newsDesc: TextView = view.findViewById(R.id.news_desc)
-        val newsSrc : TextView = view.findViewById(R.id.source_textview)
-        val newsAuthor : TextView = view.findViewById(R.id.author_textview)
-        val newsDate : TextView = view.findViewById(R.id.publish_textview)
+        val newsSrc: TextView = view.findViewById(R.id.source_textview)
+        val newsAuthor: TextView = view.findViewById(R.id.author_textview)
+        val newsDate: TextView = view.findViewById(R.id.publish_textview)
     }
 
     /**
@@ -52,23 +53,27 @@ class RecyclerViewAdapter(
      */
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
-        val item = news.articles.get(position)
+        val item = news.articles[position]
         Picasso.get().load(item.urlToImage).fit().into(holder.newsImage)
         holder.newsTitle.text = item.title
         holder.newsDesc.text = item.description
 
-        val author = "Author: "+item.author
+        val author = "Author: " + item.author
         holder.newsAuthor.text = author
 
-        val src = "Source: "+item.source.name
+        val src = "Source: " + item.source.name
         holder.newsSrc.text = src
 
-        val ldt: LocalDateTime = LocalDateTime.parse(item.publishedAt, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'"))
+        val ldt: LocalDateTime = LocalDateTime.parse(
+            item.publishedAt,
+            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
+        )
         val currentZoneId: ZoneId = ZoneId.systemDefault()
         val currentZonedDateTime: ZonedDateTime = ldt.atZone(currentZoneId)
         val format: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        val publishDate = "Published on "+format.format(currentZonedDateTime)+" at "+ldt.toLocalTime()
-        holder.newsDate.text =  publishDate
+        val publishDate =
+            "Published on " + format.format(currentZonedDateTime) + " at " + ldt.toLocalTime()
+        holder.newsDate.text = publishDate
     }
 
     /**
