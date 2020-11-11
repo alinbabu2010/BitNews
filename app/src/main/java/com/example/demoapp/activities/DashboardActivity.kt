@@ -3,19 +3,18 @@ package com.example.demoapp.activities
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.widget.EditText
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.viewpager.widget.ViewPager
 import com.example.demoapp.R
-import com.example.demoapp.fragments.NewsFragment
-import com.example.demoapp.fragments.ProfileFragment
-import com.example.demoapp.utils.addFragment
+import com.example.demoapp.adapter.PageAdapter
+import com.google.android.material.tabs.TabItem
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayout.*
 
 
 /**
@@ -37,7 +36,29 @@ class DashboardActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
-        addFragment(NewsFragment(), R.id.dashboard_container, supportFragmentManager)
+
+        // Getting tablayout and viewpager
+        val tabLayout = findViewById<TabLayout>(R.id.tablayout)
+        val viewPager= findViewById<ViewPager>(R.id.dashboard_viewpager)
+
+        // Set the adapter for each tab item
+        val pageAdapter = PageAdapter(supportFragmentManager, tabLayout.tabCount)
+        viewPager.adapter = pageAdapter
+        viewPager.addOnPageChangeListener(TabLayoutOnPageChangeListener(tabLayout))
+
+        // Listen to each tab item to set the fragment
+        tabLayout.addOnTabSelectedListener(object : OnTabSelectedListener {
+            override fun onTabSelected(tab: Tab) {
+                viewPager.currentItem = tab.position
+            }
+
+            override fun onTabUnselected(tab: Tab?) {}
+
+            override fun onTabReselected(tab: Tab?) {
+                tab?.let{ viewPager.currentItem = it.position }
+            }
+
+        })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -53,7 +74,7 @@ class DashboardActivity : AppCompatActivity() {
      * Function to show alert dialog box after button click.
      */
     private fun showAlert(){
-        val builder = AlertDialog.Builder(this,R.style.DialogBoxTheme)
+        val builder = AlertDialog.Builder(this, R.style.DialogBoxTheme)
         builder.setTitle("Logout")
         builder.setMessage("Do you really want to logout?")
         builder.setIcon(android.R.drawable.ic_dialog_alert)
