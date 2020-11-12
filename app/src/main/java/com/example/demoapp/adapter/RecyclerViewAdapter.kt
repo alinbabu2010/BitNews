@@ -11,7 +11,6 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.demoapp.R
-import com.example.demoapp.activities.DashboardActivity
 import com.example.demoapp.fragments.NewsFragment
 import com.example.demoapp.models.News
 import java.time.LocalDateTime
