@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.renderscript.ScriptGroup
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -39,13 +40,13 @@ class DashboardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
         addFragment(NewsFragment(), R.id.fragment_container, supportFragmentManager)
-        addNavBarLayout()
+        addBottomNavigationBar()
     }
 
     /**
-     * Method to bottom navigation view to the activity
+     * Method to add bottom navigation view to the activity
      */
-    private fun addNavBarLayout() {
+    private fun addBottomNavigationBar() {
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         val navlistener = BottomNavigationView.OnNavigationItemSelectedListener {
             lateinit var fragment: Fragment
