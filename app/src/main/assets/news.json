@@ -161,15 +161,16 @@
     {
       "source": {
         "id": null,
-        "name": "Yahoo Entertainment"
+        "name": "Quartz India"
       },
-      "author": "Zack Voell",
-      "title": "Riot Blockchain Mined 224 Bitcoins in Q3",
-      "description": "Riot reported a current mining capacity of 556 peta hash per second.",
-      "url": "https://finance.yahoo.com/news/riot-blockchain-mined-224-bitcoins-013228337.html",
-      "urlToImage": "https://s.yimg.com/uu/api/res/1.2/CM_aZt5sgdN4gUoBdf8GMw--~B/aD01MDY7dz03MTE7c209MTthcHBpZD15dGFjaHlvbg--/https://media.zenfs.com/en/coindesk_75/9b587aec99325a58ee448b30971b24fc",
-      "publishedAt": "2020-11-10T01:32:28Z",
-      "content": "Publicly traded bitcoin mining company Riot Blockchain reported earnings for the September period Monday, noting a significant increase in revenue and hash power from a year ago with plans for contin… [+1420 chars]"
+      "author": "Prathamesh Mulye",
+      "title": "Dhanteras 2020: Can bitcoin, other cryptocurrencies replace gold? - Quartz",
+      "description": "Since the spread of Covid-19 in India, bitcoin has outperformed every other asset class, including gold, giving a return of nearly 160% since April.But can cryptocurrencies really be a substitute for gold?",
+      "url": "https://qz.com/india/1931811/dhanteras-2020-can-bitcoin-other-cryptocurrencies-replace-gold/",
+      "urlToImage": "https://cms.qz.com/wp-content/uploads/2020/11/2020-10-21T120506Z_1465290343_RC20NJ9BFEUT_RTRMADP_3_PAYPAL-CRYPTOCURRENCY-e1605121501842.jpg?quality=75&strip=all&w=1200&h=630&crop=1",
+      "publishedAt": "2020-11-12T05:38:00Z",
+      "content": "Cryptocurrencies have had a glitzy run in recent months. But is all that glitters really gold?\r\nSince the spread of Covid-19 in India, bitcoin has outperformed every other asset class, including gold… [+4741 chars]"
+
     },
     {
       "source": {
@@ -248,6 +249,48 @@
       "urlToImage": "https://bitcoinist.com/wp-content/uploads/2020/11/1-1920x1212.png",
       "publishedAt": "2020-11-09T23:59:35Z",
       "content": "<ul><li>Ethereum has faced a drop since the $465 highs it reached last week when Bitcoin broke toward $16,000.</li><li>ETH trades for $445 as of this article’s writing.</li><li>Still, analysts remain… [+2705 chars]"
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Lewrockwell.com"
+      },
+      "author": "David Paul",
+      "title": "Americans Didn’t Vote Against Trump, They Voted Against More Media Psychological Abuse",
+      "description": "The word “coup” is being thrown about in American liberal media today, not because US liberals suddenly became uncomfortable with the fact that their nation constantly stages coups and topples governments around the world as a matter of routine policy, but be…",
+      "url": "https://www.lewrockwell.com/2020/11/no_author/americans-didnt-vote-against-trump-they-voted-against-more-media-psychological-abuse/",
+      "urlToImage": "https://www.lewrockwell.com/wp-content/themes/lrc/images/logo-med.png",
+      "publishedAt": "2020-11-12T05:01:00Z",
+      "content": "The word coup is being thrown about in American liberal media today, not because US liberals suddenly became uncomfortable with the fact that their nation constantly stages coups and topples governme… [+7484 chars]"
+
+    },
+    {
+      "source": {
+        "id": null,
+        "name": "Seeking Alpha"
+      },
+      "author": "Kurt Dew",
+      "title": "A Generic Short Bond - How A Financial Disrupter Looks",
+      "description": "The markets are fated to live a three-year period of Pax Fed. The yield curve seems slated to match the Sleepy Hollow environment that followed the Financial Crisis of 2007-2008.",
+      "url": "https://seekingalpha.com/article/4388264-generic-short-bond-how-financial-disrupter-looks",
+      "urlToImage": "https://static1.seekingalpha.com/uploads/2020/11/11/40913185-1605134534831032.png",
+      "publishedAt": "2020-11-12T04:35:50Z",
+      "content": "Our financial markets could not be riper for disruption than they are right now. Yet beyond dubious initiatives in mortgage and other consumer lending, not much disruption has taken place. Recent inn… [+10888 chars]"
+
+    },
+    {
+
+      "source": {
+        "id": null,
+        "name": "Cointelegraph"
+      },
+      "author": "Cointelegraph By Joshua Mapperson",
+      "title": "‘Slippery slope’ as new Bitcoin mining pool censors transactions",
+      "description": "A new mining pool is bringing censorship to Bitcoin transactions, choosing which of them to include in blocks produced",
+      "url": "https://cointelegraph.com/news/slippery-slope-as-new-bitcoin-mining-pool-censors-transactions",
+      "urlToImage": "https://s3.cointelegraph.com/uploads/2020-11/d6d4316f-1ccb-4ca7-b96e-3a5a5a4e0434.jpg",
+      "publishedAt": "2020-11-12T04:22:50Z",
+      "content": "Blockchain analytics platform BlockSeer has launched the private beta version of a new Bitcoin (BTC) mining pool (Blockseer Mining Pool) that censors transactions from blacklisted wallets.\r\nThe pool … [+2982 chars]"
     }
   ]
 }
