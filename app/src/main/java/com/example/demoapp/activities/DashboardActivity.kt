@@ -53,6 +53,8 @@ class DashboardActivity : AppCompatActivity() {
                 R.id.page_news -> fragment = NewsFragment()
                 R.id.page_favourites -> fragment = FavouritesFragment()
                 R.id.page_profile -> fragment = ProfileFragment()
+                R.id.page_news1 -> fragment = NewsFragment()
+                R.id.page_profile1 -> fragment = ProfileFragment()
             }
             replaceFragment(fragment, R.id.fragment_container, supportFragmentManager)
             return@OnNavigationItemSelectedListener true

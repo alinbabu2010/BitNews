@@ -15,4 +15,14 @@
         android:enabled="true"
         android:icon="@drawable/ic_profile"
         android:title="@string/profile_text" />
+    <item
+        android:id="@+id/page_news1"
+        android:enabled="true"
+        android:icon="@drawable/ic_news"
+        android:title="@string/news" />
+    <item
+        android:id="@+id/page_profile1"
+        android:enabled="true"
+        android:icon="@drawable/ic_profile"
+        android:title="@string/profile_text" />
 </menu>
