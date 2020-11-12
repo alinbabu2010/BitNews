@@ -11,11 +11,10 @@
     <string name="logout_string">Logout</string>
     <string name="reset_password_string">Reset Password</string>
     <string name="email_text">Enter your email</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="news_image">News Image</string>
     <string name="like_button">like_button_image</string>
     <string name="share_button">share_button_image</string>
     <string name="favourites">Favourites</string>
     <string name="news">News</string>
+    <string name="page_under_construction">Page under construction.</string>
 </resources>
