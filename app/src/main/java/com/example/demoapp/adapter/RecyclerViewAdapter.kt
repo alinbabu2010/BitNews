@@ -1,22 +1,18 @@
 package com.example.demoapp.adapter
 
 import android.content.Context
-import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.demoapp.R
 import com.example.demoapp.fragments.NewsFragment
 import com.example.demoapp.models.News
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Adapter class for RecyclerView of [NewsFragment]
@@ -53,28 +49,22 @@ class RecyclerViewAdapter(
     /**
      * Replace the contents of a view from news ArrayList (invoked by the layout manager)
      */
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
         val item = news.articles[position]
         Glide.with(holder.context).load(item.urlToImage).dontTransform().into(holder.newsImage)
         holder.newsTitle.text = item.title
         holder.newsDesc.text = item.description
 
-        val author = "Author: " + item.author
+        val author = "Author: ${item.author}"
         holder.newsAuthor.text = author
 
-        val src = "Source: " + item.source.name
+        val src = "Source: ${item.source.name}"
         holder.newsSrc.text = src
 
-        val ldt: LocalDateTime = LocalDateTime.parse(
-            item.publishedAt,
-            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
-        )
-        val currentZoneId: ZoneId = ZoneId.systemDefault()
-        val currentZonedDateTime: ZonedDateTime = ldt.atZone(currentZoneId)
-        val format: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        val publishDate =
-            "Published on " + format.format(currentZonedDateTime) + " at " + ldt.toLocalTime()
+        val date = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US).parse(item.publishedAt)
+        val formattedDate = SimpleDateFormat("MMM dd, y hh:mm a", Locale.US).format(date)
+
+        val publishDate = "Published on $formattedDate"
         holder.newsDate.text = publishDate
     }
 
