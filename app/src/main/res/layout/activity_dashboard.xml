@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/dashboard_container"
@@ -8,23 +8,48 @@
     android:orientation="vertical"
     tools:context=".activities.DashboardActivity">
 
-    <FrameLayout
-        android:id="@+id/fragment_container"
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/bottom_navigation" />
+        android:layout_height="65dp"
+        android:background="@color/primary_light"
+        app:tabIconTint="@color/secondary_dark"
+        app:tabIndicatorColor="@color/secondary_dark"
+        app:tabMode="fixed"
+        app:tabRippleColor="@color/secondary_light"
+        app:tabTextAppearance="@style/dashboard_text_style"
+        app:tabTextColor="@color/secondary_dark">
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/page_news"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="true"
+            android:icon="@drawable/ic_news"
+            android:text="@string/news" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/page_favourites"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="true"
+            android:icon="@drawable/ic_like"
+            android:text="@string/favourites" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/page_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="true"
+            android:icon="@drawable/ic_profile"
+            android:text="@string/profile_text" />
+
+    </com.google.android.material.tabs.TabLayout>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/dashboard_viewpager"
         android:layout_width="match_parent"
-        android:layout_height="61dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/secondary_light"
-        app:itemIconTint="@color/bnv_tab_item_foreground"
-        app:itemRippleColor="@color/secondary"
-        app:itemTextColor="@color/bnv_tab_item_foreground"
-        app:menu="@menu/bottom_navigation_menu">
+        android:layout_height="match_parent" />
 
-    </com.google.android.material.bottomnavigation.BottomNavigationView>
 
-</RelativeLayout>
+</LinearLayout>

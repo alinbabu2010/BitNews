@@ -10,13 +10,16 @@ import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.viewpager.widget.ViewPager
 import com.example.demoapp.R
+import com.example.demoapp.adapter.PageAdapter
 import com.example.demoapp.fragments.FavouritesFragment
 import com.example.demoapp.fragments.NewsFragment
 import com.example.demoapp.fragments.ProfileFragment
 import com.example.demoapp.utils.addFragment
 import com.example.demoapp.utils.replaceFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.tabs.TabLayout
 
 
 /**
@@ -38,28 +41,38 @@ class DashboardActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
-        addFragment(NewsFragment(), R.id.fragment_container, supportFragmentManager)
-        addBottomNavigationBar()
+        addFragment(NewsFragment(), R.id.dashboard_viewpager, supportFragmentManager)
+        addTabLayout()
     }
 
     /**
-     * Method to add bottom navigation view to the activity
+     * Method to add tab layout to the activity
      */
-    private fun addBottomNavigationBar() {
-        val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-        val navlistener = BottomNavigationView.OnNavigationItemSelectedListener {
-            lateinit var fragment: Fragment
-            when (it.itemId) {
-                R.id.page_news -> fragment = NewsFragment()
-                R.id.page_favourites -> fragment = FavouritesFragment()
-                R.id.page_profile -> fragment = ProfileFragment()
-                R.id.page_news1 -> fragment = NewsFragment()
-                R.id.page_profile1 -> fragment = ProfileFragment()
-            }
-            replaceFragment(fragment, R.id.fragment_container, supportFragmentManager)
-            return@OnNavigationItemSelectedListener true
+    private fun addTabLayout(){
+        val tabLayout = findViewById<TabLayout>(R.id.tab_layout)
+        val viewPager= findViewById<ViewPager>(R.id.dashboard_viewpager)
+
+        // Set the adapter for each tab item
+        val pageAdapter = PageAdapter(supportFragmentManager, tabLayout.tabCount)
+        with(viewPager){
+            this.adapter = pageAdapter
+            this.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
         }
-        bottomNav.setOnNavigationItemSelectedListener(navlistener)
+
+
+        // Listen to each tab item to set the fragment
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                viewPager.currentItem = tab.position
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+                tab?.let{ viewPager.currentItem = it.position }
+            }
+
+        })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
