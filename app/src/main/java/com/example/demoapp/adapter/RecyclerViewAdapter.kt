@@ -63,7 +63,8 @@ class RecyclerViewAdapter(
         holder.newsSrc.text = src
 
         val date = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US).parse(item.publishedAt)
-        val formattedDate = date?.let { SimpleDateFormat("MMM dd, y hh:mm a", Locale.US).format(it) }
+        val formattedDate =
+            date?.let { SimpleDateFormat("MMM dd, y hh:mm a", Locale.US).format(it) }
 
         val publishDate = "Published on $formattedDate"
         holder.newsDate.text = publishDate
