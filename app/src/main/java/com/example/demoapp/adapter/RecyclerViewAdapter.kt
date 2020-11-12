@@ -14,6 +14,7 @@ import com.example.demoapp.models.News
 import java.text.SimpleDateFormat
 import java.util.*
 
+
 /**
  * Adapter class for RecyclerView of [NewsFragment]
  */
@@ -51,7 +52,7 @@ class RecyclerViewAdapter(
      */
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
         val item = news.articles[position]
-        Glide.with(holder.context).load(item.urlToImage).dontTransform().into(holder.newsImage)
+        Glide.with(holder.context).load(item.urlToImage).override(800).into(holder.newsImage)
         holder.newsTitle.text = item.title
         holder.newsDesc.text = item.description
 
@@ -62,7 +63,7 @@ class RecyclerViewAdapter(
         holder.newsSrc.text = src
 
         val date = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US).parse(item.publishedAt)
-        val formattedDate = SimpleDateFormat("MMM dd, y hh:mm a", Locale.US).format(date)
+        val formattedDate = date?.let { SimpleDateFormat("MMM dd, y hh:mm a", Locale.US).format(it) }
 
         val publishDate = "Published on $formattedDate"
         holder.newsDate.text = publishDate

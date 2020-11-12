@@ -8,4 +8,5 @@
     <color name="secondary_dark">#c88719</color>
     <color name="black">#FF000000</color>
     <color name="background_color">#7CFFFF8D</color>
+    <color name="text_grey">#686666</color>
 </resources>
