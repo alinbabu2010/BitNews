@@ -10,7 +10,8 @@ import com.example.demoapp.fragments.ProfileFragment
 /**
  * Adapter class for ViewPager
  */
-class PageAdapter(fragment: FragmentManager, private val tabCount: Int) : FragmentStatePagerAdapter(fragment,tabCount) {
+class PageAdapter(fragment: FragmentManager, private val tabCount: Int) :
+    FragmentStatePagerAdapter(fragment, tabCount) {
 
     override fun getCount(): Int {
         return tabCount

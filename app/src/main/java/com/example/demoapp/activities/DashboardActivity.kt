@@ -9,16 +9,11 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.example.demoapp.R
 import com.example.demoapp.adapter.PageAdapter
-import com.example.demoapp.fragments.FavouritesFragment
 import com.example.demoapp.fragments.NewsFragment
-import com.example.demoapp.fragments.ProfileFragment
 import com.example.demoapp.utils.addFragment
-import com.example.demoapp.utils.replaceFragment
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
 
 
@@ -48,13 +43,13 @@ class DashboardActivity : AppCompatActivity() {
     /**
      * Method to add tab layout to the activity
      */
-    private fun addTabLayout(){
+    private fun addTabLayout() {
         val tabLayout = findViewById<TabLayout>(R.id.tab_layout)
-        val viewPager= findViewById<ViewPager>(R.id.dashboard_viewpager)
+        val viewPager = findViewById<ViewPager>(R.id.dashboard_viewpager)
 
         // Set the adapter for each tab item
         val pageAdapter = PageAdapter(supportFragmentManager, tabLayout.tabCount)
-        with(viewPager){
+        with(viewPager) {
             this.adapter = pageAdapter
             this.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
         }
@@ -69,7 +64,7 @@ class DashboardActivity : AppCompatActivity() {
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
 
             override fun onTabReselected(tab: TabLayout.Tab?) {
-                tab?.let{ viewPager.currentItem = it.position }
+                tab?.let { viewPager.currentItem = it.position }
             }
 
         })
