@@ -76,19 +76,18 @@
                 android:layout_weight="1"
                 android:textColor="@color/secondary_dark" />
 
-            <ImageButton
-                style="@android:style/Widget.Material.ImageButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="#00FFFFFF"
-                android:contentDescription="@string/like_button"
-                android:tint="@color/secondary_dark"
-                app:srcCompat="@drawable/ic_like" />
+            <CheckBox
+                android:id="@+id/favourites_button"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:button="@drawable/sl_favourite_24dp"
+                android:checked="false"
+                android:duplicateParentState="false"
+                app:buttonTint="@color/secondary_dark" />
 
             <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="9dp"
+                android:layout_height="28dp"
                 android:layout_weight="1"
                 android:background="#00FFFFFF"
                 android:contentDescription="@string/share_button"

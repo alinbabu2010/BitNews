@@ -4,6 +4,8 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
+import android.widget.CompoundButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -32,6 +34,7 @@ class RecyclerViewAdapter(
         val newsSrc: TextView = view.findViewById(R.id.source_textview)
         val newsAuthor: TextView = view.findViewById(R.id.author_textview)
         val newsDate: TextView = view.findViewById(R.id.publish_textview)
+        val newsLiked: CheckBox = view.findViewById(R.id.favourites_button)
         val context: Context = view.context
     }
 
@@ -68,6 +71,9 @@ class RecyclerViewAdapter(
 
         val publishDate = "Published on $formattedDate"
         holder.newsDate.text = publishDate
+
+        holder.newsLiked.setOnCheckedChangeListener(null)
+
     }
 
     /**
