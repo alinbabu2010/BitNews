@@ -76,7 +76,7 @@
                 android:layout_weight="1"
                 android:textColor="@color/secondary_dark" />
 
-            <CheckBox
+            <RadioButton
                 android:id="@+id/favourites_button"
                 android:layout_width="30dp"
                 android:layout_height="match_parent"
