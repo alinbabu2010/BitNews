@@ -77,7 +77,6 @@
                 android:textColor="@color/secondary_dark" />
 
             <ImageButton
-                android:id="@+id/like_button"
                 style="@android:style/Widget.Material.ImageButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -88,7 +87,6 @@
                 app:srcCompat="@drawable/ic_like" />
 
             <ImageButton
-                android:id="@+id/share_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
