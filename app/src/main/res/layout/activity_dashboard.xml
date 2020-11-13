@@ -17,7 +17,6 @@
         app:tabIndicatorColor="@color/secondary_dark"
         app:tabInlineLabel="true"
         app:tabMode="fixed"
-        app:tabPadding="2dp"
         app:tabRippleColor="@color/secondary_light"
         app:tabTextAppearance="@style/tablayout_style"
         app:tabTextColor="@color/secondary_dark">
@@ -25,23 +24,17 @@
         <com.google.android.material.tabs.TabItem
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:enabled="true"
-            android:icon="@drawable/ic_news"
-            android:text="@string/news" />
+            android:enabled="true" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:enabled="true"
-            android:icon="@drawable/ic_like"
-            android:text="@string/favourites" />
+            android:enabled="true" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:enabled="true"
-            android:icon="@drawable/ic_profile"
-            android:text="@string/profile_text" />
+            android:enabled="true" />
 
     </com.google.android.material.tabs.TabLayout>
 

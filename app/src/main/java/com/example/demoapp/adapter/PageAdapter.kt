@@ -13,6 +13,12 @@ import com.example.demoapp.fragments.ProfileFragment
 class PageAdapter(fragment: FragmentManager, private val tabCount: Int) :
     FragmentStatePagerAdapter(fragment, tabCount) {
 
+    private val tabTitles = arrayOf("News", "Favourites", "Profile")
+
+    override fun getPageTitle(position: Int): CharSequence? {
+        return tabTitles[position]
+    }
+
     override fun getCount(): Int {
         return tabCount
     }
