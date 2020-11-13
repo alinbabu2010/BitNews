@@ -4,25 +4,26 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
-import android.widget.CompoundButton
 import android.widget.ImageView
+import android.widget.RadioButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.demoapp.R
 import com.example.demoapp.fragments.NewsFragment
 import com.example.demoapp.models.News
+import com.example.demoapp.viewmodels.DemoViewModel
 import java.text.SimpleDateFormat
 import java.util.*
-
 
 /**
  * Adapter class for RecyclerView of [NewsFragment]
  */
 class RecyclerViewAdapter(
     private val news: News,
-) : RecyclerView.Adapter<RecyclerViewAdapter.NewsViewHolder>() {
+    private val favourite: DemoViewModel
+) : RecyclerView.Adapter<RecyclerViewAdapter.NewsViewHolder>(){
+
 
     /**
      * A subclass for providing a reference to the views for each data item
@@ -34,7 +35,7 @@ class RecyclerViewAdapter(
         val newsSrc: TextView = view.findViewById(R.id.source_textview)
         val newsAuthor: TextView = view.findViewById(R.id.author_textview)
         val newsDate: TextView = view.findViewById(R.id.publish_textview)
-        val newsLiked: CheckBox = view.findViewById(R.id.favourites_button)
+        val newsLiked: RadioButton = view.findViewById(R.id.favourites_button)
         val context: Context = view.context
     }
 
@@ -72,12 +73,20 @@ class RecyclerViewAdapter(
         val publishDate = "Published on $formattedDate"
         holder.newsDate.text = publishDate
 
-        holder.newsLiked.setOnCheckedChangeListener(null)
+        if (favourite.favouriteNews.value.isNullOrEmpty()){
+            favourite.favouriteNews.value = arrayListOf()
+        }
 
+        holder.newsLiked.isChecked = favourite.isFavourites(item) == true
+
+        holder.newsLiked.setOnClickListener {
+            favourite.addFavourites(item)
+        }
     }
 
     /**
      * Return the size of your data set (invoked by the layout manager)
      */
     override fun getItemCount(): Int = news.articles.size
+
 }

@@ -5,11 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.demoapp.R
 import com.example.demoapp.adapter.RecyclerViewAdapter
 import com.example.demoapp.models.News
+import com.example.demoapp.viewmodels.DemoViewModel
 import com.google.gson.GsonBuilder
 
 
@@ -23,8 +25,12 @@ class NewsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        // Inflate the layout for this fragment
         val inflatedView = inflater.inflate(R.layout.fragment_news, container, false)
+
+        val viewModel = ViewModelProvider(this).get(DemoViewModel::class.java)
+        viewModel.favouriteNews.observe(viewLifecycleOwner,{
+            viewModel.favouriteNews.value = it
+        })
 
         // Call the function to parse JSON file.
         val news = loadJSONFromAsset()
@@ -33,7 +39,7 @@ class NewsFragment : Fragment() {
         val recyclerView = inflatedView.findViewById<RecyclerView>(R.id.recycler_view)
         with(recyclerView) {
             layoutManager = LinearLayoutManager(context)
-            adapter = RecyclerViewAdapter(news)
+            adapter = RecyclerViewAdapter(news, DemoViewModel())
             setHasFixedSize(true)
         }
 
