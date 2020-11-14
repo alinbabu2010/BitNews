@@ -5,13 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.demoapp.R
-import com.example.demoapp.adapter.RecyclerViewAdapter
+import com.example.demoapp.adapter.NewsAdapter
+import com.example.demoapp.models.Articles
 import com.example.demoapp.models.News
-import com.example.demoapp.viewmodels.DemoViewModel
+import com.example.demoapp.viewmodels.NewsViewModel
 import com.google.gson.GsonBuilder
 
 
@@ -20,17 +22,17 @@ import com.google.gson.GsonBuilder
  */
 class NewsFragment : Fragment() {
 
+    private var articles = MutableLiveData<ArrayList<Articles>>()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
         val inflatedView = inflater.inflate(R.layout.fragment_news, container, false)
+        val newsViewModel = ViewModelProvider(this).get(NewsViewModel::class.java)
+        articles.value = newsViewModel.news.value
 
-        val viewModel = ViewModelProvider(this).get(DemoViewModel::class.java)
-        viewModel.favouriteNews.observe(viewLifecycleOwner,{
-            viewModel.favouriteNews.value = it
-        })
 
         // Call the function to parse JSON file.
         val news = loadJSONFromAsset()
@@ -39,7 +41,8 @@ class NewsFragment : Fragment() {
         val recyclerView = inflatedView.findViewById<RecyclerView>(R.id.recycler_view)
         with(recyclerView) {
             layoutManager = LinearLayoutManager(context)
-            adapter = RecyclerViewAdapter(news, DemoViewModel())
+            adapter = NewsAdapter(news,articles)
+            adapter?.notifyDataSetChanged()
             setHasFixedSize(true)
         }
 

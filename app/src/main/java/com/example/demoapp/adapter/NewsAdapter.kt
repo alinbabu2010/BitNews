@@ -7,22 +7,25 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.TextView
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.demoapp.R
 import com.example.demoapp.fragments.NewsFragment
+import com.example.demoapp.models.Articles
 import com.example.demoapp.models.News
-import com.example.demoapp.viewmodels.DemoViewModel
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Adapter class for RecyclerView of [NewsFragment]
  */
-class RecyclerViewAdapter(
+class NewsAdapter(
     private val news: News,
-    private val favourite: DemoViewModel
-) : RecyclerView.Adapter<RecyclerViewAdapter.NewsViewHolder>(){
+    private val newsViewModel: LiveData<ArrayList<Articles>>
+) : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>(){
 
 
     /**
@@ -73,15 +76,14 @@ class RecyclerViewAdapter(
         val publishDate = "Published on $formattedDate"
         holder.newsDate.text = publishDate
 
-        if (favourite.favouriteNews.value.isNullOrEmpty()){
-            favourite.favouriteNews.value = arrayListOf()
-        }
-
-        holder.newsLiked.isChecked = favourite.isFavourites(item) == true
+        holder.newsLiked.isChecked = newsViewModel.value?.contains(item)  == true
 
         holder.newsLiked.setOnClickListener {
-            favourite.addFavourites(item)
+            newsViewModel.value?.add(item)
+            println(newsViewModel.value)
         }
+
+
     }
 
     /**
