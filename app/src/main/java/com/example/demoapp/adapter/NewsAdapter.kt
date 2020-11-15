@@ -7,26 +7,25 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.TextView
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.demoapp.R
 import com.example.demoapp.fragments.NewsFragment
 import com.example.demoapp.models.Articles
 import com.example.demoapp.models.News
+import com.example.demoapp.viewmodels.NewsViewModel
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
+
 
 /**
  * Adapter class for RecyclerView of [NewsFragment]
  */
 class NewsAdapter(
     private val news: News,
-    private val newsViewModel: LiveData<ArrayList<Articles>>
+    private val newsViewModel: NewsViewModel,
+    private val listener: (Articles) -> Unit
 ) : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>(){
-
 
     /**
      * A subclass for providing a reference to the views for each data item
@@ -76,14 +75,11 @@ class NewsAdapter(
         val publishDate = "Published on $formattedDate"
         holder.newsDate.text = publishDate
 
-        holder.newsLiked.isChecked = newsViewModel.value?.contains(item)  == true
+        holder.newsLiked.isChecked = newsViewModel.newsLiveData.value?.contains(item) == true
 
         holder.newsLiked.setOnClickListener {
-            newsViewModel.value?.add(item)
-            println(newsViewModel.value)
+            listener(item)
         }
-
-
     }
 
     /**
