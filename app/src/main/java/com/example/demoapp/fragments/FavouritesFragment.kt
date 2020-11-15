@@ -1,5 +1,6 @@
 package com.example.demoapp.fragments
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,8 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.demoapp.R
-import com.example.demoapp.adapter.NewsAdapter
-import com.example.demoapp.models.News
+import com.example.demoapp.adapter.FavouritesAdapter
 import com.example.demoapp.viewmodels.NewsViewModel
 
 
@@ -38,29 +38,28 @@ class FavouritesFragment : Fragment() {
         // Getting recyclerView and invoke layoutManager and recyclerViewAdapter
         val recyclerView = view.findViewById<RecyclerView>(R.id.fragment_view)
         with(recyclerView) {
-            val articles = newsViewModel?.newsLiveData?.value
+            val articles  = newsViewModel?.newsLiveData?.value
             layoutManager = LinearLayoutManager(context)
-            adapter = articles?.let { News(it) }?.let {
-                NewsAdapter(it, newsViewModel) { item ->
-                    newsViewModel.newsLiveData.value?.remove(item)
-                    println(newsViewModel.newsLiveData.value)
-                }
+            adapter = FavouritesAdapter(articles) { item ->
+                newsViewModel?.newsLiveData?.value?.remove(item)
             }
+            adapter?.notifyDataSetChanged()
             setHasFixedSize(true)
         }
 
         // Refresh on swipe by calling recycler view
         val refreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.swipeRefresh)
+        refreshLayout.setProgressBackgroundColorSchemeColor(Color.YELLOW)
+        refreshLayout.setColorSchemeResources(R.color.secondary_dark)
+
         refreshLayout.setOnRefreshListener {
             with(recyclerView) {
-                val articles = newsViewModel?.newsLiveData?.value
+                val articles  = newsViewModel?.newsLiveData?.value
                 layoutManager = LinearLayoutManager(context)
-                adapter = articles?.let { News(it) }?.let {
-                    NewsAdapter(it, newsViewModel) { item ->
-                        newsViewModel.newsLiveData.value?.remove(item)
-                        println(newsViewModel.newsLiveData.value)
-                    }
+                adapter = FavouritesAdapter(articles) { item ->
+                        newsViewModel?.newsLiveData?.value?.remove(item)
                 }
+                adapter?.notifyDataSetChanged()
                 setHasFixedSize(true)
             }
             refreshLayout.isRefreshing = false
