@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.demoapp.R
 import com.example.demoapp.adapter.NewsAdapter
-import com.example.demoapp.models.Articles
 import com.example.demoapp.models.News
 import com.example.demoapp.viewmodels.NewsViewModel
 import com.google.gson.GsonBuilder

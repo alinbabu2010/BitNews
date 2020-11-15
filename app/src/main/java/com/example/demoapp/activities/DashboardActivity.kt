@@ -45,7 +45,8 @@ class DashboardActivity : AppCompatActivity() {
      * Method to add tab layout to the activity
      */
     private fun addTabLayout() {
-        val image = intArrayOf(R.drawable.ic_news, R.drawable.ic_favourite_outlined, R.drawable.ic_profile)
+        val image =
+            intArrayOf(R.drawable.ic_news, R.drawable.ic_favourite_outlined, R.drawable.ic_profile)
         val tabLayout: TabLayout = findViewById(R.id.tab_layout)
         val viewPager: ViewPager = findViewById(R.id.dashboard_viewpager)
 

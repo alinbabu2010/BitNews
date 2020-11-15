@@ -25,7 +25,7 @@ class NewsAdapter(
     private val news: News,
     private val newsViewModel: NewsViewModel,
     private val listener: (Articles) -> Unit
-) : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>(){
+) : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
 
     /**
      * A subclass for providing a reference to the views for each data item

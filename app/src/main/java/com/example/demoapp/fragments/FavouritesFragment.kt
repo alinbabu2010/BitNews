@@ -41,7 +41,7 @@ class FavouritesFragment : Fragment() {
             val articles = newsViewModel?.newsLiveData?.value
             layoutManager = LinearLayoutManager(context)
             adapter = articles?.let { News(it) }?.let {
-                NewsAdapter(it,newsViewModel){ item ->
+                NewsAdapter(it, newsViewModel) { item ->
                     newsViewModel.newsLiveData.value?.remove(item)
                     println(newsViewModel.newsLiveData.value)
                 }
@@ -56,7 +56,7 @@ class FavouritesFragment : Fragment() {
                 val articles = newsViewModel?.newsLiveData?.value
                 layoutManager = LinearLayoutManager(context)
                 adapter = articles?.let { News(it) }?.let {
-                    NewsAdapter(it,newsViewModel){ item ->
+                    NewsAdapter(it, newsViewModel) { item ->
                         newsViewModel.newsLiveData.value?.remove(item)
                         println(newsViewModel.newsLiveData.value)
                     }
