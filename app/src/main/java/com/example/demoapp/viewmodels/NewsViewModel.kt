@@ -9,8 +9,6 @@ import com.example.demoapp.models.Articles
  */
 class NewsViewModel() : ViewModel() {
 
-    val news: MutableLiveData<ArrayList<Articles>> by lazy{
-        MutableLiveData<ArrayList<Articles>>()
-    }
+    var newsLiveData: MutableLiveData<ArrayList<Articles>> = MutableLiveData(arrayListOf())
 
 }
