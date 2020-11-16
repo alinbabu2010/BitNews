@@ -44,7 +44,7 @@ class FavouritesFragment : Fragment() {
         refreshLayout.setProgressBackgroundColorSchemeColor(Color.YELLOW)
         refreshLayout.setColorSchemeResources(R.color.secondary_dark)
         refreshLayout.setOnRefreshListener {
-            loadRecyclerView(recyclerView, newsViewModel)
+            recyclerView.adapter?.notifyDataSetChanged()
             refreshLayout.isRefreshing = false
         }
     }

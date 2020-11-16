@@ -49,6 +49,7 @@ class NewsFragment : Fragment() {
                     Toast.makeText(context,"Added to favourites", Toast.LENGTH_SHORT).show()
                 }
             }
+            adapter?.notifyDataSetChanged()
             setHasFixedSize(true)
         }
 
@@ -57,17 +58,7 @@ class NewsFragment : Fragment() {
         refreshLayout.setProgressBackgroundColorSchemeColor(Color.YELLOW)
         refreshLayout.setColorSchemeResources(R.color.secondary_dark)
         refreshLayout.setOnRefreshListener {
-            with(recyclerView) {
-                newsViewModel?.newsLiveData?.value
-                layoutManager = LinearLayoutManager(context)
-                adapter = newsViewModel?.let {
-                    NewsAdapter(news, it) { item ->
-                        newsViewModel.newsLiveData.value?.add(item)
-                        Toast.makeText(context,"Added to favourites", Toast.LENGTH_SHORT).show()
-                    }
-                }
-                setHasFixedSize(true)
-            }
+            recyclerView.adapter?.notifyDataSetChanged()
             refreshLayout.isRefreshing = false
         }
     }
