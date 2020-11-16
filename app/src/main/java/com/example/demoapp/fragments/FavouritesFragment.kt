@@ -37,8 +37,25 @@ class FavouritesFragment : Fragment() {
 
         // Getting recyclerView and invoke layoutManager and recyclerViewAdapter
         val recyclerView = view.findViewById<RecyclerView>(R.id.fragment_view)
+        loadRecyclerView(recyclerView, newsViewModel)
+
+        // Refresh on swipe by calling recycler view
+        val refreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.swipeRefresh)
+        refreshLayout.setProgressBackgroundColorSchemeColor(Color.YELLOW)
+        refreshLayout.setColorSchemeResources(R.color.secondary_dark)
+        refreshLayout.setOnRefreshListener {
+            loadRecyclerView(recyclerView, newsViewModel)
+            refreshLayout.isRefreshing = false
+        }
+    }
+
+
+    /**
+     * Method to invoke layoutManager and recyclerViewAdapter
+     */
+    private fun loadRecyclerView(recyclerView: RecyclerView, newsViewModel: NewsViewModel?) {
+        val articles = newsViewModel?.newsLiveData?.value
         with(recyclerView) {
-            val articles  = newsViewModel?.newsLiveData?.value
             layoutManager = LinearLayoutManager(context)
             adapter = FavouritesAdapter(articles) { item ->
                 newsViewModel?.newsLiveData?.value?.remove(item)
@@ -46,23 +63,6 @@ class FavouritesFragment : Fragment() {
             adapter?.notifyDataSetChanged()
             setHasFixedSize(true)
         }
-
-        // Refresh on swipe by calling recycler view
-        val refreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.swipeRefresh)
-        refreshLayout.setProgressBackgroundColorSchemeColor(Color.YELLOW)
-        refreshLayout.setColorSchemeResources(R.color.secondary_dark)
-
-        refreshLayout.setOnRefreshListener {
-            with(recyclerView) {
-                val articles  = newsViewModel?.newsLiveData?.value
-                layoutManager = LinearLayoutManager(context)
-                adapter = FavouritesAdapter(articles) { item ->
-                        newsViewModel?.newsLiveData?.value?.remove(item)
-                }
-                adapter?.notifyDataSetChanged()
-                setHasFixedSize(true)
-            }
-            refreshLayout.isRefreshing = false
-        }
     }
+
 }
