@@ -7,13 +7,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.TextView
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.demoapp.R
 import com.example.demoapp.fragments.NewsFragment
 import com.example.demoapp.models.Articles
 import com.example.demoapp.models.News
-import com.example.demoapp.viewmodels.NewsViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -23,7 +23,7 @@ import java.util.*
  */
 class NewsAdapter(
     private val news: News,
-    private val newsViewModel: NewsViewModel,
+    private val articles: MutableLiveData<ArrayList<Articles>>,
     private val listener: (Articles) -> Unit
 ) : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
 
@@ -75,7 +75,7 @@ class NewsAdapter(
         val publishDate = "Published on $formattedDate"
         holder.newsDate.text = publishDate
 
-        holder.newsLiked.isChecked = newsViewModel.newsLiveData.value?.contains(item) == true
+        holder.newsLiked.isChecked = articles.value?.contains(item) ?: true
 
         holder.newsLiked.setOnClickListener {
             listener(item)

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.demoapp.R
@@ -18,7 +19,7 @@ import java.util.*
  * Adapter class for RecyclerView of FavouritesFragment
  */
 class FavouritesAdapter(
-    private val news: ArrayList<Articles>?,
+    private val news: MutableLiveData<ArrayList<Articles>>,
     val listener: (Articles?) -> Unit
 ) : RecyclerView.Adapter<FavouritesAdapter.FavouritesViewHolder>() {
 
@@ -53,7 +54,7 @@ class FavouritesAdapter(
      * Replace the contents of a view from news ArrayList (invoked by the layout manager)
      */
     override fun onBindViewHolder(holder: FavouritesViewHolder, position: Int) {
-        val item = news?.get(position)
+        val item = news.value?.get(position)
         Glide.with(holder.context).load(item?.urlToImage).override(800).into(holder.newsImage)
         holder.newsTitle.text = item?.title
         holder.newsDesc.text = item?.description
@@ -71,8 +72,6 @@ class FavouritesAdapter(
         val publishDate = "Published on $formattedDate"
         holder.newsDate.text = publishDate
 
-        holder.newsLiked.isChecked = news?.contains(item) == true
-
         holder.newsLiked.setOnClickListener {
             listener(item)
             notifyDataSetChanged()
@@ -83,6 +82,6 @@ class FavouritesAdapter(
     /**
      * Return the size of your data set (invoked by the layout manager)
      */
-    override fun getItemCount(): Int = news?.size ?: 0
+    override fun getItemCount(): Int = news.value?.size ?: 0
 
 }

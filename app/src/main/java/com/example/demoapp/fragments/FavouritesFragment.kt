@@ -6,12 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.demoapp.R
 import com.example.demoapp.adapter.FavouritesAdapter
+import com.example.demoapp.models.Articles
 import com.example.demoapp.viewmodels.NewsViewModel
 
 
@@ -54,11 +56,14 @@ class FavouritesFragment : Fragment() {
      * Method to invoke layoutManager and recyclerViewAdapter
      */
     private fun loadRecyclerView(recyclerView: RecyclerView, newsViewModel: NewsViewModel?) {
-        val articles = newsViewModel?.newsLiveData?.value
+        val articles : MutableLiveData<ArrayList<Articles>> = MutableLiveData(arrayListOf())
+        newsViewModel?.newsLiveData?.observe(viewLifecycleOwner,{
+            articles.value = it
+        })
         with(recyclerView) {
             layoutManager = LinearLayoutManager(context)
             adapter = FavouritesAdapter(articles) { item ->
-                newsViewModel?.newsLiveData?.value?.remove(item)
+                item?.let { newsViewModel?.removeNews(it) }
             }
             adapter?.notifyDataSetChanged()
             setHasFixedSize(true)

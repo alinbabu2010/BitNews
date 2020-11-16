@@ -7,12 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.demoapp.R
 import com.example.demoapp.adapter.NewsAdapter
+import com.example.demoapp.models.Articles
 import com.example.demoapp.models.News
 import com.example.demoapp.viewmodels.NewsViewModel
 import com.google.gson.GsonBuilder
@@ -41,12 +43,17 @@ class NewsFragment : Fragment() {
 
         // Getting recyclerView and invoke layoutManager and recyclerViewAdapter
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
+        val articles: MutableLiveData<ArrayList<Articles>> = MutableLiveData(arrayListOf())
+        newsViewModel?.newsLiveData?.observe(viewLifecycleOwner, {
+            articles.value = it
+        })
         with(recyclerView) {
             layoutManager = LinearLayoutManager(context)
-            adapter = newsViewModel?.let {
-                NewsAdapter(news, it) { item ->
-                    newsViewModel.newsLiveData.value?.add(item)
-                    Toast.makeText(context,"Added to favourites", Toast.LENGTH_SHORT).show()
+            adapter = NewsAdapter(news,articles) { item ->
+                if (newsViewModel?.isFavourite(item) == false) {
+                    newsViewModel.addNews(item)
+                    println(newsViewModel.newsLiveData.value)
+                    Toast.makeText(context, "Added to favourites", Toast.LENGTH_SHORT).show()
                 }
             }
             adapter?.notifyDataSetChanged()
