@@ -79,6 +79,7 @@ class NewsAdapter(
 
         holder.newsLiked.setOnClickListener {
             listener(item)
+            notifyDataSetChanged()
         }
     }
 

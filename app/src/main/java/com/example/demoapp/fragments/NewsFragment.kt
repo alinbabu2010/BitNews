@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -45,7 +46,7 @@ class NewsFragment : Fragment() {
             adapter = newsViewModel?.let {
                 NewsAdapter(news, it) { item ->
                     newsViewModel.newsLiveData.value?.add(item)
-                    adapter?.notifyDataSetChanged()
+                    Toast.makeText(context,"Added to favourites", Toast.LENGTH_SHORT).show()
                 }
             }
             setHasFixedSize(true)
@@ -62,7 +63,7 @@ class NewsFragment : Fragment() {
                 adapter = newsViewModel?.let {
                     NewsAdapter(news, it) { item ->
                         newsViewModel.newsLiveData.value?.add(item)
-                        adapter?.notifyDataSetChanged()
+                        Toast.makeText(context,"Added to favourites", Toast.LENGTH_SHORT).show()
                     }
                 }
                 setHasFixedSize(true)
