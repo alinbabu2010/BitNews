@@ -25,6 +25,10 @@ import com.google.gson.GsonBuilder
  */
 class NewsFragment : Fragment() {
 
+    private lateinit var news: News
+    private var newsViewModel: NewsViewModel? = null
+    private lateinit var articles: MutableLiveData<ArrayList<Articles>>
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,21 +42,22 @@ class NewsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Call the function to parse JSON file.
-        val news = loadJSONFromAsset()
-        val newsViewModel = activity?.let { ViewModelProvider(it).get(NewsViewModel::class.java) }
+        news = loadJSONFromAsset()
+        newsViewModel = activity?.let { ViewModelProvider(it).get(NewsViewModel::class.java) }
 
         // Getting recyclerView and invoke layoutManager and recyclerViewAdapter
-        val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
-        val articles: MutableLiveData<ArrayList<Articles>> = MutableLiveData(arrayListOf())
+        val recyclerView : RecyclerView = view.findViewById(R.id.recycler_view)
+        articles = MutableLiveData(arrayListOf())
         newsViewModel?.newsLiveData?.observe(viewLifecycleOwner, {
             articles.value = it
+            recyclerView.adapter?.notifyDataSetChanged()
+            onCreate(savedInstanceState)
         })
         with(recyclerView) {
             layoutManager = LinearLayoutManager(context)
             adapter = NewsAdapter(news,articles) { item ->
                 if (newsViewModel?.isFavourite(item) == false) {
-                    newsViewModel.addNews(item)
-                    println(newsViewModel.newsLiveData.value)
+                    newsViewModel?.addNews(item)
                     Toast.makeText(context, "Added to favourites", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -81,4 +86,10 @@ class NewsFragment : Fragment() {
         return news
     }
 
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        val recyclerView : RecyclerView? = view?.findViewById(R.id.recycler_view)
+        if (isVisibleToUser && recyclerView?.isInLayout==false) {
+            recyclerView.adapter?.notifyDataSetChanged()
+        }
+    }
 }

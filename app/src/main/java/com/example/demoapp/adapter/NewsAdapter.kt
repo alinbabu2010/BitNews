@@ -75,7 +75,7 @@ class NewsAdapter(
         val publishDate = "Published on $formattedDate"
         holder.newsDate.text = publishDate
 
-        holder.newsLiked.isChecked = articles.value?.contains(item) ?: true
+        holder.newsLiked.isChecked = articles.value?.contains(item) ?: false
 
         holder.newsLiked.setOnClickListener {
             listener(item)

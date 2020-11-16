@@ -72,6 +72,7 @@ class FavouritesAdapter(
         val publishDate = "Published on $formattedDate"
         holder.newsDate.text = publishDate
 
+        holder.newsLiked.isChecked = news.value?.contains(item) ?: false
         holder.newsLiked.setOnClickListener {
             listener(item)
             notifyDataSetChanged()

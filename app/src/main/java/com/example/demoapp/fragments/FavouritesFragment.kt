@@ -22,12 +22,15 @@ import com.example.demoapp.viewmodels.NewsViewModel
  */
 class FavouritesFragment : Fragment() {
 
+    private var newsViewModel: NewsViewModel? = null
+    lateinit var articles: MutableLiveData<ArrayList<Articles>>
+    lateinit var recyclerView: RecyclerView
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_favourites, container, false)
     }
 
@@ -35,10 +38,10 @@ class FavouritesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         super.onViewCreated(view, savedInstanceState)
-        val newsViewModel = activity?.let { ViewModelProvider(it).get(NewsViewModel::class.java) }
+        newsViewModel = activity?.let { ViewModelProvider(it).get(NewsViewModel::class.java) }
 
         // Getting recyclerView and invoke layoutManager and recyclerViewAdapter
-        val recyclerView = view.findViewById<RecyclerView>(R.id.fragment_view)
+        recyclerView = view.findViewById<RecyclerView>(R.id.fragment_view)
         loadRecyclerView(recyclerView, newsViewModel)
 
         // Refresh on swipe by calling recycler view
@@ -56,9 +59,10 @@ class FavouritesFragment : Fragment() {
      * Method to invoke layoutManager and recyclerViewAdapter
      */
     private fun loadRecyclerView(recyclerView: RecyclerView, newsViewModel: NewsViewModel?) {
-        val articles : MutableLiveData<ArrayList<Articles>> = MutableLiveData(arrayListOf())
+        articles = MutableLiveData(arrayListOf())
         newsViewModel?.newsLiveData?.observe(viewLifecycleOwner,{
             articles.value = it
+            recyclerView.adapter?.notifyDataSetChanged()
         })
         with(recyclerView) {
             layoutManager = LinearLayoutManager(context)
@@ -70,4 +74,9 @@ class FavouritesFragment : Fragment() {
         }
     }
 
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        if (isVisibleToUser) {
+            recyclerView.adapter?.notifyDataSetChanged()
+        }
+    }
 }
