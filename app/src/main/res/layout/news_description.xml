@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="16dp"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/news_title2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_condensed_regular"
+        android:lineSpacingExtra="8sp"
+        android:text="@string/app_name"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="normal" />
+
+    <TextView
+        android:id="@+id/author_textview2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/roboto_condensed_regular"
+        android:lineSpacingMultiplier="0"
+        android:textColor="@color/secondary_dark" />
+
+    <TextView
+        android:id="@+id/source_textview2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_condensed_regular"
+        android:lineSpacingExtra="8sp"
+        android:textColor="@color/secondary_dark" />
+
+    <TextView
+        android:id="@+id/publish_textview2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/roboto_condensed_regular"
+        android:lineSpacingExtra="8sp"
+        android:textColor="@color/secondary_dark" />
+
+    <TextView
+        android:id="@+id/news_desc2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/roboto_condensed_regular"
+        android:lineSpacingExtra="8sp"
+        android:lines="2"
+        android:text="@string/app_name"
+        android:textColor="@color/text_grey"
+        android:textSize="16sp"
+        android:textStyle="normal" />
+
+</LinearLayout>
