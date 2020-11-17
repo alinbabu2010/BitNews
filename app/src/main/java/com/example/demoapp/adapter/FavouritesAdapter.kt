@@ -1,21 +1,18 @@
 package com.example.demoapp.adapter
 
 import android.content.Context
-import android.content.Intent
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.demoapp.R
-import com.example.demoapp.activities.ArticleActivity
 import com.example.demoapp.models.Articles
+import com.example.demoapp.utils.openArticle
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -23,7 +20,7 @@ import java.util.*
  * Adapter class for RecyclerView of FavouritesFragment
  */
 class FavouritesAdapter(
-    private val news: MutableLiveData<ArrayList<Articles>>,
+    private val news: MutableLiveData<MutableSet<Articles>>,
     val listener: (Articles?) -> Unit
 ) : RecyclerView.Adapter<FavouritesAdapter.FavouritesViewHolder>() {
 
@@ -58,7 +55,7 @@ class FavouritesAdapter(
      * Replace the contents of a view from news ArrayList (invoked by the layout manager)
      */
     override fun onBindViewHolder(holder: FavouritesViewHolder, position: Int) {
-        val item = news.value?.get(position)
+        val item = news.value?.toMutableList()?.get(position)
         Glide.with(holder.context).load(item?.urlToImage).override(800).into(holder.newsImage)
         holder.newsTitle.text = item?.title
         holder.newsDesc.text = item?.description
@@ -69,7 +66,10 @@ class FavouritesAdapter(
         val src = "Source: ${item?.source?.name}"
         holder.newsSrc.text = src
 
-        val date = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US).parse(item?.publishedAt.toString())
+        val date = SimpleDateFormat(
+            "yyyy-MM-dd'T'HH:mm:ss'Z'",
+            Locale.US
+        ).parse(item?.publishedAt.toString())
         val formattedDate =
             date?.let { SimpleDateFormat("MMM dd, y hh:mm a", Locale.US).format(it) }
 
@@ -83,11 +83,11 @@ class FavouritesAdapter(
         }
 
         holder.newsImage.setOnClickListener {
-            openArticle(holder.context,position,item?.title)
+            openArticle(holder.context, position, item?.title)
         }
 
         holder.newsTitle.setOnClickListener {
-            openArticle(holder.context,position,item?.title)
+            openArticle(holder.context, position, item?.title)
         }
 
     }
@@ -97,13 +97,4 @@ class FavouritesAdapter(
      */
     override fun getItemCount(): Int = news.value?.size ?: 0
 
-    /**
-     * Method to start news details activity
-     */
-    private fun openArticle(context: Context, position: Int, title: String?) {
-        val intent = Intent(context, ArticleActivity::class.java)
-        intent.putExtra("position",position)
-        intent.putExtra("title",title)
-        ContextCompat.startActivity(context, intent, Bundle.EMPTY)
-    }
 }
