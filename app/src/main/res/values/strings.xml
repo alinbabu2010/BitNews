@@ -13,4 +13,6 @@
     <string name="email_text">Enter your email</string>
     <string name="news_image">News Image</string>
     <string name="share_button">share_button_image</string>
+    <string name="description">Description</string>
+    <string name="article">Article</string>
 </resources>

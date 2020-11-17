@@ -39,11 +39,11 @@ class ArticleActivity : AppCompatActivity() {
 
         val position = intent.getIntExtra("position",1)
         val newsImage: ImageView = findViewById(R.id.appbar_news_image)
-        val newsTitle: TextView = findViewById(R.id.news_title2)
         val newsDesc: TextView = findViewById(R.id.news_desc2)
         val newsSrc: TextView = findViewById(R.id.source_textview2)
         val newsAuthor: TextView = findViewById(R.id.author_textview2)
         val newsDate: TextView = findViewById(R.id.publish_textview2)
+        val newsContent : TextView = findViewById(R.id.news_content)
         val toolbar:Toolbar? = findViewById(R.id.toolbar)
 
         val news = loadJSONFromAsset()
@@ -51,8 +51,8 @@ class ArticleActivity : AppCompatActivity() {
 
         Glide.with(applicationContext).load(articles.urlToImage).override(800).into(newsImage)
 
-        newsTitle.text = articles.title
-        newsDesc.text = articles.content
+        newsDesc.text = articles.description
+        newsContent.text = articles.content
 
         val author = "Author: ${articles.author}"
         newsAuthor.text = author
@@ -71,7 +71,7 @@ class ArticleActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val collapsingToolbarLayout = findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbar)
         collapsingToolbarLayout.title = articles.title
-        collapsingToolbarLayout.setExpandedTitleTextColor(ColorStateList.valueOf(getColor(R.color.design_default_color_error)))
+        collapsingToolbarLayout.setExpandedTitleTextColor(ColorStateList.valueOf(getColor(R.color.secondary_dark)))
     }
 
     /**
