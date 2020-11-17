@@ -1,20 +1,23 @@
 package com.example.demoapp.adapter
 
 import android.content.Context
+import android.content.Intent
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.demoapp.R
+import com.example.demoapp.activities.ArticleActivity
 import com.example.demoapp.fragments.NewsFragment
 import com.example.demoapp.models.Articles
 import com.example.demoapp.models.News
-import com.example.demoapp.utils.openArticle
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -24,7 +27,7 @@ import java.util.*
  */
 class NewsAdapter(
     private val news: News,
-    private val articles: MutableLiveData<MutableSet<Articles>>,
+    private val articles: MutableLiveData<ArrayList<Articles>>,
     private val listener: (Articles) -> Unit
 ) : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
 
@@ -84,11 +87,11 @@ class NewsAdapter(
         }
 
         holder.newsImage.setOnClickListener {
-            openArticle(holder.context, position)
+            openArticle(holder.context,position)
         }
 
         holder.newsTitle.setOnClickListener {
-            openArticle(holder.context, position)
+           openArticle(holder.context,position)
         }
     }
 
@@ -97,5 +100,12 @@ class NewsAdapter(
      */
     override fun getItemCount(): Int = news.articles.size
 
-
+    /**
+     * Method to start news details activity
+     */
+    private fun openArticle(context: Context, position: Int) {
+        val intent = Intent(context, ArticleActivity::class.java)
+        intent.putExtra("position",position)
+        startActivity(context,intent, Bundle.EMPTY)
+    }
 }
