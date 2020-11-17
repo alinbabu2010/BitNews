@@ -1,16 +1,20 @@
 package com.example.demoapp.adapter
 
 import android.content.Context
+import android.content.Intent
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.demoapp.R
+import com.example.demoapp.activities.ArticleActivity
 import com.example.demoapp.models.Articles
 import java.text.SimpleDateFormat
 import java.util.*
@@ -78,6 +82,14 @@ class FavouritesAdapter(
             notifyDataSetChanged()
         }
 
+        holder.newsImage.setOnClickListener {
+            openArticle(holder.context,position,item?.title)
+        }
+
+        holder.newsTitle.setOnClickListener {
+            openArticle(holder.context,position,item?.title)
+        }
+
     }
 
     /**
@@ -85,4 +97,13 @@ class FavouritesAdapter(
      */
     override fun getItemCount(): Int = news.value?.size ?: 0
 
+    /**
+     * Method to start news details activity
+     */
+    private fun openArticle(context: Context, position: Int, title: String?) {
+        val intent = Intent(context, ArticleActivity::class.java)
+        intent.putExtra("position",position)
+        intent.putExtra("title",title)
+        ContextCompat.startActivity(context, intent, Bundle.EMPTY)
+    }
 }
