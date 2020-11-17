@@ -20,7 +20,9 @@
             android:id="@+id/news_image"
             android:layout_width="match_parent"
             android:layout_height="194dp"
+            android:clickable="true"
             android:contentDescription="@string/news_image"
+            android:focusable="true"
             android:scaleType="fitXY"
             android:visibility="visible" />
 
@@ -34,6 +36,9 @@
                 android:id="@+id/news_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:clickable="true"
+                android:contextClickable="true"
+                android:focusable="true"
                 android:fontFamily="@font/roboto_condensed_regular"
                 android:lineSpacingExtra="8sp"
                 android:text="@string/app_name"

@@ -1,16 +1,20 @@
 package com.example.demoapp.adapter
 
 import android.content.Context
+import android.content.Intent
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.demoapp.R
+import com.example.demoapp.activities.ArticleActivity
 import com.example.demoapp.fragments.NewsFragment
 import com.example.demoapp.models.Articles
 import com.example.demoapp.models.News
@@ -80,6 +84,18 @@ class NewsAdapter(
         holder.newsLiked.setOnClickListener {
             listener(item)
             notifyDataSetChanged()
+        }
+
+        holder.newsImage.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putInt("position",position)
+            startActivity(holder.context,Intent(holder.context, ArticleActivity::class.java),bundle)
+        }
+
+        holder.newsTitle.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putInt("position",position)
+            startActivity(holder.context,Intent(holder.context, ArticleActivity::class.java),bundle)
         }
     }
 

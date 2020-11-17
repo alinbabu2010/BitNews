@@ -38,6 +38,16 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activities.ArticleActivity"
+            android:parentActivityName=".activities.DashboardActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/ArticleTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
         <meta-data
             android:name="preloaded_fonts"
