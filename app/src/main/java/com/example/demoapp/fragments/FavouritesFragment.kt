@@ -23,8 +23,8 @@ import com.example.demoapp.viewmodels.NewsViewModel
 class FavouritesFragment : Fragment() {
 
     private var newsViewModel: NewsViewModel? = null
-    lateinit var articles: MutableLiveData<ArrayList<Articles>>
-    lateinit var recyclerView: RecyclerView
+    private lateinit var articles: MutableLiveData<MutableSet<Articles>>
+    private lateinit var recyclerView: RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,7 +41,7 @@ class FavouritesFragment : Fragment() {
         newsViewModel = activity?.let { ViewModelProvider(it).get(NewsViewModel::class.java) }
 
         // Getting recyclerView and invoke layoutManager and recyclerViewAdapter
-        recyclerView = view.findViewById<RecyclerView>(R.id.fragment_view)
+        recyclerView = view.findViewById(R.id.fragment_view)
         loadRecyclerView(recyclerView, newsViewModel)
 
         // Refresh on swipe by calling recycler view
@@ -59,8 +59,8 @@ class FavouritesFragment : Fragment() {
      * Method to invoke layoutManager and recyclerViewAdapter
      */
     private fun loadRecyclerView(recyclerView: RecyclerView, newsViewModel: NewsViewModel?) {
-        articles = MutableLiveData(arrayListOf())
-        newsViewModel?.newsLiveData?.observe(viewLifecycleOwner,{
+        articles = MutableLiveData(mutableSetOf())
+        newsViewModel?.newsLiveData?.observe(viewLifecycleOwner, {
             articles.value = it
             recyclerView.adapter?.notifyDataSetChanged()
         })

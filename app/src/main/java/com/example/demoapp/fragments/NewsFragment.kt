@@ -15,9 +15,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.demoapp.R
 import com.example.demoapp.adapter.NewsAdapter
 import com.example.demoapp.models.Articles
-import com.example.demoapp.models.News
+import com.example.demoapp.utils.loadJSONFromAsset
 import com.example.demoapp.viewmodels.NewsViewModel
-import com.google.gson.GsonBuilder
 
 
 /**
@@ -25,9 +24,8 @@ import com.google.gson.GsonBuilder
  */
 class NewsFragment : Fragment() {
 
-    private lateinit var news: News
     private var newsViewModel: NewsViewModel? = null
-    private lateinit var articles: MutableLiveData<ArrayList<Articles>>
+    private lateinit var articles: MutableLiveData<MutableSet<Articles>>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,12 +40,13 @@ class NewsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Call the function to parse JSON file.
-        news = loadJSONFromAsset()
+        val fileData: String? = activity?.assets?.open("news.json")?.readBytes()?.let { String(it) }
+        val news = loadJSONFromAsset(fileData)
         newsViewModel = activity?.let { ViewModelProvider(it).get(NewsViewModel::class.java) }
 
         // Getting recyclerView and invoke layoutManager and recyclerViewAdapter
-        val recyclerView : RecyclerView = view.findViewById(R.id.recycler_view)
-        articles = MutableLiveData(arrayListOf())
+        val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view)
+        articles = MutableLiveData(mutableSetOf())
         newsViewModel?.newsLiveData?.observe(viewLifecycleOwner, {
             articles.value = it
             recyclerView.adapter?.notifyDataSetChanged()
@@ -55,9 +54,8 @@ class NewsFragment : Fragment() {
         })
         with(recyclerView) {
             layoutManager = LinearLayoutManager(context)
-            adapter = NewsAdapter(news,articles) { item ->
-                if (newsViewModel?.isFavourite(item) == false) {
-                    newsViewModel?.addNews(item)
+            adapter = NewsAdapter(news, articles) { item ->
+                if (newsViewModel?.addNews(item) == true) {
                     Toast.makeText(context, "Added to favourites", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -75,20 +73,10 @@ class NewsFragment : Fragment() {
         }
     }
 
-    /**
-     * Method to get the news from JSON file and add it to news ArrayList
-     */
-    private fun loadJSONFromAsset(): News {
-        lateinit var news: News
-        val gson = GsonBuilder().setPrettyPrinting().create()
-        val fileData: String? = activity?.assets?.open("news.json")?.readBytes()?.let { String(it) }
-        gson.fromJson(fileData, News::class.java).let { news = it }
-        return news
-    }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
-        val recyclerView : RecyclerView? = view?.findViewById(R.id.recycler_view)
-        if (isVisibleToUser && recyclerView?.isInLayout==false) {
+        val recyclerView: RecyclerView? = view?.findViewById(R.id.recycler_view)
+        if (isVisibleToUser && recyclerView?.isInLayout == false) {
             recyclerView.adapter?.notifyDataSetChanged()
         }
     }
