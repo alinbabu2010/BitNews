@@ -7,9 +7,9 @@
     android:background="@color/secondary_light"
     app:cardBackgroundColor="@color/secondary_light"
     app:cardCornerRadius="4dp"
-    app:strokeWidth="1dp"
+    app:cardElevation="1dp"
     app:strokeColor="@color/primary_dark"
-    app:cardElevation="1dp">
+    app:strokeWidth="1dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,9 +22,9 @@
             android:layout_height="194dp"
             android:clickable="true"
             android:contentDescription="@string/news_image"
+            android:focusable="true"
             android:scaleType="fitXY"
-            android:visibility="visible"
-            android:focusable="true" />
+            android:visibility="visible" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -37,13 +37,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
+                android:focusable="true"
                 android:fontFamily="@font/roboto_condensed_regular"
                 android:lineSpacingExtra="8sp"
                 android:text="@string/app_name"
                 android:textColor="@color/black"
                 android:textSize="18sp"
-                android:textStyle="normal"
-                android:focusable="true" />
+                android:textStyle="normal" />
 
             <TextView
                 android:id="@+id/news_desc"

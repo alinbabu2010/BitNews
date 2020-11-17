@@ -4,6 +4,7 @@ import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -12,9 +13,9 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.demoapp.R
 import com.example.demoapp.models.Articles
-import com.example.demoapp.models.News
+import com.example.demoapp.utils.loadJSONFromAsset
+import com.example.demoapp.utils.showAlert
 import com.google.android.material.appbar.CollapsingToolbarLayout
-import com.google.gson.GsonBuilder
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -38,20 +39,21 @@ class ArticleActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_article)
 
-        val position = intent.getIntExtra("position",1)
+        val position = intent.getIntExtra("position", 1)
         val title = intent.getStringExtra("title")
         val newsImage: ImageView = findViewById(R.id.appbar_news_image)
         val newsDesc: TextView = findViewById(R.id.news_desc2)
         val newsSrc: TextView = findViewById(R.id.source_textview2)
         val newsAuthor: TextView = findViewById(R.id.author_textview2)
         val newsDate: TextView = findViewById(R.id.publish_textview2)
-        val newsContent : TextView = findViewById(R.id.news_content)
-        val toolbar:Toolbar? = findViewById(R.id.toolbar)
+        val newsContent: TextView = findViewById(R.id.news_content)
+        val toolbar: Toolbar? = findViewById(R.id.toolbar)
 
-        val news = loadJSONFromAsset()
-        lateinit var articles : Articles
+        val fileData: String? = assets?.open("news.json")?.readBytes()?.let { String(it) }
+        val news = loadJSONFromAsset(fileData)
+        lateinit var articles: Articles
 
-        if(title.isNullOrBlank()) {
+        if (title.isNullOrBlank()) {
             articles = position.let { news.articles[it] }
         } else {
             news.articles.find { it.title.contentEquals(title) }?.let { articles = it }
@@ -68,7 +70,8 @@ class ArticleActivity : AppCompatActivity() {
         val src = "Source: ${articles.source.name}"
         newsSrc.text = src
 
-        val date = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US).parse(articles.publishedAt)
+        val date =
+            SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US).parse(articles.publishedAt)
         val formattedDate =
             date?.let { SimpleDateFormat("MMM dd, y hh:mm a", Locale.US).format(it) }
 
@@ -82,14 +85,14 @@ class ArticleActivity : AppCompatActivity() {
         collapsingToolbarLayout.setExpandedTitleTextColor(ColorStateList.valueOf(getColor(R.color.secondary_dark)))
     }
 
-    /**
-     * Method to get the news from JSON file and add it to news ArrayList
-     */
-    private fun loadJSONFromAsset(): News {
-        lateinit var news: News
-        val gson = GsonBuilder().setPrettyPrinting().create()
-        val fileData: String? = assets?.open("news.json")?.readBytes()?.let { String(it) }
-        gson.fromJson(fileData, News::class.java).let { news = it }
-        return news
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return if (item.itemId == R.id.logout_option) {
+            showAlert(this, this)
+            true
+        } else {
+            false
+        }
     }
+
 }

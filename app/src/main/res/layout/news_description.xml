@@ -34,7 +34,6 @@
         android:textColor="@color/secondary_dark" />
 
     <TextView
-        android:id="@+id/textView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/roboto_condensed_regular"
@@ -60,7 +59,6 @@
         android:typeface="normal" />
 
     <TextView
-        android:id="@+id/textView4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/roboto_condensed_regular"
