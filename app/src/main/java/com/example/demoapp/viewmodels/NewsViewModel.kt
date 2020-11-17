@@ -1,6 +1,5 @@
 package com.example.demoapp.viewmodels
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.demoapp.models.Articles
@@ -10,12 +9,11 @@ import com.example.demoapp.models.Articles
  */
 class NewsViewModel : ViewModel() {
 
-    private var _newsLiveData = MutableLiveData<ArrayList<Articles>>()
-    val newsLiveData : LiveData<ArrayList<Articles>>
-    get() = _newsLiveData
+    var newsLiveData = MutableLiveData<ArrayList<Articles>>()
+
 
     init {
-        _newsLiveData.value = arrayListOf()
+        newsLiveData.value = arrayListOf()
     }
 
     fun addNews(articles: Articles){
