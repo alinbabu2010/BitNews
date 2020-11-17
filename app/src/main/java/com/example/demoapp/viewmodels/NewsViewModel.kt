@@ -9,23 +9,18 @@ import com.example.demoapp.models.Articles
  */
 class NewsViewModel : ViewModel() {
 
-    var newsLiveData = MutableLiveData<ArrayList<Articles>>()
-
+    var newsLiveData = MutableLiveData<MutableSet<Articles>>()
 
     init {
-        newsLiveData.value = arrayListOf()
+        newsLiveData.value = mutableSetOf()
     }
 
-    fun addNews(articles: Articles){
-        newsLiveData.value?.add(articles)
+    fun addNews(articles: Articles): Boolean? {
+        return newsLiveData.value?.add(articles)
     }
 
-    fun removeNews(articles: Articles){
+    fun removeNews(articles: Articles) {
         newsLiveData.value?.remove(articles)
-    }
-
-    fun isFavourite(articles: Articles): Boolean? {
-        return newsLiveData.value?.contains(articles)
     }
 
 }
