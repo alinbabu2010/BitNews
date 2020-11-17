@@ -87,15 +87,11 @@ class NewsAdapter(
         }
 
         holder.newsImage.setOnClickListener {
-            val bundle = Bundle()
-            bundle.putInt("position",position)
-            startActivity(holder.context,Intent(holder.context, ArticleActivity::class.java),bundle)
+            openArticle(holder.context,position)
         }
 
         holder.newsTitle.setOnClickListener {
-            val bundle = Bundle()
-            bundle.putInt("position",position)
-            startActivity(holder.context,Intent(holder.context, ArticleActivity::class.java),bundle)
+           openArticle(holder.context,position)
         }
     }
 
@@ -104,4 +100,12 @@ class NewsAdapter(
      */
     override fun getItemCount(): Int = news.articles.size
 
+    /**
+     * Method to start news details activity
+     */
+    private fun openArticle(context: Context, position: Int) {
+        val intent = Intent(context, ArticleActivity::class.java)
+        intent.putExtra("position",position)
+        startActivity(context,intent, Bundle.EMPTY)
+    }
 }

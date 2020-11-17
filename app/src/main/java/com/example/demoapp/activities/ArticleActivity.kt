@@ -1,5 +1,6 @@
 package com.example.demoapp.activities
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -36,7 +37,7 @@ class ArticleActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_article)
 
-        val position = Bundle().getInt("position")
+        val position = intent.getIntExtra("position",1)
         val newsImage: ImageView = findViewById(R.id.appbar_news_image)
         val newsTitle: TextView = findViewById(R.id.news_title2)
         val newsDesc: TextView = findViewById(R.id.news_desc2)
@@ -46,7 +47,7 @@ class ArticleActivity : AppCompatActivity() {
         val toolbar:Toolbar? = findViewById(R.id.toolbar)
 
         val news = loadJSONFromAsset()
-        val articles = news.articles[position]
+        val articles = position.let { news.articles[it] }
 
         Glide.with(applicationContext).load(articles.urlToImage).override(800).into(newsImage)
 
@@ -70,6 +71,7 @@ class ArticleActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val collapsingToolbarLayout = findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbar)
         collapsingToolbarLayout.title = articles.title
+        collapsingToolbarLayout.setExpandedTitleTextColor(ColorStateList.valueOf(getColor(R.color.design_default_color_error)))
     }
 
     /**
