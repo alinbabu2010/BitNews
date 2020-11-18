@@ -17,6 +17,7 @@ import com.example.demoapp.adapter.NewsAdapter
 import com.example.demoapp.models.Articles
 import com.example.demoapp.utils.loadJSONFromAsset
 import com.example.demoapp.viewmodels.NewsViewModel
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
 /**
@@ -55,7 +56,7 @@ class NewsFragment : Fragment() {
         with(recyclerView) {
             layoutManager = LinearLayoutManager(context)
             adapter = NewsAdapter(news, articles) { item ->
-                if(articles.value?.add(item) == true){
+                if (articles.value?.add(item) == true) {
                     newsViewModel?.newsLiveData?.postValue(articles.value)
                     Toast.makeText(context, "Added to favourites", Toast.LENGTH_SHORT).show()
                 }
@@ -71,6 +72,18 @@ class NewsFragment : Fragment() {
         refreshLayout.setOnRefreshListener {
             recyclerView.adapter?.notifyDataSetChanged()
             refreshLayout.isRefreshing = false
+        }
+
+        // Inflate bottom sheet dialog on floating action button click
+        val filter: FloatingActionButton = view.findViewById(R.id.filter_button)
+        filter.setOnClickListener {
+            val bottomSheet = FilterDialogFragment()
+            activity?.supportFragmentManager?.let { it1 ->
+                bottomSheet.show(
+                    it1,
+                    "FilterBottomSheet"
+                )
+            }
         }
     }
 
