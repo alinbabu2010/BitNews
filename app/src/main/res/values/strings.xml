@@ -15,4 +15,6 @@
     <string name="share_button">share_button_image</string>
     <string name="description">Description</string>
     <string name="article">Article</string>
+    <string name="filter_icon">Filter floating action button</string>
+    <string name="empty_favourites_string">No Favourites added</string>
 </resources>
