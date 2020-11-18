@@ -17,6 +17,12 @@
             android:layout_height="match_parent"
             android:background="@color/background_color"
             android:padding="4dp"
-            android:scrollbars="vertical" />
+            android:scrollbarThumbHorizontal="@color/secondary_light"
+            android:scrollbarThumbVertical="@color/secondary_light"
+            android:scrollbars="vertical"
+            android:splitMotionEvents="true">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </LinearLayout>
