@@ -55,7 +55,8 @@ class NewsFragment : Fragment() {
         with(recyclerView) {
             layoutManager = LinearLayoutManager(context)
             adapter = NewsAdapter(news, articles) { item ->
-                if (newsViewModel?.addNews(item) == true) {
+                if(articles.value?.add(item) == true){
+                    newsViewModel?.newsLiveData?.postValue(articles.value)
                     Toast.makeText(context, "Added to favourites", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -73,11 +74,4 @@ class NewsFragment : Fragment() {
         }
     }
 
-
-    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
-        val recyclerView: RecyclerView? = view?.findViewById(R.id.recycler_view)
-        if (isVisibleToUser && recyclerView?.isInLayout == false) {
-            recyclerView.adapter?.notifyDataSetChanged()
-        }
-    }
 }

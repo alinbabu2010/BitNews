@@ -67,16 +67,12 @@ class FavouritesFragment : Fragment() {
         with(recyclerView) {
             layoutManager = LinearLayoutManager(context)
             adapter = FavouritesAdapter(articles) { item ->
-                item?.let { newsViewModel?.removeNews(it) }
+                articles.value?.remove(item)
+                newsViewModel?.newsLiveData?.postValue(articles.value)
             }
             adapter?.notifyDataSetChanged()
             setHasFixedSize(true)
         }
     }
 
-    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
-        if (isVisibleToUser) {
-            recyclerView.adapter?.notifyDataSetChanged()
-        }
-    }
 }

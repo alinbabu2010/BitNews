@@ -15,12 +15,4 @@ class NewsViewModel : ViewModel() {
         newsLiveData.value = mutableSetOf()
     }
 
-    fun addNews(articles: Articles): Boolean? {
-        return newsLiveData.value?.add(articles)
-    }
-
-    fun removeNews(articles: Articles) {
-        newsLiveData.value?.remove(articles)
-    }
-
 }
