@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
@@ -62,6 +63,11 @@ class FavouritesFragment : Fragment() {
         articles = MutableLiveData(mutableSetOf())
         newsViewModel?.newsLiveData?.observe(viewLifecycleOwner, {
             articles.value = it
+            if (articles.value.isNullOrEmpty()) {
+                view?.findViewById<TextView>(R.id.empty_textView)?.visibility = View.VISIBLE
+            } else {
+                view?.findViewById<TextView>(R.id.empty_textView)?.visibility = View.INVISIBLE
+            }
             recyclerView.adapter?.notifyDataSetChanged()
         })
         with(recyclerView) {
