@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.demoapp.R
 import com.example.demoapp.models.Articles
-import com.example.demoapp.utils.loadJSONFromAsset
 import com.example.demoapp.utils.showAlert
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import java.text.SimpleDateFormat
@@ -39,8 +38,7 @@ class ArticleActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_article)
 
-        val position = intent.getIntExtra("position", 1)
-        val title = intent.getStringExtra("title")
+        val article = intent.getParcelableExtra<Articles>("article")
         val newsImage: ImageView = findViewById(R.id.appbar_news_image)
         val newsDesc: TextView = findViewById(R.id.news_desc2)
         val newsSrc: TextView = findViewById(R.id.source_textview2)
@@ -49,29 +47,18 @@ class ArticleActivity : AppCompatActivity() {
         val newsContent: TextView = findViewById(R.id.news_content)
         val toolbar: Toolbar? = findViewById(R.id.toolbar)
 
-        val fileData: String? = assets?.open("news.json")?.readBytes()?.let { String(it) }
-        val news = loadJSONFromAsset(fileData)
-        lateinit var articles: Articles
+        Glide.with(applicationContext).load(article?.urlToImage).override(800).into(newsImage)
+        newsDesc.text = article?.description
+        newsContent.text = article?.content
 
-        if (title.isNullOrBlank()) {
-            articles = position.let { news.articles[it] }
-        } else {
-            news.articles.find { it.title.contentEquals(title) }?.let { articles = it }
-        }
-
-
-        Glide.with(applicationContext).load(articles.urlToImage).override(800).into(newsImage)
-        newsDesc.text = articles.description
-        newsContent.text = articles.content
-
-        val author = "Author: ${articles.author}"
+        val author = "Author: ${article?.author}"
         newsAuthor.text = author
 
-        val src = "Source: ${articles.source.name}"
+        val src = "Source: ${article?.source?.name}"
         newsSrc.text = src
 
         val date =
-            SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US).parse(articles.publishedAt)
+            SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US).parse(article?.publishedAt.toString())
         val formattedDate =
             date?.let { SimpleDateFormat("MMM dd, y hh:mm a", Locale.US).format(it) }
 
@@ -81,7 +68,7 @@ class ArticleActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val collapsingToolbarLayout = findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbar)
-        collapsingToolbarLayout.title = articles.title
+        collapsingToolbarLayout.title = article?.title
         collapsingToolbarLayout.setExpandedTitleTextColor(ColorStateList.valueOf(getColor(R.color.secondary_dark)))
     }
 

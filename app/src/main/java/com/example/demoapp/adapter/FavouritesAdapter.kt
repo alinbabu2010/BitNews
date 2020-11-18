@@ -83,11 +83,11 @@ class FavouritesAdapter(
         }
 
         holder.newsImage.setOnClickListener {
-            openArticle(holder.context, position, item?.title)
+            openArticle(holder.context,item)
         }
 
         holder.newsTitle.setOnClickListener {
-            openArticle(holder.context, position, item?.title)
+            openArticle(holder.context,item)
         }
 
     }

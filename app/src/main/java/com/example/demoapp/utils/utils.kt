@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentManager
 import com.example.demoapp.R
 import com.example.demoapp.activities.ArticleActivity
 import com.example.demoapp.activities.MainActivity
+import com.example.demoapp.models.Articles
 import com.example.demoapp.models.News
 import com.google.gson.GsonBuilder
 
@@ -66,9 +67,8 @@ fun showAlert(context: Context, activity: Activity) {
 /**
  * Function to start news detail activity
  */
-fun openArticle(context: Context, position: Int, title: String? = null) {
+fun openArticle(context: Context, article: Articles?) {
     val intent = Intent(context, ArticleActivity::class.java)
-    intent.putExtra("position", position)
-    intent.putExtra("title", title)
+    intent.putExtra("article",article)
     ContextCompat.startActivity(context, intent, Bundle.EMPTY)
 }

@@ -84,11 +84,11 @@ class NewsAdapter(
         }
 
         holder.newsImage.setOnClickListener {
-            openArticle(holder.context, position)
+            openArticle(holder.context,item)
         }
 
         holder.newsTitle.setOnClickListener {
-            openArticle(holder.context, position)
+            openArticle(holder.context,item)
         }
     }
 
