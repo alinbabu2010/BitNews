@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.demoapp"
-        minSdkVersion 23
+        minSdkVersion 24
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -41,6 +41,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.wear:wear:1.1.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
     testImplementation 'junit:junit:4.13.1'
     implementation 'android.arch.lifecycle:extensions:1.1.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
