@@ -32,7 +32,7 @@ class NewsFragment : Fragment() {
 
     private var newsViewModel: NewsViewModel? = null
     private var container: ViewGroup? = null
-    val articles: MutableLiveData<MutableSet<Articles>> = MutableLiveData(mutableSetOf())
+    private val articles: MutableLiveData<MutableSet<Articles>> = MutableLiveData(mutableSetOf())
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

@@ -9,7 +9,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.demoapp.R
 import com.example.demoapp.models.Articles
@@ -20,7 +19,7 @@ import java.util.*
 
 
 /**
- * A simple [Fragment] subclass for view each news article.
+ * An activity for viewing each news article.
  */
 class ArticleActivity : AppCompatActivity() {
 
