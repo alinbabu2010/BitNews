@@ -26,7 +26,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 class NewsFragment : Fragment() {
 
     private var newsViewModel: NewsViewModel? = null
-    private lateinit var articles: MutableLiveData<MutableSet<Articles>>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,7 +46,7 @@ class NewsFragment : Fragment() {
 
         // Getting recyclerView and invoke layoutManager and recyclerViewAdapter
         val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view)
-        articles = MutableLiveData(mutableSetOf())
+        val articles: MutableLiveData<MutableSet<Articles>> = MutableLiveData(mutableSetOf())
         newsViewModel?.newsLiveData?.observe(viewLifecycleOwner, {
             articles.value = it
             recyclerView.adapter?.notifyDataSetChanged()

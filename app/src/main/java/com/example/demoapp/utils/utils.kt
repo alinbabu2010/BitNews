@@ -39,7 +39,7 @@ fun replaceFragment(fragment: Fragment, id: Int, fragmentManager: FragmentManage
  * Function to get the news from JSON file and add it to news ArrayList
  */
 fun loadJSONFromAsset(fileData: String?): News {
-    lateinit var news: News
+    val news: News
     val gson = GsonBuilder().setPrettyPrinting().create()
     gson.fromJson(fileData, News::class.java).let { news = it }
     return news
