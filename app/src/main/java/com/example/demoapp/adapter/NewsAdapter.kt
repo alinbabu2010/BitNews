@@ -7,14 +7,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.TextView
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.demoapp.R
 import com.example.demoapp.fragments.NewsFragment
 import com.example.demoapp.models.Articles
-import com.example.demoapp.models.News
 import com.example.demoapp.utils.openArticle
+import com.example.demoapp.viewmodels.NewsViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -23,9 +22,8 @@ import java.util.*
  * Adapter class for RecyclerView of [NewsFragment]
  */
 class NewsAdapter(
-    private val news: News,
-    private val articles: MutableLiveData<MutableSet<Articles>>,
-    private val listener: (Articles) -> Unit
+    private val news: ArrayList<Articles>?,
+    private val newsViewModel: NewsViewModel?,
 ) : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
 
     /**
@@ -58,44 +56,47 @@ class NewsAdapter(
      * Replace the contents of a view from news ArrayList (invoked by the layout manager)
      */
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
-        val item = news.articles[position]
-        Glide.with(holder.context).load(item.urlToImage).override(800).into(holder.newsImage)
-        holder.newsTitle.text = item.title
-        holder.newsDesc.text = item.description
+        val item = news?.get(position)
+        Glide.with(holder.context).load(item?.urlToImage).override(800).into(holder.newsImage)
+        holder.newsTitle.text = item?.title
+        holder.newsDesc.text = item?.description
 
-        val author = "Author: ${item.author}"
+        val author = "Author: ${item?.author}"
         holder.newsAuthor.text = author
 
-        val src = "Source: ${item.source.name}"
+        val src = "Source: ${item?.source?.name}"
         holder.newsSrc.text = src
 
-        val date = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US).parse(item.publishedAt)
+        val date = SimpleDateFormat(
+            "yyyy-MM-dd'T'HH:mm:ss'Z'",
+            Locale.US
+        ).parse(item?.publishedAt.toString())
         val formattedDate =
             date?.let { SimpleDateFormat("MMM dd, y hh:mm a", Locale.US).format(it) }
 
         val publishDate = "Published on $formattedDate"
         holder.newsDate.text = publishDate
 
-        holder.newsLiked.isChecked = articles.value?.contains(item) ?: false
+        holder.newsLiked.isChecked = newsViewModel?.isFavouriteNews(item) ?: false
 
         holder.newsLiked.setOnClickListener {
-            listener(item)
+            newsViewModel?.addToFavourites(item)
             notifyDataSetChanged()
         }
 
         holder.newsImage.setOnClickListener {
-            openArticle(holder.context,item)
+            openArticle(holder.context, item)
         }
 
         holder.newsTitle.setOnClickListener {
-            openArticle(holder.context,item)
+            openArticle(holder.context, item)
         }
     }
 
     /**
      * Return the size of your data set (invoked by the layout manager)
      */
-    override fun getItemCount(): Int = news.articles.size
+    override fun getItemCount(): Int = news?.size ?: 0
 
 
 }

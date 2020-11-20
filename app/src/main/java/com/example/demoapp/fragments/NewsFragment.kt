@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,8 +17,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.demoapp.R
 import com.example.demoapp.adapter.NewsAdapter
 import com.example.demoapp.models.Articles
-import com.example.demoapp.models.News
-import com.example.demoapp.utils.loadJSONFromAsset
 import com.example.demoapp.viewmodels.NewsViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -32,7 +29,6 @@ class NewsFragment : Fragment() {
 
     private var newsViewModel: NewsViewModel? = null
     private var container: ViewGroup? = null
-    private val articles: MutableLiveData<MutableSet<Articles>> = MutableLiveData(mutableSetOf())
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,19 +43,20 @@ class NewsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Call the function to parse JSON file.
-        val fileData: String? = activity?.assets?.open("news.json")?.readBytes()?.let { String(it) }
-        val news = loadJSONFromAsset(fileData)
         newsViewModel = activity?.let { ViewModelProvider(it).get(NewsViewModel::class.java) }
+        val articles = activity?.let { newsViewModel?.getNews(it) }
 
         // Getting recyclerView and invoke layoutManager and recyclerViewAdapter
         val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view)
+        with(recyclerView) {
+            layoutManager = LinearLayoutManager(context)
+            adapter = NewsAdapter(articles, newsViewModel)
+            setHasFixedSize(true)
+        }
         newsViewModel?.newsLiveData?.observe(viewLifecycleOwner, {
-            articles.value = it
             recyclerView.adapter?.notifyDataSetChanged()
             onCreate(savedInstanceState)
         })
-        setRecyclerViewAdapter(recyclerView,news,articles)
 
         // Refresh on swipe by calling recycler view
         val refreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.swipeRefresh)
@@ -73,40 +70,25 @@ class NewsFragment : Fragment() {
         // Inflate bottom sheet dialog on floating action button click
         val filter: FloatingActionButton = view.findViewById(R.id.filter_button)
         filter.setOnClickListener {
-            val bottomSheet = context?.let { it1 -> BottomSheetDialog(it1) }
-            val bottomSheetView: View = layoutInflater.inflate(R.layout.news_filter, container,false)
-            bottomSheet?.setContentView(bottomSheetView)
-            bottomSheet?.show()
-            val sourceRadioGroup: RadioGroup = bottomSheetView.findViewById(R.id.source_radioGroup)
-            val dateView: TextView = bottomSheetView.findViewById(R.id.publish_datepicker)
-            setBottomSheetDialog(news, sourceRadioGroup, dateView)
-
-            val applyButton: Button = bottomSheetView.findViewById(R.id.apply_button)
-            applyButton.setOnClickListener {
-                filterNews(bottomSheet,dateView,sourceRadioGroup,news,recyclerView)
-            }
-
-            val clearButton : Button = bottomSheetView.findViewById(R.id.clear_button)
-            clearButton.setOnClickListener {
-                dateView.text = null
-                sourceRadioGroup.clearCheck()
-                setRecyclerViewAdapter(recyclerView,news,articles)
-            }
+            setBottomSheetDialog(recyclerView, articles)
         }
 
     }
 
     /**
-     * Method to set radio buttons and datepicker for filter bottom sheet dialog
+     * Method to set radio buttons and datepicker for filter bottom sheet dialog and process the filter clicks
      */
-    private fun setBottomSheetDialog(
-        news: News,
-        sourceRadioGroup: RadioGroup,
-        dateView: TextView
-    ) {
-        val article = news.articles
+    private fun setBottomSheetDialog(recyclerView: RecyclerView, article: ArrayList<Articles>?) {
+
         val source = mutableSetOf<String>()
-        article.forEach { source.add(it.source.name) }
+        val bottomSheet = context?.let { it1 -> BottomSheetDialog(it1) }
+        val bottomSheetView: View = layoutInflater.inflate(R.layout.news_filter, container, false)
+        bottomSheet?.setContentView(bottomSheetView)
+        bottomSheet?.show()
+
+        val sourceRadioGroup: RadioGroup = bottomSheetView.findViewById(R.id.source_radioGroup)
+        val dateView: TextView = bottomSheetView.findViewById(R.id.publish_datepicker)
+        article?.forEach { source.add(it.source.name) }
 
         // Adding radio button based on the source set
         for (i in source.indices) {
@@ -126,7 +108,8 @@ class NewsFragment : Fragment() {
                         val updateDate = Calendar.getInstance()
                         updateDate.set(year, month, dayOfMonth)
                         val month1 = month + 1
-                        val day : String = if (dayOfMonth < 10) "0$dayOfMonth" else dayOfMonth.toString()
+                        val day: String =
+                            if (dayOfMonth < 10) "0$dayOfMonth" else dayOfMonth.toString()
                         val dateToSet = "$year-$month1-$day"
                         dateView.text = dateToSet
                     },
@@ -137,24 +120,21 @@ class NewsFragment : Fragment() {
             }
         dateView.setOnClickListener { datePicker?.show() }
 
+        val applyButton: Button = bottomSheetView.findViewById(R.id.apply_button)
+        applyButton.setOnClickListener {
+            filterNews(bottomSheet, dateView, sourceRadioGroup, article, recyclerView)
+        }
+
+        val clearButton: Button = bottomSheetView.findViewById(R.id.clear_button)
+        clearButton.setOnClickListener {
+            dateView.text = null
+            sourceRadioGroup.clearCheck()
+            view?.findViewById<TextView>(R.id.no_matching_textView)?.visibility = View.INVISIBLE
+            recyclerView.swapAdapter(NewsAdapter(article, newsViewModel), false)
+        }
+
     }
 
-    /**
-     * Method to set the recycler view adapter
-     */
-    private fun setRecyclerViewAdapter(recyclerView: RecyclerView, news:News, articles: MutableLiveData<MutableSet<Articles>>){
-        with(recyclerView) {
-            layoutManager = LinearLayoutManager(context)
-            adapter = NewsAdapter(news, articles) { item ->
-                if (articles.value?.add(item) == true) {
-                    newsViewModel?.newsLiveData?.postValue(articles.value)
-                    Toast.makeText(context, "Added to favourites", Toast.LENGTH_SHORT).show()
-                }
-            }
-            adapter?.notifyDataSetChanged()
-            setHasFixedSize(true)
-        }
-    }
 
     /**
      * Method to filter the news according to source or published date
@@ -163,10 +143,9 @@ class NewsFragment : Fragment() {
         bottomSheet: BottomSheetDialog?,
         dateView: TextView,
         sourceRadioGroup: RadioGroup,
-        news: News,
+        article: ArrayList<Articles>?,
         recyclerView: RecyclerView
     ) {
-        val article = news.articles
         val checkedRadio =
             bottomSheet?.findViewById<RadioButton>(sourceRadioGroup.checkedRadioButtonId)
         var sourceName: String? = null
@@ -178,26 +157,30 @@ class NewsFragment : Fragment() {
         if (sourceName.isNullOrEmpty() && publishedDate.isNullOrEmpty()) {
             Toast.makeText(context, "Select at least one filter", Toast.LENGTH_SHORT).show()
         } else {
-            val sourceFilter  = article.filter { it.source.name == sourceName.toString() } as ArrayList<Articles>
+            val sourceFilter =
+                article?.filter { it.source.name == sourceName.toString() } as ArrayList<Articles>
             var dateFilter = arrayListOf<Articles>()
             if (publishedDate.isNotEmpty()) {
-                dateFilter = article.filter { it.publishedAt.startsWith(publishedDate.toString()) } as ArrayList<Articles>
+                dateFilter =
+                    article.filter { it.publishedAt.startsWith(publishedDate.toString()) } as ArrayList<Articles>
             }
             Log.i("date", dateFilter.toString())
-            val distinctNewsFilter : ArrayList<Articles>
+            val distinctNewsFilter: ArrayList<Articles>
             distinctNewsFilter = when {
-                (sourceFilter.isEmpty()) ->  dateFilter
-                (dateFilter.isEmpty()) ->  sourceFilter
+                (sourceFilter.isEmpty()) -> dateFilter
+                (dateFilter.isEmpty()) -> sourceFilter
                 else -> (sourceFilter + dateFilter).distinct() as ArrayList<Articles>
             }
             Log.i("final", distinctNewsFilter.toString())
             if (distinctNewsFilter.isEmpty()) {
-                Toast.makeText(context, "No matching news", Toast.LENGTH_SHORT).show()
+                view?.findViewById<TextView>(R.id.no_matching_textView)?.visibility = View.VISIBLE
+                recyclerView.swapAdapter(NewsAdapter(null, newsViewModel), false)
+                bottomSheet?.dismiss()
             } else {
-                val newsFiltered = News(distinctNewsFilter)
-                setRecyclerViewAdapter(recyclerView,newsFiltered,articles)
+                recyclerView.swapAdapter(NewsAdapter(distinctNewsFilter, newsViewModel), false)
+                bottomSheet?.dismiss()
             }
-            bottomSheet?.dismiss()
+
         }
     }
 

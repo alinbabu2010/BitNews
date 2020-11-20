@@ -7,12 +7,11 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.demoapp.R
-import com.example.demoapp.models.Articles
 import com.example.demoapp.utils.openArticle
+import com.example.demoapp.viewmodels.NewsViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -20,8 +19,7 @@ import java.util.*
  * Adapter class for RecyclerView of FavouritesFragment
  */
 class FavouritesAdapter(
-    private val news: MutableLiveData<MutableSet<Articles>>,
-    val listener: (Articles?) -> Unit
+    private val newsViewModel: NewsViewModel?
 ) : RecyclerView.Adapter<FavouritesAdapter.FavouritesViewHolder>() {
 
 
@@ -55,7 +53,8 @@ class FavouritesAdapter(
      * Replace the contents of a view from news ArrayList (invoked by the layout manager)
      */
     override fun onBindViewHolder(holder: FavouritesViewHolder, position: Int) {
-        val item = news.value?.toMutableList()?.get(position)
+        val articles = newsViewModel?.getFavourites()
+        val item = articles?.toMutableList()?.get(position)
         Glide.with(holder.context).load(item?.urlToImage).override(800).into(holder.newsImage)
         holder.newsTitle.text = item?.title
         holder.newsDesc.text = item?.description
@@ -76,18 +75,18 @@ class FavouritesAdapter(
         val publishDate = "Published on $formattedDate"
         holder.newsDate.text = publishDate
 
-        holder.newsLiked.isChecked = news.value?.contains(item) ?: false
+        holder.newsLiked.isChecked = newsViewModel?.isFavouriteNews(item) ?: false
         holder.newsLiked.setOnClickListener {
-            listener(item)
+            newsViewModel?.removeFromFavourites(item)
             notifyDataSetChanged()
         }
 
         holder.newsImage.setOnClickListener {
-            openArticle(holder.context,item)
+            openArticle(holder.context, item)
         }
 
         holder.newsTitle.setOnClickListener {
-            openArticle(holder.context,item)
+            openArticle(holder.context, item)
         }
 
     }
@@ -95,6 +94,6 @@ class FavouritesAdapter(
     /**
      * Return the size of your data set (invoked by the layout manager)
      */
-    override fun getItemCount(): Int = news.value?.size ?: 0
+    override fun getItemCount(): Int = newsViewModel?.newsLiveData?.value?.size ?: 0
 
 }

@@ -7,14 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.demoapp.R
 import com.example.demoapp.adapter.FavouritesAdapter
-import com.example.demoapp.models.Articles
 import com.example.demoapp.viewmodels.NewsViewModel
 
 
@@ -58,25 +56,22 @@ class FavouritesFragment : Fragment() {
      * Method to invoke layoutManager and recyclerViewAdapter
      */
     private fun loadRecyclerView(recyclerView: RecyclerView, newsViewModel: NewsViewModel?) {
-        val articles: MutableLiveData<MutableSet<Articles>> = MutableLiveData(mutableSetOf())
+        with(recyclerView) {
+            layoutManager = LinearLayoutManager(context)
+            adapter = FavouritesAdapter(newsViewModel)
+            adapter?.notifyDataSetChanged()
+            setHasFixedSize(true)
+        }
         newsViewModel?.newsLiveData?.observe(viewLifecycleOwner, {
-            articles.value = it
-            if (articles.value.isNullOrEmpty()) {
+            val articles = newsViewModel.getFavourites()
+            if (articles.isNullOrEmpty()) {
                 view?.findViewById<TextView>(R.id.empty_textView)?.visibility = View.VISIBLE
             } else {
                 view?.findViewById<TextView>(R.id.empty_textView)?.visibility = View.INVISIBLE
             }
             recyclerView.adapter?.notifyDataSetChanged()
         })
-        with(recyclerView) {
-            layoutManager = LinearLayoutManager(context)
-            adapter = FavouritesAdapter(articles) { item ->
-                articles.value?.remove(item)
-                newsViewModel?.newsLiveData?.postValue(articles.value)
-            }
-            adapter?.notifyDataSetChanged()
-            setHasFixedSize(true)
-        }
+
     }
 
 }
