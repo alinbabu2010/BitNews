@@ -4,8 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_color"
     android:orientation="vertical"
     tools:context=".fragments.NewsFragment">
+
+    <TextView
+        android:id="@+id/no_matching_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_condensed_regular"
+        android:text="@string/no_matchings"
+        android:textAlignment="center"
+        android:textColor="@color/secondary_dark"
+        android:textSize="24sp"
+        android:visibility="invisible"
+        app:drawableTopCompat="@drawable/ic_empty_box"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/filter_button"
@@ -34,7 +51,6 @@
                 android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/background_color"
                 android:padding="4dp"
                 android:scrollbarThumbHorizontal="@color/secondary_light"
                 android:scrollbarThumbVertical="@color/secondary_light"
