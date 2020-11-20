@@ -48,7 +48,7 @@ class ArticleActivity : AppCompatActivity() {
         val newsDate: TextView = findViewById(R.id.publish_date_display)
         val newsContent: TextView = findViewById(R.id.news_content)
         val toolbar: Toolbar? = findViewById(R.id.toolbar)
-        val openNews : Button = findViewById(R.id.open_button)
+        val openNews: Button = findViewById(R.id.open_button)
 
         Glide.with(applicationContext).load(article?.urlToImage).override(800).into(newsImage)
         newsDesc.text = article?.description
@@ -77,14 +77,13 @@ class ArticleActivity : AppCompatActivity() {
         collapsingToolbarLayout.title = article?.title
         collapsingToolbarLayout.setExpandedTitleTextColor(ColorStateList.valueOf(getColor(R.color.secondary_dark)))
 
-
+        // Open the news in browser on button click
         openNews.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW)
             intent.data = Uri.parse(article?.url)
             startActivity(intent)
         }
     }
-
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return if (item.itemId == R.id.logout_option) {

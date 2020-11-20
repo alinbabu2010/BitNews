@@ -28,7 +28,7 @@ class NewsFragment : Fragment() {
 
     private var newsViewModel: NewsViewModel? = null
     private var container: ViewGroup? = null
-    private var checkedRadio : RadioButton? = null
+    private var checkedRadio: RadioButton? = null
     private var publishedDate: String? = null
 
     override fun onCreateView(
@@ -162,15 +162,15 @@ class NewsFragment : Fragment() {
         } else {
             val sourceFilter =
                 article?.filter { it.source.name == sourceName.toString() } as ArrayList<Articles>?
-            var dateFilter : ArrayList<Articles>? = arrayListOf()
-            if (publishedDate?.isNotEmpty()==true) {
+            var dateFilter: ArrayList<Articles>? = arrayListOf()
+            if (publishedDate?.isNotEmpty() == true) {
                 dateFilter =
                     article?.filter { it.publishedAt.startsWith(publishedDate.toString()) } as ArrayList<Articles>?
             }
             val distinctNewsFilter: ArrayList<Articles>?
             distinctNewsFilter = when {
-                (sourceFilter?.isEmpty()==true) -> dateFilter
-                (dateFilter?.isEmpty()==true) -> sourceFilter
+                (sourceFilter?.isEmpty() == true) -> dateFilter
+                (dateFilter?.isEmpty() == true) -> sourceFilter
                 else -> dateFilter?.let { sourceFilter?.plus(it) } as ArrayList<Articles>?
             }
             if (distinctNewsFilter?.isEmpty() == true) {

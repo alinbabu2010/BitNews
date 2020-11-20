@@ -62,13 +62,15 @@ fun openArticle(context: Context, article: Articles?) {
     ContextCompat.startActivity(context, intent, Bundle.EMPTY)
 }
 
+/**
+ * Function to share news to others
+ */
 fun shareNews(context: Context, url: String?) {
     val sendIntent: Intent = Intent().apply {
         action = Intent.ACTION_SEND
         putExtra(Intent.EXTRA_TEXT, url)
         type = "text/plain"
     }
-
     val shareIntent = Intent.createChooser(sendIntent, null)
     ContextCompat.startActivity(context, shareIntent, Bundle.EMPTY)
 }

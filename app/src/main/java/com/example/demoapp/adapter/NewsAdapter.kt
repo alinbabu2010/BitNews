@@ -39,7 +39,7 @@ class NewsAdapter(
         val newsAuthor: TextView = view.findViewById(R.id.author_textview)
         val newsDate: TextView = view.findViewById(R.id.publish_textview)
         val newsLiked: RadioButton = view.findViewById(R.id.favourites_button)
-        val shareNews : ImageButton = view.findViewById(R.id.share_button)
+        val shareNews: ImageButton = view.findViewById(R.id.share_button)
         val context: Context = view.context
     }
 
@@ -96,7 +96,7 @@ class NewsAdapter(
         }
 
         holder.shareNews.setOnClickListener {
-            shareNews(holder.context,item?.url)
+            shareNews(holder.context, item?.url)
         }
     }
 
