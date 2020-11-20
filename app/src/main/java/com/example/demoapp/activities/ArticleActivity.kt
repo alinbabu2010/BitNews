@@ -57,7 +57,10 @@ class ArticleActivity : AppCompatActivity() {
         newsSrc.text = src
 
         val date =
-            SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US).parse(article?.publishedAt.toString())
+            SimpleDateFormat(
+                "yyyy-MM-dd'T'HH:mm:ss'Z'",
+                Locale.US
+            ).parse(article?.publishedAt.toString())
         val formattedDate =
             date?.let { SimpleDateFormat("MMM dd, y hh:mm a", Locale.US).format(it) }
 

@@ -13,8 +13,6 @@ import com.example.demoapp.R
 import com.example.demoapp.activities.ArticleActivity
 import com.example.demoapp.activities.MainActivity
 import com.example.demoapp.models.Articles
-import com.example.demoapp.models.News
-import com.google.gson.GsonBuilder
 
 /**
  * Function to add a new fragment to the layout
@@ -35,15 +33,6 @@ fun replaceFragment(fragment: Fragment, id: Int, fragmentManager: FragmentManage
     fragmentTransaction.commit()
 }
 
-/**
- * Function to get the news from JSON file and add it to news ArrayList
- */
-fun loadJSONFromAsset(fileData: String?): News {
-    val news: News
-    val gson = GsonBuilder().setPrettyPrinting().create()
-    gson.fromJson(fileData, News::class.java).let { news = it }
-    return news
-}
 
 /*
  * Function to show alert dialog box after button click.
@@ -69,6 +58,6 @@ fun showAlert(context: Context, activity: Activity) {
  */
 fun openArticle(context: Context, article: Articles?) {
     val intent = Intent(context, ArticleActivity::class.java)
-    intent.putExtra("article",article)
+    intent.putExtra("article", article)
     ContextCompat.startActivity(context, intent, Bundle.EMPTY)
 }
