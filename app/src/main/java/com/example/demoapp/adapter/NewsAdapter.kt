@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.TextView
@@ -13,6 +14,7 @@ import com.example.demoapp.R
 import com.example.demoapp.fragments.NewsFragment
 import com.example.demoapp.models.Articles
 import com.example.demoapp.utils.openArticle
+import com.example.demoapp.utils.shareNews
 import com.example.demoapp.viewmodels.NewsViewModel
 import java.text.SimpleDateFormat
 import java.util.*
@@ -37,6 +39,7 @@ class NewsAdapter(
         val newsAuthor: TextView = view.findViewById(R.id.author_textview)
         val newsDate: TextView = view.findViewById(R.id.publish_textview)
         val newsLiked: RadioButton = view.findViewById(R.id.favourites_button)
+        val shareNews : ImageButton = view.findViewById(R.id.share_button)
         val context: Context = view.context
     }
 
@@ -90,6 +93,10 @@ class NewsAdapter(
 
         holder.newsTitle.setOnClickListener {
             openArticle(holder.context, item)
+        }
+
+        holder.shareNews.setOnClickListener {
+            shareNews(holder.context,item?.url)
         }
     }
 
