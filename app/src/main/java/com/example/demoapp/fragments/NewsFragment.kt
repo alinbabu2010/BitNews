@@ -4,7 +4,6 @@ import android.app.DatePickerDialog
 import android.graphics.Color
 import android.icu.util.Calendar
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -153,26 +152,23 @@ class NewsFragment : Fragment() {
             sourceName = checkedRadio.text as String?
         }
         val publishedDate = dateView.text
-        Log.i("Filter", sourceName.toString())
         if (sourceName.isNullOrEmpty() && publishedDate.isNullOrEmpty()) {
             Toast.makeText(context, "Select at least one filter", Toast.LENGTH_SHORT).show()
         } else {
             val sourceFilter =
-                article?.filter { it.source.name == sourceName.toString() } as ArrayList<Articles>
-            var dateFilter = arrayListOf<Articles>()
+                article?.filter { it.source.name == sourceName.toString() } as? ArrayList<Articles>
+            var dateFilter : ArrayList<Articles>? = arrayListOf()
             if (publishedDate.isNotEmpty()) {
                 dateFilter =
-                    article.filter { it.publishedAt.startsWith(publishedDate.toString()) } as ArrayList<Articles>
+                    article?.filter { it.publishedAt.startsWith(publishedDate.toString()) } as? ArrayList<Articles>
             }
-            Log.i("date", dateFilter.toString())
-            val distinctNewsFilter: ArrayList<Articles>
+            val distinctNewsFilter: ArrayList<Articles>?
             distinctNewsFilter = when {
-                (sourceFilter.isEmpty()) -> dateFilter
-                (dateFilter.isEmpty()) -> sourceFilter
-                else -> (sourceFilter + dateFilter).distinct() as ArrayList<Articles>
+                (sourceFilter?.isEmpty()==true) -> dateFilter
+                (dateFilter?.isEmpty()==true) -> sourceFilter
+                else -> dateFilter?.let { sourceFilter?.plus(it) } as ArrayList<Articles>
             }
-            Log.i("final", distinctNewsFilter.toString())
-            if (distinctNewsFilter.isEmpty()) {
+            if (distinctNewsFilter?.isEmpty() == true) {
                 view?.findViewById<TextView>(R.id.no_matching_textView)?.visibility = View.VISIBLE
                 recyclerView.swapAdapter(NewsAdapter(null, newsViewModel), false)
                 bottomSheet?.dismiss()
