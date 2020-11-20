@@ -156,17 +156,17 @@ class NewsFragment : Fragment() {
             Toast.makeText(context, "Select at least one filter", Toast.LENGTH_SHORT).show()
         } else {
             val sourceFilter =
-                article?.filter { it.source.name == sourceName.toString() } as? ArrayList<Articles>
+                article?.filter { it.source.name == sourceName.toString() } as ArrayList<Articles>?
             var dateFilter : ArrayList<Articles>? = arrayListOf()
             if (publishedDate.isNotEmpty()) {
                 dateFilter =
-                    article?.filter { it.publishedAt.startsWith(publishedDate.toString()) } as? ArrayList<Articles>
+                    article?.filter { it.publishedAt.startsWith(publishedDate.toString()) } as ArrayList<Articles>?
             }
             val distinctNewsFilter: ArrayList<Articles>?
             distinctNewsFilter = when {
                 (sourceFilter?.isEmpty()==true) -> dateFilter
                 (dateFilter?.isEmpty()==true) -> sourceFilter
-                else -> dateFilter?.let { sourceFilter?.plus(it) } as ArrayList<Articles>
+                else -> dateFilter?.let { sourceFilter?.plus(it) } as ArrayList<Articles>?
             }
             if (distinctNewsFilter?.isEmpty() == true) {
                 view?.findViewById<TextView>(R.id.no_matching_textView)?.visibility = View.VISIBLE
