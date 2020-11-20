@@ -28,6 +28,8 @@ class NewsFragment : Fragment() {
 
     private var newsViewModel: NewsViewModel? = null
     private var container: ViewGroup? = null
+    private var checkedRadio : RadioButton? = null
+    private var publishedDate: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -95,7 +97,11 @@ class NewsFragment : Fragment() {
             radioButton.text = source.toTypedArray()[i]
             radioButton.id = View.generateViewId()
             sourceRadioGroup.addView(radioButton)
+            if (checkedRadio?.text == radioButton.text) {
+                sourceRadioGroup.check(radioButton.id)
+            }
         }
+        dateView.text = publishedDate
 
         // Initializing data picker dialog and inflating date picker on clicking
         val date: Calendar = Calendar.getInstance()
@@ -128,6 +134,8 @@ class NewsFragment : Fragment() {
         clearButton.setOnClickListener {
             dateView.text = null
             sourceRadioGroup.clearCheck()
+            checkedRadio = null
+            publishedDate = null
             view?.findViewById<TextView>(R.id.no_matching_textView)?.visibility = View.INVISIBLE
             recyclerView.swapAdapter(NewsAdapter(article, newsViewModel), false)
         }
@@ -145,20 +153,17 @@ class NewsFragment : Fragment() {
         article: ArrayList<Articles>?,
         recyclerView: RecyclerView
     ) {
-        val checkedRadio =
-            bottomSheet?.findViewById<RadioButton>(sourceRadioGroup.checkedRadioButtonId)
-        var sourceName: String? = null
-        if (checkedRadio != null) {
-            sourceName = checkedRadio.text as String?
-        }
-        val publishedDate = dateView.text
+        checkedRadio = bottomSheet?.findViewById(sourceRadioGroup.checkedRadioButtonId)
+        val sourceName = checkedRadio?.text
+        publishedDate = dateView.text as String?
+
         if (sourceName.isNullOrEmpty() && publishedDate.isNullOrEmpty()) {
             Toast.makeText(context, "Select at least one filter", Toast.LENGTH_SHORT).show()
         } else {
             val sourceFilter =
                 article?.filter { it.source.name == sourceName.toString() } as ArrayList<Articles>?
             var dateFilter : ArrayList<Articles>? = arrayListOf()
-            if (publishedDate.isNotEmpty()) {
+            if (publishedDate?.isNotEmpty()==true) {
                 dateFilter =
                     article?.filter { it.publishedAt.startsWith(publishedDate.toString()) } as ArrayList<Articles>?
             }
