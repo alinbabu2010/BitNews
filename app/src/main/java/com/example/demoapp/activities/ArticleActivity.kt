@@ -1,10 +1,13 @@
 package com.example.demoapp.activities
 
+import android.content.Intent
 import android.content.res.ColorStateList
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -40,11 +43,12 @@ class ArticleActivity : AppCompatActivity() {
         val article = intent.getParcelableExtra<Articles>("article")
         val newsImage: ImageView = findViewById(R.id.appbar_news_image)
         val newsDesc: TextView = findViewById(R.id.news_desc2)
-        val newsSrc: TextView = findViewById(R.id.source_textview2)
-        val newsAuthor: TextView = findViewById(R.id.author_textview2)
-        val newsDate: TextView = findViewById(R.id.publish_textview2)
+        val newsSrc: TextView = findViewById(R.id.source_text_display)
+        val newsAuthor: TextView = findViewById(R.id.author_text_display)
+        val newsDate: TextView = findViewById(R.id.publish_date_display)
         val newsContent: TextView = findViewById(R.id.news_content)
         val toolbar: Toolbar? = findViewById(R.id.toolbar)
+        val openNews : Button = findViewById(R.id.open_button)
 
         Glide.with(applicationContext).load(article?.urlToImage).override(800).into(newsImage)
         newsDesc.text = article?.description
@@ -72,6 +76,13 @@ class ArticleActivity : AppCompatActivity() {
         val collapsingToolbarLayout = findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbar)
         collapsingToolbarLayout.title = article?.title
         collapsingToolbarLayout.setExpandedTitleTextColor(ColorStateList.valueOf(getColor(R.color.secondary_dark)))
+
+
+        openNews.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse(article?.url)
+            startActivity(intent)
+        }
     }
 
 
