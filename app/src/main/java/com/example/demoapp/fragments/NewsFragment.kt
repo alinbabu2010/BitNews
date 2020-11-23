@@ -123,7 +123,18 @@ class NewsFragment : Fragment() {
                     date.get(Calendar.DAY_OF_MONTH)
                 )
             }
-        dateView.setOnClickListener { datePicker?.show() }
+        dateView.setOnClickListener {
+            datePicker?.show()
+            if(publishedDate?.isNotEmpty() == true) {
+                publishedDate?.substring(0, 4)?.toInt()?.let { year ->
+                    publishedDate?.substring(5, 7)?.toInt()?.let { month ->
+                        publishedDate?.substringAfterLast("-")?.toInt()?.let { day ->
+                            datePicker?.updateDate(year, month - 1, day)
+                        }
+                    }
+                }
+            }
+        }
 
         val applyButton: Button = bottomSheetView.findViewById(R.id.apply_button)
         applyButton.setOnClickListener {
@@ -165,19 +176,20 @@ class NewsFragment : Fragment() {
             var dateFilter: ArrayList<Articles>? = arrayListOf()
             if (publishedDate?.isNotEmpty() == true) {
                 dateFilter =
-                    article?.filter { it.publishedAt.startsWith(publishedDate.toString()) } as ArrayList<Articles>?
+                    article?.filter { it.publishedAt.contains(publishedDate.toString()) } as ArrayList<Articles>?
             }
             val distinctNewsFilter: ArrayList<Articles>?
             distinctNewsFilter = when {
                 (sourceFilter?.isEmpty() == true) -> dateFilter
-                (dateFilter?.isEmpty() == true) -> sourceFilter
-                else -> dateFilter?.let { sourceFilter?.plus(it) } as ArrayList<Articles>?
+                (publishedDate?.isEmpty() == true) -> sourceFilter
+                else -> dateFilter?.filter { it.source.name == sourceName.toString() } as ArrayList<Articles>?
             }
             if (distinctNewsFilter?.isEmpty() == true) {
                 view?.findViewById<TextView>(R.id.no_matching_textView)?.visibility = View.VISIBLE
                 recyclerView.swapAdapter(NewsAdapter(null, newsViewModel), false)
                 bottomSheet?.dismiss()
             } else {
+                view?.findViewById<TextView>(R.id.no_matching_textView)?.visibility = View.INVISIBLE
                 recyclerView.swapAdapter(NewsAdapter(distinctNewsFilter, newsViewModel), false)
                 bottomSheet?.dismiss()
             }
