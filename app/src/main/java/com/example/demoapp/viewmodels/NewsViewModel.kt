@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.demoapp.models.Articles
 import com.example.demoapp.models.News
+import com.example.demoapp.utils.JSON_FILE_NAME
 import com.google.gson.GsonBuilder
 
 /**
@@ -24,7 +25,7 @@ class NewsViewModel : ViewModel() {
      * Method to get the news from JSON file
      */
     fun getNews(activity: Activity): ArrayList<Articles> {
-        val fileData: String? = activity.assets.open("news.json").readBytes().let { String(it) }
+        val fileData: String? = activity.assets.open(JSON_FILE_NAME).readBytes().let { String(it) }
         val gson = GsonBuilder().setPrettyPrinting().create()
         gson.fromJson(fileData, News::class.java).let { newsArticles = it.articles }
         return newsArticles

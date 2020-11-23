@@ -16,6 +16,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.demoapp.R
 import com.example.demoapp.adapter.NewsAdapter
 import com.example.demoapp.models.Articles
+import com.example.demoapp.utils.EMPTY_FILTER_MESSAGE
 import com.example.demoapp.viewmodels.NewsViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -169,7 +170,7 @@ class NewsFragment : Fragment() {
         publishedDate = dateView.text as String?
 
         if (sourceName.isNullOrEmpty() && publishedDate.isNullOrEmpty()) {
-            Toast.makeText(context, "Select at least one filter", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, EMPTY_FILTER_MESSAGE, Toast.LENGTH_SHORT).show()
         } else {
             val sourceFilter =
                 article?.filter { it.source.name == sourceName.toString() } as ArrayList<Articles>?

@@ -10,6 +10,9 @@ import androidx.fragment.app.Fragment
 import com.example.demoapp.R
 import com.example.demoapp.models.Users
 import com.example.demoapp.models.users
+import com.example.demoapp.utils.ERROR_EMAIL_MESSAGE
+import com.example.demoapp.utils.INVALID_EMAIL_MESSAGE
+import com.example.demoapp.utils.PASSWORD_RESET_MESSAGE
 import com.google.android.material.textfield.TextInputEditText
 
 /**
@@ -39,17 +42,17 @@ class ForgotPasswordFragment : Fragment() {
                 if (validUser == null) {
                     Toast.makeText(
                         context,
-                        "Email not associated with any account",
+                        ERROR_EMAIL_MESSAGE,
                         Toast.LENGTH_SHORT
                     ).show()
                 } else {
-                    Toast.makeText(context, "Password reset link send to email", Toast.LENGTH_SHORT)
+                    Toast.makeText(context, PASSWORD_RESET_MESSAGE, Toast.LENGTH_SHORT)
                         .show()
                     parentFragmentManager.popBackStack()
                 }
 
             } else {
-                Toast.makeText(context, "Invalid email address entered", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, INVALID_EMAIL_MESSAGE, Toast.LENGTH_SHORT).show()
             }
         }
         return inflatedView

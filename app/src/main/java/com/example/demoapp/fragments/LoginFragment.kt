@@ -17,7 +17,7 @@ import androidx.fragment.app.Fragment
 import com.example.demoapp.R
 import com.example.demoapp.activities.DashboardActivity
 import com.example.demoapp.models.users
-import com.example.demoapp.utils.replaceFragment
+import com.example.demoapp.utils.*
 import com.google.android.material.textfield.TextInputEditText
 
 
@@ -47,7 +47,7 @@ class LoginFragment : Fragment() {
             val password =
                 inflatedView.findViewById<TextInputEditText>(R.id.password_input).text.toString()
             if (userName.isBlank() && password.isBlank()) {
-                Toast.makeText(context, "Fields cannot be empty", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, FIELD_EMPTY_MESSAGE, Toast.LENGTH_SHORT).show()
             } else {
                 loginUser(userName, password)
             }
@@ -83,10 +83,10 @@ class LoginFragment : Fragment() {
         val user =
             users.find { it.username.contentEquals(userName) and it.password.contentEquals(password) }
         if (user == null) {
-            Toast.makeText(context, "Incorrect credentials entered", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, WRONG_CREDENTIALS_MESSAGE, Toast.LENGTH_LONG).show()
         } else {
-            val editor = context?.getSharedPreferences("app-userInfo", Context.MODE_PRIVATE)?.edit()
-            editor?.putString("username", user.username)
+            val editor = context?.getSharedPreferences(SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)?.edit()
+            editor?.putString(USERNAME, user.username)
             editor?.apply()
             startActivity(Intent(context, DashboardActivity::class.java))
             activity?.finish()

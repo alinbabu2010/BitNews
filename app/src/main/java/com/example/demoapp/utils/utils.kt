@@ -44,7 +44,7 @@ fun showAlert(context: Context, activity: Activity) {
     builder.setIcon(android.R.drawable.ic_dialog_alert)
     builder.setPositiveButton("Yes") { _, _ ->
         activity.startActivity(Intent(context, MainActivity::class.java))
-        activity.getSharedPreferences("app-userInfo", Context.MODE_PRIVATE).edit().clear().apply()
+        activity.getSharedPreferences(SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE).edit().clear().apply()
         activity.finish()
     }
     builder.setNegativeButton("No") { _: DialogInterface, _: Int -> }
