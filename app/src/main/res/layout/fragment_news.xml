@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/roboto_condensed_regular"
-        android:text="@string/no_matchings"
+        android:text="@string/no_matching"
         android:textAlignment="center"
         android:textColor="@color/secondary_dark"
         android:textSize="24sp"

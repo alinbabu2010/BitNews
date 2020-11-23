@@ -22,6 +22,6 @@
     <string name="apply">Apply</string>
     <string name="clear">Clear</string>
     <string name="select_date">Click to select a published date</string>
-    <string name="no_matchings">No matchings found</string>
+    <string name="no_matching">No matching found</string>
     <string name="browser_btn_string">Open in browser.</string>
 </resources>
