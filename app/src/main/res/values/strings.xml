@@ -24,4 +24,6 @@
     <string name="select_date">Click to select a published date</string>
     <string name="no_matching">No matching found</string>
     <string name="browser_btn_string">Open in browser.</string>
+    <string name="get">GET</string>
+    <string name="post">POST</string>
 </resources>
