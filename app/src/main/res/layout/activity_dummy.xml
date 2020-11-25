@@ -12,7 +12,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="80dp"
-        android:onClick="loadNews"
         android:text="@string/get"
         app:layout_constraintEnd_toStartOf="@+id/button_post"
         app:layout_constraintHorizontal_bias="0.5"
