@@ -39,18 +39,20 @@ class DummyActivity : AppCompatActivity() {
                 val news: News? = response.body()
                 val stringBuilder = StringBuilder()
                 news?.articles?.forEach {
-                    stringBuilder.append(it.title)
-                    stringBuilder.append("\n")
-                    stringBuilder.append(it.author)
-                    stringBuilder.append("\n")
-                    stringBuilder.append(it.content)
-                    stringBuilder.append("\n")
-                    stringBuilder.append(it.description)
-                    stringBuilder.append("\n")
-                    stringBuilder.append(it.publishedAt)
-                    stringBuilder.append("\n")
-                    stringBuilder.append(it.url)
-                    stringBuilder.append("\n\n")
+                    with(stringBuilder) {
+                        append(it.title)
+                        append("\n")
+                        append(it.author)
+                        append("\n")
+                        append(it.content)
+                        append("\n")
+                        append(it.description)
+                        append("\n")
+                        append(it.publishedAt)
+                        append("\n")
+                        append(it.url)
+                        append("\n\n")
+                    }
                 }
 
                 view.findViewById<TextView>(R.id.textView_out).text = stringBuilder
