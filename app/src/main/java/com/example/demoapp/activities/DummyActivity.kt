@@ -1,17 +1,28 @@
 package com.example.demoapp.activities
 
+import android.app.Activity
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.database.Cursor
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.demoapp.R
 import com.example.demoapp.models.News
 import com.example.demoapp.models.UserPost
 import kotlinx.android.synthetic.main.activity_dummy.*
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.File
 
 
 class DummyActivity : AppCompatActivity() {
@@ -27,6 +38,10 @@ class DummyActivity : AppCompatActivity() {
         button_post.setOnClickListener {
             saveData()
             //thread.start()
+        }
+
+        button_upload.setOnClickListener {
+            pickImageFromGallery()
         }
 
     }
@@ -103,10 +118,7 @@ class DummyActivity : AppCompatActivity() {
                 textView_out.text = t.message.toString()
             }
         })
-
-
     }
-
 
     // Thread to execute Synchronous method of retrofit POST request
     private val thread = Thread() {
@@ -126,5 +138,104 @@ class DummyActivity : AppCompatActivity() {
         val message = " ${post.code()} \n ${post.message()}"
         runOnUiThread{ textView_out.text = message }
     }
+
+    /**
+     * Method to pick image from device gallery
+     */
+    private fun pickImageFromGallery() {
+
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
+        startActivityForResult(intent, IMAGE_PICK_CODE)
+    }
+
+    companion object {
+        private const val IMAGE_PICK_CODE = 1000
+        private const val PERMISSION_CODE = 1001
+    }
+
+    /**
+     * Handle requested permission result
+     */
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        when(requestCode){
+            PERMISSION_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] ==
+                    PackageManager.PERMISSION_GRANTED
+                ) {
+                    //permission from popup granted
+                    pickImageFromGallery()
+                } else {
+                    //permission from popup denied
+                    Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    /**
+     * Handle result of picked image
+     */
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE){
+            val selectedImage: Uri? = data?.data
+            val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
+            val cursor: Cursor? = selectedImage?.let {
+                contentResolver.query(
+                    it,
+                    filePathColumn, null, null, null
+                )
+            }
+            cursor?.moveToFirst()
+            val columnIndex: Int? = cursor?.getColumnIndex(filePathColumn[0])
+            val picturePath: String? = columnIndex?.let { cursor.getString(it) }
+            cursor?.close()
+            uploadFile(picturePath)
+        }
+    }
+
+    /**
+     * Method to upload image using multipart-data
+     */
+    private fun uploadFile(data: String?) {
+
+        // Retrofit builder
+        val retrofit: Retrofit = Retrofit.Builder()
+            .baseUrl("https://jsonplaceholder.typicode.com/albums/1/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val file = File(data.toString())
+        val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file)
+        val body = MultipartBody.Part.createFormData("image", file.name, requestFile)
+        val descriptionString = "hello, this is description speaking"
+        val description = RequestBody.create(
+            MultipartBody.FORM, descriptionString
+        )
+
+        // Object to call methods
+        val newsAPI: NewsAPI = retrofit.create(NewsAPI::class.java)
+        val callPost= newsAPI.uploadPhoto(description,body)
+
+        callPost.enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                val message = " ${response.code()} \n ${response.message()}"
+                runOnUiThread { textView_out.text = message }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                textView_out.text = t.message.toString()
+            }
+
+        })
+
+
+    }
+
 
 }
