@@ -104,7 +104,7 @@ class DummyActivity : AppCompatActivity() {
 
         // Object to call methods
         val newsAPI: NewsAPI = retrofit.create(NewsAPI::class.java)
-        val newPost = UserPost(1, 2, "Sample Title", "Hello my dear friend!")
+        val newPost = UserPost(12, 25, "Sample Title", "Hello my dear friend!")
         val callPost: Call<UserPost> = newsAPI.setPost(newPost)
 
         // Asynchronous method
@@ -206,7 +206,7 @@ class DummyActivity : AppCompatActivity() {
 
         // Retrofit builder
         val retrofit: Retrofit = Retrofit.Builder()
-            .baseUrl("https://jsonplaceholder.typicode.com/albums/1/")
+            .baseUrl("https://demoapp.free.beeceptor.com")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
