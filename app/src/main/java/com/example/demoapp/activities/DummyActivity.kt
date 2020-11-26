@@ -19,6 +19,9 @@ import com.example.demoapp.models.UserPost
 import com.example.demoapp.utils.ErrorUtils
 import com.example.demoapp.utils.Services
 import kotlinx.android.synthetic.main.activity_dummy.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -43,8 +46,10 @@ class DummyActivity : AppCompatActivity() {
         }
 
         button_post.setOnClickListener {
-            checkConnection { savePost() }
-            //checkConnection { thread.start() }
+            //checkConnection { savePost() }
+            checkConnection {
+                CoroutineScope(Dispatchers.IO).launch { coroutinePostData() }
+            }
         }
 
         button_upload.setOnClickListener {
@@ -161,12 +166,12 @@ class DummyActivity : AppCompatActivity() {
     }
 
     /**
-     * Thread to execute Synchronous method of retrofit POST request
+     * Method to execute retrofit POST request using coroutine
      */
-    private val thread = Thread() {
+    private fun coroutinePostData() {
 
         val apiServices = Services()
-        val newsAPI = apiServices.getService("https://jsonplaceholder.typicoe.com/")
+        val newsAPI = apiServices.getService("https://jsonplaceholder.typicode.com/")
         val newPost = UserPost(1, 2, "Sample Title", "Hello my dear friend!")
         val callPost: Call<UserPost> = newsAPI.setPost(newPost)
 
