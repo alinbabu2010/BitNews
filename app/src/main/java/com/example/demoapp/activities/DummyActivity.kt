@@ -13,9 +13,10 @@ import android.provider.MediaStore
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.demoapp.R
-import com.example.demoapp.api.NewsAPI
-import com.example.demoapp.models.News
+import com.example.demoapp.api.PostsAPI
+import com.example.demoapp.models.APIError
 import com.example.demoapp.models.UserPost
+import com.example.demoapp.utils.ErrorUtils
 import com.example.demoapp.utils.Services
 import kotlinx.android.synthetic.main.activity_dummy.*
 import okhttp3.MediaType
@@ -37,11 +38,11 @@ class DummyActivity : AppCompatActivity() {
         setContentView(R.layout.activity_dummy)
 
         button_get.setOnClickListener {
-            checkConnection { loadNews() }
+            checkConnection { loadPost() }
         }
 
         button_post.setOnClickListener {
-           checkConnection { saveData() }
+           checkConnection { savePost() }
             //thread.start()
         }
 
@@ -83,42 +84,29 @@ class DummyActivity : AppCompatActivity() {
     /**
      * Method to make a GET request using retrofit
      */
-    private fun loadNews() {
+    private fun loadPost() {
 
         // Retrofit builder
         val retrofit: Retrofit = Retrofit.Builder()
-            .baseUrl("http://newsapi.org/v2/")
+            .baseUrl("https://jsonplaceholder.typicode.com/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
         // Object to call methods
-        val newsAPI: NewsAPI = retrofit.create(NewsAPI::class.java)
-        val call: Call<News> = newsAPI.getNews()
-        call.enqueue(object : Callback<News> {
-            override fun onResponse(call: Call<News>, response: Response<News>) {
-                val news: News? = response.body()
-                val stringBuilder = StringBuilder()
-                news?.articles?.forEach {
-                    with(stringBuilder) {
-                        append(it.title)
-                        append("\n")
-                        append(it.author)
-                        append("\n")
-                        append(it.content)
-                        append("\n")
-                        append(it.description)
-                        append("\n")
-                        append(it.publishedAt)
-                        append("\n")
-                        append(it.url)
-                        append("\n\n")
-                    }
+        val postsAPI: PostsAPI = retrofit.create(PostsAPI::class.java)
+        val call: Call<UserPost> = postsAPI.getPost()
+        call.enqueue(object : Callback<UserPost> {
+            override fun onResponse(call: Call<UserPost>, response: Response<UserPost>) {
+                if (response.isSuccessful) {
+                    val message = "${response.body()?.id} \n ${response.body()?.userId} \n ${response.body()?.title} \n ${response.body()?.body} "
+                    textView_out.text = message
+                } else {
+                    val error: APIError? = ErrorUtils().parseError(response)
+                    textView_out.text = error?.message()
                 }
-
-                textView_out.text = stringBuilder
             }
 
-            override fun onFailure(call: Call<News>, t: Throwable) {
+            override fun onFailure(call: Call<UserPost>, t: Throwable) {
                 Toast.makeText(baseContext, t.message.toString(), Toast.LENGTH_SHORT).show()
             }
         })
@@ -127,7 +115,7 @@ class DummyActivity : AppCompatActivity() {
     /**
      * Method to make a POST request using retrofit
      */
-    private fun saveData() {
+    private fun savePost() {
 
         val apiServices = Services()
         val newsAPI = apiServices.getService("https://jsonplaceholder.typicode.com/")
@@ -137,8 +125,13 @@ class DummyActivity : AppCompatActivity() {
         // Asynchronous method
         callPost.enqueue(object : Callback<UserPost> {
             override fun onResponse(call: Call<UserPost>, response: Response<UserPost>) {
-                val message = " ${response.code()} \n ${response.raw()} \n" + " ${response.body()}"
-                textView_out.text = message
+                if (response.isSuccessful) {
+                    val message = " ${response.code()} \n" + " ${response.message()}"
+                    textView_out.text = message
+                } else {
+                    val error: APIError? = ErrorUtils().parseError(response)
+                    textView_out.text = error?.message()
+                }
             }
 
             override fun onFailure(call: Call<UserPost>, t: Throwable) {
@@ -147,7 +140,9 @@ class DummyActivity : AppCompatActivity() {
         })
     }
 
-    // Thread to execute Synchronous method of retrofit POST request
+    /**
+     * Thread to execute Synchronous method of retrofit POST request
+     */
     private val thread = Thread() {
 
         val apiServices = Services()
@@ -219,7 +214,7 @@ class DummyActivity : AppCompatActivity() {
     }
 
     /**
-     * Method to upload image using multipart-data
+     * Method to upload image as multipart-data
      */
     private fun uploadFile(data: String?) {
         val file = File(data.toString())
