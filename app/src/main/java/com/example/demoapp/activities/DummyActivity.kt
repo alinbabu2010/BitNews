@@ -1,17 +1,22 @@
 package com.example.demoapp.activities
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.demoapp.R
+import com.example.demoapp.api.NewsAPI
 import com.example.demoapp.models.News
 import com.example.demoapp.models.UserPost
+import com.example.demoapp.utils.Services
 import kotlinx.android.synthetic.main.activity_dummy.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -32,20 +37,48 @@ class DummyActivity : AppCompatActivity() {
         setContentView(R.layout.activity_dummy)
 
         button_get.setOnClickListener {
-            loadNews()
+            checkConnection { loadNews() }
         }
 
         button_post.setOnClickListener {
-            saveData()
+           checkConnection { saveData() }
             //thread.start()
         }
 
         button_upload.setOnClickListener {
-            pickImageFromGallery()
+            checkConnection { pickImageFromGallery() }
         }
 
     }
 
+    /**
+     * Method that check network connection before calling the request function
+     */
+    private fun  checkConnection(function: () -> Unit) {
+        if (isNetworkConnected()) {
+           function()
+        } else {
+            Toast.makeText(
+                this,
+                "No Internet Connection",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
+    }
+
+    /**
+     * Method to check if network is connected or not
+     */
+    private fun isNetworkConnected(): Boolean {
+
+        val connectivityManager =
+            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetwork = connectivityManager.activeNetwork
+        val networkCapabilities = connectivityManager.getNetworkCapabilities(activeNetwork)
+        return networkCapabilities != null &&
+                networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+    }
 
     /**
      * Method to make a GET request using retrofit
@@ -96,14 +129,8 @@ class DummyActivity : AppCompatActivity() {
      */
     private fun saveData() {
 
-        // Retrofit builder
-        val retrofit: Retrofit = Retrofit.Builder()
-            .baseUrl("https://jsonplaceholder.typicode.com/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        // Object to call methods
-        val newsAPI: NewsAPI = retrofit.create(NewsAPI::class.java)
+        val apiServices = Services()
+        val newsAPI = apiServices.getService("https://jsonplaceholder.typicode.com/")
         val newPost = UserPost(12, 25, "Sample Title", "Hello my dear friend!")
         val callPost: Call<UserPost> = newsAPI.setPost(newPost)
 
@@ -123,20 +150,14 @@ class DummyActivity : AppCompatActivity() {
     // Thread to execute Synchronous method of retrofit POST request
     private val thread = Thread() {
 
-        // Retrofit builder
-        val retrofit: Retrofit = Retrofit.Builder()
-            .baseUrl("https://jsonplaceholder.typicode.com/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        // Object to call methods
-        val newsAPI: NewsAPI = retrofit.create(NewsAPI::class.java)
+        val apiServices = Services()
+        val newsAPI = apiServices.getService("https://jsonplaceholder.typicode.com/")
         val newPost = UserPost(1, 2, "Sample Title", "Hello my dear friend!")
         val callPost: Call<UserPost> = newsAPI.setPost(newPost)
 
         val post = callPost.execute()
         val message = " ${post.code()} \n ${post.message()}"
-        runOnUiThread{ textView_out.text = message }
+        runOnUiThread { textView_out.text = message }
     }
 
     /**
@@ -162,15 +183,13 @@ class DummyActivity : AppCompatActivity() {
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
-        when(requestCode){
+        when (requestCode) {
             PERMISSION_CODE -> {
                 if (grantResults.isNotEmpty() && grantResults[0] ==
                     PackageManager.PERMISSION_GRANTED
                 ) {
-                    //permission from popup granted
                     pickImageFromGallery()
                 } else {
-                    //permission from popup denied
                     Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -182,7 +201,7 @@ class DummyActivity : AppCompatActivity() {
      */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE){
+        if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE) {
             val selectedImage: Uri? = data?.data
             val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
             val cursor: Cursor? = selectedImage?.let {
@@ -203,13 +222,6 @@ class DummyActivity : AppCompatActivity() {
      * Method to upload image using multipart-data
      */
     private fun uploadFile(data: String?) {
-
-        // Retrofit builder
-        val retrofit: Retrofit = Retrofit.Builder()
-            .baseUrl("https://demoapp.free.beeceptor.com")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
         val file = File(data.toString())
         val requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file)
         val body = MultipartBody.Part.createFormData("image", file.name, requestFile)
@@ -218,10 +230,9 @@ class DummyActivity : AppCompatActivity() {
             MultipartBody.FORM, descriptionString
         )
 
-        // Object to call methods
-        val newsAPI: NewsAPI = retrofit.create(NewsAPI::class.java)
-        val callPost= newsAPI.uploadPhoto(description,body)
-
+        val apiServices = Services()
+        val newsAPI = apiServices.getService("https://demoapp.free.beeceptor.com")
+        val callPost = newsAPI.uploadPhoto(description, body)
         callPost.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 val message = " ${response.code()} \n ${response.message()}"
@@ -231,10 +242,7 @@ class DummyActivity : AppCompatActivity() {
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 textView_out.text = t.message.toString()
             }
-
         })
-
-
     }
 
 
