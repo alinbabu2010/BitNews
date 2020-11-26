@@ -29,6 +29,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
+import java.io.IOException
 
 
 class DummyActivity : AppCompatActivity() {
@@ -42,8 +43,8 @@ class DummyActivity : AppCompatActivity() {
         }
 
         button_post.setOnClickListener {
-           checkConnection { savePost() }
-            //thread.start()
+            checkConnection { savePost() }
+            //checkConnection { thread.start() }
         }
 
         button_upload.setOnClickListener {
@@ -98,7 +99,8 @@ class DummyActivity : AppCompatActivity() {
         call.enqueue(object : Callback<UserPost> {
             override fun onResponse(call: Call<UserPost>, response: Response<UserPost>) {
                 if (response.isSuccessful) {
-                    val message = "${response.body()?.id} \n ${response.body()?.userId} \n ${response.body()?.title} \n ${response.body()?.body} "
+                    val message =
+                        "${response.body()?.id} \n ${response.body()?.userId} \n ${response.body()?.title} \n ${response.body()?.body} "
                     textView_out.text = message
                 } else {
                     val error: APIError? = ErrorUtils().parseError(response)
@@ -107,7 +109,16 @@ class DummyActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<UserPost>, t: Throwable) {
-                Toast.makeText(baseContext, t.message.toString(), Toast.LENGTH_SHORT).show()
+                if (t is IOException) {
+                    Toast.makeText(
+                        baseContext,
+                        "Network failure or Not Found",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                } else {
+                    Toast.makeText(baseContext, t.message.toString(), Toast.LENGTH_SHORT).show()
+                }
             }
         })
     }
@@ -135,7 +146,16 @@ class DummyActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<UserPost>, t: Throwable) {
-                textView_out.text = t.message.toString()
+                if (t is IOException) {
+                    Toast.makeText(
+                        baseContext,
+                        "Network failure or Not Found",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                } else {
+                    Toast.makeText(baseContext, t.message.toString(), Toast.LENGTH_SHORT).show()
+                }
             }
         })
     }
@@ -146,13 +166,25 @@ class DummyActivity : AppCompatActivity() {
     private val thread = Thread() {
 
         val apiServices = Services()
-        val newsAPI = apiServices.getService("https://jsonplaceholder.typicode.com/")
+        val newsAPI = apiServices.getService("https://jsonplaceholder.typicoe.com/")
         val newPost = UserPost(1, 2, "Sample Title", "Hello my dear friend!")
         val callPost: Call<UserPost> = newsAPI.setPost(newPost)
 
-        val post = callPost.execute()
-        val message = " ${post.code()} \n ${post.message()}"
-        runOnUiThread { textView_out.text = message }
+        try {
+            val response = callPost.execute()
+            if (response.isSuccessful) {
+                val message = " ${response.code()} \n" + " ${response.message()}"
+                runOnUiThread { textView_out.text = message }
+            } else {
+                val error: APIError? = ErrorUtils().parseError(response)
+                runOnUiThread { textView_out.text = error?.message() }
+            }
+        }
+        catch (e: IOException) {
+            runOnUiThread { Toast.makeText(this, "Network failure", Toast.LENGTH_SHORT).show() }
+        }
+
+
     }
 
     /**
