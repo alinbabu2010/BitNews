@@ -34,8 +34,6 @@ import java.io.IOException
 
 class DummyActivity : AppCompatActivity() {
 
-    private val apiServices = RetrofitService()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dummy)
@@ -90,7 +88,7 @@ class DummyActivity : AppCompatActivity() {
      */
     private fun loadPost() {
 
-        val postsAPI = apiServices.getService("https://jsonplaceholder.typicode.com/")
+        val postsAPI = RetrofitService.getService("https://jsonplaceholder.typicode.com/")
         val call: Call<UserPost> = postsAPI.getPost()
         call.enqueue(object : Callback<UserPost> {
             override fun onResponse(call: Call<UserPost>, response: Response<UserPost>) {
@@ -124,7 +122,7 @@ class DummyActivity : AppCompatActivity() {
      */
     private fun coroutinePostData() {
 
-        val newsAPI = apiServices.getService("https://jsonplaceholder.typicode.com/")
+        val newsAPI = RetrofitService.getService("https://jsonplaceholder.typicode.com/")
         val newPost = UserPost(1, 2, "Sample Title", "Hello my dear friend!")
         val callPost: Call<UserPost> = newsAPI.setPost(newPost)
 
@@ -214,8 +212,8 @@ class DummyActivity : AppCompatActivity() {
         val description = RequestBody.create(
             MultipartBody.FORM, descriptionString
         )
-        
-        val newsAPI = apiServices.getService("https://demoapp.free.beeceptor.com")
+
+        val newsAPI = RetrofitService.getService("https://demoapp.free.beeceptor.com")
         val callPost = newsAPI.uploadPhoto(description, body)
         callPost.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {

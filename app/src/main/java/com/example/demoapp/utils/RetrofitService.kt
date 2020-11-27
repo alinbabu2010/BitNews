@@ -4,7 +4,7 @@ import com.example.demoapp.api.UserPostAPI
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class RetrofitService {
+object RetrofitService {
 
     fun getService(baseURL : String): UserPostAPI {
         val retrofit = getRetrofit(baseURL)
