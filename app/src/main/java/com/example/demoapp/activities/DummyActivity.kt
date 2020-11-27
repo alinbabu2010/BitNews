@@ -53,6 +53,11 @@ class DummyActivity : AppCompatActivity() {
             withConnectionCheck { pickImageFromGallery() }
         }
 
+        button_news.setOnClickListener {
+            startActivity(Intent(this, DashboardActivity::class.java))
+            this.finish()
+        }
+
     }
 
     /**

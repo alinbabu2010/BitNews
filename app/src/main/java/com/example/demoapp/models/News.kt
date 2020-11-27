@@ -29,6 +29,6 @@ data class Articles(
  */
 @Parcelize
 data class Source(
-    var id: String,
+    var id: String?,
     var name: String
 ) : Parcelable
