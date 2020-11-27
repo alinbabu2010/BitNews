@@ -13,7 +13,7 @@ import java.io.IOException
 class  ErrorUtils {
 
     fun parseError(response: Response<*>): APIError? {
-        val converter: Converter<ResponseBody, APIError> = RetrofitService().getRetrofit("https://jsonplaceholder.typicode.com/")
+        val converter: Converter<ResponseBody, APIError> = RetrofitService.getRetrofit("https://jsonplaceholder.typicode.com/")
             .responseBodyConverter(APIError::class.java, arrayOfNulls<Annotation>(0))
         val error: APIError?
         error = try {
