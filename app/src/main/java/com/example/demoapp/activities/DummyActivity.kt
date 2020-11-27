@@ -20,6 +20,7 @@ import com.example.demoapp.utils.RetrofitService
 import kotlinx.android.synthetic.main.activity_dummy.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -57,9 +58,9 @@ class DummyActivity : AppCompatActivity() {
     /**
      * Method that check network connection before calling the request function
      */
-    private fun  withConnectionCheck(function: () -> Unit) {
+    private fun withConnectionCheck(function: () -> Unit) {
         if (isNetworkConnected()) {
-           function()
+            function()
         } else {
             Toast.makeText(
                 this,
@@ -127,17 +128,22 @@ class DummyActivity : AppCompatActivity() {
         val callPost: Call<UserPost> = newsAPI.setPost(newPost)
 
         try {
-            val response = callPost.execute()
+            val response: Response<UserPost> = callPost.execute()
             if (response.isSuccessful) {
                 val message = " ${response.code()} \n" + " ${response.message()}"
-                runOnUiThread { textView_out.text = message }
+                GlobalScope.launch(Dispatchers.Main) { textView_out.text = message }
             } else {
                 val error: APIError? = ErrorUtils().parseError(response)
-                runOnUiThread { textView_out.text = error?.message() }
+                GlobalScope.launch(Dispatchers.Main) { textView_out.text = error?.message() }
             }
-        }
-        catch (e: IOException) {
-            runOnUiThread { Toast.makeText(this, "Network failure", Toast.LENGTH_SHORT).show() }
+        } catch (e: IOException) {
+            GlobalScope.launch(Dispatchers.Main) {
+                Toast.makeText(
+                    this@DummyActivity,
+                    "Network failure",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
 
 
