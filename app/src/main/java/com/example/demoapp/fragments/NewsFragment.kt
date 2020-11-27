@@ -46,16 +46,17 @@ class NewsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         newsViewModel = activity?.let { ViewModelProvider(it).get(NewsViewModel::class.java) }
-        val articles = activity?.let { newsViewModel?.getNews(it) }
+        activity?.let { newsViewModel?.getNews(it) }
 
         // Getting recyclerView and invoke layoutManager and recyclerViewAdapter
         val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view)
-        with(recyclerView) {
-            layoutManager = LinearLayoutManager(context)
-            adapter = NewsAdapter(articles, newsViewModel)
-            setHasFixedSize(true)
-        }
+
         newsViewModel?.newsLiveData?.observe(viewLifecycleOwner, {
+            with(recyclerView) {
+                layoutManager = LinearLayoutManager(context)
+                adapter = NewsAdapter(newsViewModel?.newsArticles, newsViewModel)
+                setHasFixedSize(true)
+            }
             recyclerView.adapter?.notifyDataSetChanged()
             onCreate(savedInstanceState)
         })
@@ -72,7 +73,7 @@ class NewsFragment : Fragment() {
         // Inflate bottom sheet dialog on floating action button click
         val filter: FloatingActionButton = view.findViewById(R.id.filter_button)
         filter.setOnClickListener {
-            setBottomSheetDialog(recyclerView, articles)
+            setBottomSheetDialog(recyclerView, newsViewModel?.newsArticles)
         }
 
     }
