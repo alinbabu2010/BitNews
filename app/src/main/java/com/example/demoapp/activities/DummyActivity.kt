@@ -13,11 +13,10 @@ import android.provider.MediaStore
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.demoapp.R
-import com.example.demoapp.api.PostsAPI
 import com.example.demoapp.models.APIError
 import com.example.demoapp.models.UserPost
 import com.example.demoapp.utils.ErrorUtils
-import com.example.demoapp.utils.Services
+import com.example.demoapp.utils.RetrofitService
 import kotlinx.android.synthetic.main.activity_dummy.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -29,31 +28,30 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
 import java.io.IOException
 
 
 class DummyActivity : AppCompatActivity() {
 
+    private val apiServices = RetrofitService()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dummy)
 
         button_get.setOnClickListener {
-            checkConnection { loadPost() }
+            withConnectionCheck { loadPost() }
         }
 
         button_post.setOnClickListener {
-            //checkConnection { savePost() }
-            checkConnection {
+            withConnectionCheck {
                 CoroutineScope(Dispatchers.IO).launch { coroutinePostData() }
             }
         }
 
         button_upload.setOnClickListener {
-            checkConnection { pickImageFromGallery() }
+            withConnectionCheck { pickImageFromGallery() }
         }
 
     }
@@ -61,7 +59,7 @@ class DummyActivity : AppCompatActivity() {
     /**
      * Method that check network connection before calling the request function
      */
-    private fun  checkConnection(function: () -> Unit) {
+    private fun  withConnectionCheck(function: () -> Unit) {
         if (isNetworkConnected()) {
            function()
         } else {
@@ -92,14 +90,7 @@ class DummyActivity : AppCompatActivity() {
      */
     private fun loadPost() {
 
-        // Retrofit builder
-        val retrofit: Retrofit = Retrofit.Builder()
-            .baseUrl("https://jsonplaceholder.typicode.com/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        // Object to call methods
-        val postsAPI: PostsAPI = retrofit.create(PostsAPI::class.java)
+        val postsAPI = apiServices.getService("https://jsonplaceholder.typicode.com/")
         val call: Call<UserPost> = postsAPI.getPost()
         call.enqueue(object : Callback<UserPost> {
             override fun onResponse(call: Call<UserPost>, response: Response<UserPost>) {
@@ -129,48 +120,10 @@ class DummyActivity : AppCompatActivity() {
     }
 
     /**
-     * Method to make a POST request using retrofit
-     */
-    private fun savePost() {
-
-        val apiServices = Services()
-        val newsAPI = apiServices.getService("https://jsonplaceholder.typicode.com/")
-        val newPost = UserPost(12, 25, "Sample Title", "Hello my dear friend!")
-        val callPost: Call<UserPost> = newsAPI.setPost(newPost)
-
-        // Asynchronous method
-        callPost.enqueue(object : Callback<UserPost> {
-            override fun onResponse(call: Call<UserPost>, response: Response<UserPost>) {
-                if (response.isSuccessful) {
-                    val message = " ${response.code()} \n" + " ${response.message()}"
-                    textView_out.text = message
-                } else {
-                    val error: APIError? = ErrorUtils().parseError(response)
-                    textView_out.text = error?.message()
-                }
-            }
-
-            override fun onFailure(call: Call<UserPost>, t: Throwable) {
-                if (t is IOException) {
-                    Toast.makeText(
-                        baseContext,
-                        "Network failure or Not Found",
-                        Toast.LENGTH_SHORT
-                    ).show()
-
-                } else {
-                    Toast.makeText(baseContext, t.message.toString(), Toast.LENGTH_SHORT).show()
-                }
-            }
-        })
-    }
-
-    /**
      * Method to execute retrofit POST request using coroutine
      */
     private fun coroutinePostData() {
 
-        val apiServices = Services()
         val newsAPI = apiServices.getService("https://jsonplaceholder.typicode.com/")
         val newPost = UserPost(1, 2, "Sample Title", "Hello my dear friend!")
         val callPost: Call<UserPost> = newsAPI.setPost(newPost)
@@ -261,8 +214,7 @@ class DummyActivity : AppCompatActivity() {
         val description = RequestBody.create(
             MultipartBody.FORM, descriptionString
         )
-
-        val apiServices = Services()
+        
         val newsAPI = apiServices.getService("https://demoapp.free.beeceptor.com")
         val callPost = newsAPI.uploadPhoto(description, body)
         callPost.enqueue(object : Callback<ResponseBody> {
