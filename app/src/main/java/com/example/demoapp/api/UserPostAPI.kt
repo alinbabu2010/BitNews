@@ -10,7 +10,7 @@ import retrofit2.http.*
 /**
  * API interface for each posts
  */
-interface PostsAPI {
+interface UserPostAPI {
 
     @GET("posts/100")
     fun getPost() : Call<UserPost>
