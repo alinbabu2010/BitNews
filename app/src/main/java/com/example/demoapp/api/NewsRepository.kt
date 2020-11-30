@@ -7,10 +7,8 @@ import com.example.demoapp.models.Articles
 import com.example.demoapp.models.News
 import com.example.demoapp.utils.ErrorUtils
 import com.example.demoapp.utils.RetrofitService
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 
@@ -20,21 +18,17 @@ import java.io.IOException
 class NewsRepository {
 
     private val newsAPI = RetrofitService.getNewsService("http://newsapi.org/v2/")
-    var news = ArrayList<Articles>()
 
     /**
      * Method to fetch news from API
      */
-    fun loadNews(activity: Activity) {
+    fun loadNews(activity: Activity, articles: (ArrayList<Articles>) -> Unit) {
         val call: Call<News> = newsAPI.getNews()
-        try {
-
-            val response: Response<News> = call.execute()
-            if (response.isSuccessful) {
-                news = response.body()?.articles ?: arrayListOf()
-            } else {
-                val error: APIError? = ErrorUtils().parseError(response)
-                GlobalScope.launch(Dispatchers.Main) {
+        call.enqueue(object : Callback<News>{
+            override fun onResponse(call: Call<News>, response: Response<News>) {
+                if (response.isSuccessful) response.body()?.articles?.let { articles(it) }
+                else {
+                    val error: APIError? = ErrorUtils().parseError(response)
                     Toast.makeText(
                         activity.applicationContext,
                         error?.message(),
@@ -42,14 +36,25 @@ class NewsRepository {
                     ).show()
                 }
             }
-        } catch (e: IOException) {
-            GlobalScope.launch(Dispatchers.Main) {
-                Toast.makeText(
-                    activity.applicationContext,
-                    "Network failure",
-                    Toast.LENGTH_SHORT
-                ).show()
+
+            override fun onFailure(call: Call<News>, t: Throwable) {
+                if( t is IOException ) {
+                    Toast.makeText(
+                        activity.applicationContext,
+                        "Network failure",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    Toast.makeText(
+                        activity.applicationContext,
+                        t.message,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
-        }
+
+        })
+
+
     }
 }

@@ -3,12 +3,10 @@ package com.example.demoapp.viewmodels
 import android.app.Activity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.recyclerview.widget.RecyclerView
+import com.example.demoapp.adapter.NewsAdapter
 import com.example.demoapp.api.NewsRepository
 import com.example.demoapp.models.Articles
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 /**
  * This class is used to define view model for favourite news storing
@@ -24,17 +22,15 @@ class NewsViewModel : ViewModel() {
     }
 
     /**
-     * Method to get the news from JSON file
+     * Method to get the news from API url
      */
-    fun getNews(activity: Activity) {
-       runBlocking {
-           val job: Job = launch(Dispatchers.IO) {
-               val newsRepository = NewsRepository()
-               newsRepository.loadNews(activity)
-               newsArticles = newsRepository.news
-           }
-           job.join()
-       }
+    fun getNews(activity: Activity, recyclerView: RecyclerView) {
+        val newsRepository = NewsRepository()
+        newsRepository.loadNews(activity) {
+            newsArticles = it
+            recyclerView.adapter = NewsAdapter(newsArticles,this)
+            recyclerView.setHasFixedSize(true)
+        }
     }
 
     /**

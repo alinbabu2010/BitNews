@@ -44,19 +44,12 @@ class NewsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         newsViewModel = activity?.let { ViewModelProvider(it).get(NewsViewModel::class.java) }
-        activity?.let { newsViewModel?.getNews(it) }
-
-        // Getting recyclerView and invoke layoutManager and recyclerViewAdapter
         val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view)
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        activity?.let { newsViewModel?.getNews(it,recyclerView) }
 
         newsViewModel?.newsLiveData?.observe(viewLifecycleOwner, {
-            with(recyclerView) {
-                layoutManager = LinearLayoutManager(context)
-                adapter = NewsAdapter(newsViewModel?.newsArticles, newsViewModel)
-                setHasFixedSize(true)
-            }
             recyclerView.adapter?.notifyDataSetChanged()
             onCreate(savedInstanceState)
         })
