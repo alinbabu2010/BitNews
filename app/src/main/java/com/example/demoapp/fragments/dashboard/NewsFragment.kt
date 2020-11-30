@@ -1,4 +1,4 @@
-package com.example.demoapp.fragments
+package com.example.demoapp.fragments.dashboard
 
 import android.app.DatePickerDialog
 import android.graphics.Color

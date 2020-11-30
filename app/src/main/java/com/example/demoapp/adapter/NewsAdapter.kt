@@ -11,7 +11,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.demoapp.R
-import com.example.demoapp.fragments.NewsFragment
+import com.example.demoapp.fragments.dashboard.NewsFragment
 import com.example.demoapp.models.Articles
 import com.example.demoapp.utils.openArticle
 import com.example.demoapp.utils.shareNews

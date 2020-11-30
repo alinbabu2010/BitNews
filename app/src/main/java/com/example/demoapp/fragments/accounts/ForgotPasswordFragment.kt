@@ -1,4 +1,4 @@
-package com.example.demoapp.fragments
+package com.example.demoapp.fragments.accounts
 
 import android.os.Bundle
 import android.view.LayoutInflater

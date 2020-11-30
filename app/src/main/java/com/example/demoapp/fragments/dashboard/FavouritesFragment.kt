@@ -1,4 +1,4 @@
-package com.example.demoapp.fragments
+package com.example.demoapp.fragments.dashboard
 
 import android.graphics.Color
 import android.os.Bundle

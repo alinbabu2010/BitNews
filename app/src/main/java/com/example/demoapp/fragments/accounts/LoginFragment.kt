@@ -1,4 +1,4 @@
-package com.example.demoapp.fragments
+package com.example.demoapp.fragments.accounts
 
 import android.content.Intent
 import android.os.Bundle
@@ -42,10 +42,10 @@ class LoginFragment : Fragment() {
         val inflatedView = inflater.inflate(R.layout.fragment_login, container, false)
 
         val forgotTextView = inflatedView.findViewById<TextView>(R.id.forgot_password)
-        clickableText(forgotTextView,28,32,ForgotPasswordFragment())
+        clickableText(forgotTextView,28,32, ForgotPasswordFragment())
 
         val registerTextView = inflatedView.findViewById<TextView>(R.id.register_redirect)
-        clickableText(registerTextView,25,29,RegisterFragment())
+        clickableText(registerTextView,25,29, RegisterFragment())
 
         inflatedView.findViewById<ProgressBar>(R.id.progressBar).visibility = View.INVISIBLE
 

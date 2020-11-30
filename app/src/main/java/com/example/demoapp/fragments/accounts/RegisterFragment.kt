@@ -1,4 +1,4 @@
-package com.example.demoapp.fragments
+package com.example.demoapp.fragments.accounts
 
 import android.content.Intent
 import android.os.Bundle

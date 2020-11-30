@@ -3,7 +3,7 @@ package com.example.demoapp.activities
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.demoapp.R
-import com.example.demoapp.fragments.RegisterFragment
+import com.example.demoapp.fragments.accounts.RegisterFragment
 import com.example.demoapp.utils.addFragment
 
 /**
