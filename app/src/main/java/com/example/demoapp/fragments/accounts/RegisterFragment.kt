@@ -77,7 +77,7 @@ class RegisterFragment : Fragment() {
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
-                        val user = Users(username,password,name,email)
+                        val user = Users(username,name,email)
                         FirebaseAuth.getInstance().currentUser?.uid?.let { it1 ->
                             FirebaseDatabase.getInstance().getReference("Users")
                                 .child(it1).setValue(user).addOnCompleteListener { task ->
