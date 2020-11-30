@@ -2,6 +2,7 @@
 <lint>
     <issue id="IconLocation">
         <ignore path="src/main/res/drawable/empty_box.png" />
+        <ignore path="src/main/res/drawable/ic_empty_box.png" />
         <ignore path="src/main/res/drawable/logo.png" />
     </issue>
     <issue id="IconXmlAndPng">
