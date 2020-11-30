@@ -34,4 +34,5 @@
     <string name="password_string">Password</string>
     <string name="login_redirect_string">Already have an account. Click here</string>
     <string name="confirm_password_string">Confirm Password</string>
+    <string name="register_text">New to our app! Register here</string>
 </resources>

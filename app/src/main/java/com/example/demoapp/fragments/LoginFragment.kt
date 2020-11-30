@@ -42,7 +42,10 @@ class LoginFragment : Fragment() {
         val inflatedView = inflater.inflate(R.layout.fragment_login, container, false)
 
         val forgotTextView = inflatedView.findViewById<TextView>(R.id.forgot_password)
-        clickableText(forgotTextView)
+        clickableText(forgotTextView,28,32,ForgotPasswordFragment())
+
+        val registerTextView = inflatedView.findViewById<TextView>(R.id.register_redirect)
+        clickableText(registerTextView,25,29,RegisterFragment())
 
         inflatedView.findViewById<ProgressBar>(R.id.progressBar).visibility = View.INVISIBLE
 
@@ -62,28 +65,28 @@ class LoginFragment : Fragment() {
     }
 
     /**
-     * Method to set the forgotTextView as clickable span
+     * Method to set the [TextView] as clickable span and replace the fragment on click.
      */
-    private fun clickableText(forgotTextView: TextView?) {
+    private fun clickableText(view: TextView?,start :Int,end:Int,fragment: Fragment) {
 
-        val spannableTextView = SpannableString(forgotTextView?.text.toString())
+        val spannableTextView = SpannableString(view?.text.toString())
         val clickableSpanTextView: ClickableSpan = object : ClickableSpan() {
             override fun onClick(widget: View) {
                 replaceFragment(
-                    ForgotPasswordFragment(),
+                    fragment,
                     R.id.fragment_container,
                     parentFragmentManager
                 )
             }
         }
-        spannableTextView.setSpan(clickableSpanTextView, 28, 32, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        forgotTextView?.text = spannableTextView
-        forgotTextView?.movementMethod = LinkMovementMethod.getInstance()
+        spannableTextView.setSpan(clickableSpanTextView, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        view?.text = spannableTextView
+        view?.movementMethod = LinkMovementMethod.getInstance()
 
     }
 
     /**
-     * Method to check user provided login credentials and move to dashboard if it is true
+     * Method to check user provided login credentials and move to [DashboardActivity] if it is true
      */
     private fun loginUser(userName: String, password: String) {
         val userAuth = FirebaseAuth.getInstance()
