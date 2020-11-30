@@ -1,6 +1,5 @@
 package com.example.demoapp.fragments
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableString
@@ -11,14 +10,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.demoapp.R
 import com.example.demoapp.activities.DashboardActivity
-import com.example.demoapp.models.users
-import com.example.demoapp.utils.*
+import com.example.demoapp.utils.FIELD_EMPTY_MESSAGE
+import com.example.demoapp.utils.WRONG_CREDENTIALS_MESSAGE
+import com.example.demoapp.utils.replaceFragment
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.fragment_login.*
 
 
 /**
@@ -41,6 +44,8 @@ class LoginFragment : Fragment() {
         val forgotTextView = inflatedView.findViewById<TextView>(R.id.forgot_password)
         clickableText(forgotTextView)
 
+        inflatedView.findViewById<ProgressBar>(R.id.progressBar).visibility = View.INVISIBLE
+
         inflatedView.findViewById<Button>(R.id.login_button).setOnClickListener {
             val userName =
                 inflatedView.findViewById<TextInputEditText>(R.id.username_input).text.toString()
@@ -49,6 +54,7 @@ class LoginFragment : Fragment() {
             if (userName.isBlank() && password.isBlank()) {
                 Toast.makeText(context, FIELD_EMPTY_MESSAGE, Toast.LENGTH_SHORT).show()
             } else {
+                progressBar.visibility = View.VISIBLE
                 loginUser(userName, password)
             }
         }
@@ -80,16 +86,14 @@ class LoginFragment : Fragment() {
      * Method to check user provided login credentials and move to dashboard if it is true
      */
     private fun loginUser(userName: String, password: String) {
-        val user =
-            users.find { it.username.contentEquals(userName) and it.password.contentEquals(password) }
-        if (user == null) {
-            Toast.makeText(context, WRONG_CREDENTIALS_MESSAGE, Toast.LENGTH_LONG).show()
-        } else {
-            val editor = context?.getSharedPreferences(SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE)?.edit()
-            editor?.putString(USERNAME, user.username)
-            editor?.apply()
-            startActivity(Intent(context, DashboardActivity::class.java))
-            activity?.finish()
+        val userAuth = FirebaseAuth.getInstance()
+        userAuth.signInWithEmailAndPassword(userName,password).addOnCompleteListener {
+            if(it.isSuccessful){
+                startActivity(Intent(context, DashboardActivity::class.java))
+                activity?.finish()
+            } else {
+                Toast.makeText(context, WRONG_CREDENTIALS_MESSAGE, Toast.LENGTH_LONG).show()
+            }
         }
     }
 }
