@@ -40,7 +40,7 @@
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_textView"
-        app:startIconDrawable="@drawable/ic_user"
+        app:startIconDrawable="@drawable/fui_ic_mail_white_24dp"
         app:startIconTint="@color/secondary_dark">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -68,7 +68,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/username_input_layout"
         app:passwordToggleTint="@color/secondary_dark"
-        app:startIconDrawable="@drawable/ic_password"
+        app:startIconDrawable="@android:drawable/ic_lock_idle_lock"
         app:startIconTint="@color/secondary_dark">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -101,4 +101,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_button" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="invisible" />
 </androidx.constraintlayout.widget.ConstraintLayout>
