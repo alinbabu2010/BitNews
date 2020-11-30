@@ -5,15 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.demoapp.R
-import com.example.demoapp.models.Users
-import com.example.demoapp.models.users
-import com.example.demoapp.utils.ERROR_EMAIL_MESSAGE
 import com.example.demoapp.utils.INVALID_EMAIL_MESSAGE
 import com.example.demoapp.utils.PASSWORD_RESET_MESSAGE
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.fragment_forgot_password.*
 
 /**
  * A simple [Fragment] subclass for forgot password fragment
@@ -31,41 +31,39 @@ class ForgotPasswordFragment : Fragment() {
 
         // Inflate the layout for this fragment
         val inflatedView = inflater.inflate(R.layout.fragment_forgot_password, container, false)
+        inflatedView.findViewById<ProgressBar>(R.id.resetProgressBar).visibility = View.INVISIBLE
 
         inflatedView.findViewById<Button>(R.id.reset_button).setOnClickListener {
-            val email =
-                inflatedView.findViewById<TextInputEditText>(R.id.email_input).text.toString()
+            val email = inflatedView.findViewById<TextInputEditText>(R.id.email_input).text.toString()
+            inflatedView.findViewById<ProgressBar>(R.id.resetProgressBar).visibility = View.VISIBLE
+            resetPassword(email)
 
-            // Checking email is valid or not
-            if (email.matches(emailPattern.toRegex())) {
-                val validUser = users.isValid { it.email?.contentEquals(email) }
-                if (validUser == null) {
-                    Toast.makeText(
-                        context,
-                        ERROR_EMAIL_MESSAGE,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } else {
-                    Toast.makeText(context, PASSWORD_RESET_MESSAGE, Toast.LENGTH_SHORT)
-                        .show()
-                    parentFragmentManager.popBackStack()
-                }
-
-            } else {
-                Toast.makeText(context, INVALID_EMAIL_MESSAGE, Toast.LENGTH_SHORT).show()
-            }
         }
         return inflatedView
     }
 
     /**
-     * Extension function for ArrayList<Users> to check the email is with any user or not
+     * Method to check email and send the password reset link
      */
-    private fun ArrayList<Users>.isValid(predicate: (Users) -> Boolean?): Users? {
-        for (element in this) if (predicate(element)!!) {
-            return element
+    private fun resetPassword(email: String) {
+        if (email.matches(emailPattern.toRegex())) {
+            val validUser = FirebaseAuth.getInstance().sendPasswordResetEmail(email)
+            validUser.addOnCompleteListener {
+                if(it.isSuccessful) {
+                    resetProgressBar.visibility = View.INVISIBLE
+                    Toast.makeText(context, PASSWORD_RESET_MESSAGE, Toast.LENGTH_SHORT).show()
+                    parentFragmentManager.popBackStack()
+                }
+                else {
+                    resetProgressBar.visibility = View.INVISIBLE
+                    Toast.makeText(context, it.exception?.message, Toast.LENGTH_SHORT).show()
+                }
+
+            }
+        } else {
+            resetProgressBar.visibility = View.INVISIBLE
+            Toast.makeText(context, INVALID_EMAIL_MESSAGE, Toast.LENGTH_SHORT).show()
         }
-        return null
     }
 }
 
