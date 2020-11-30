@@ -3,7 +3,7 @@ package com.example.demoapp.activities
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.demoapp.R
-import com.example.demoapp.fragments.LoginFragment
+import com.example.demoapp.fragments.RegisterFragment
 import com.example.demoapp.utils.addFragment
 
 /**
@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         // Adding login fragment to activity layout
-        addFragment(LoginFragment(), R.id.fragment_container, supportFragmentManager)
+        addFragment(RegisterFragment(), R.id.fragment_container, supportFragmentManager)
 
         /**
          * Enable back button in actionbar only  if there are entries in the back stack
