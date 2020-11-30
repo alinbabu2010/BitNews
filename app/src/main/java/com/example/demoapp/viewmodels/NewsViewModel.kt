@@ -5,7 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.demoapp.api.NewsRepository
 import com.example.demoapp.models.Articles
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 /**
  * This class is used to define view model for favourite news storing
@@ -25,10 +28,9 @@ class NewsViewModel : ViewModel() {
      */
     fun getNews(activity: Activity) {
        runBlocking {
-           val job: Job = launch(context = Dispatchers.Default) {
+           val job: Job = launch(Dispatchers.IO) {
                val newsRepository = NewsRepository()
                newsRepository.loadNews(activity)
-               delay(100)
                newsArticles = newsRepository.news
            }
            job.join()
