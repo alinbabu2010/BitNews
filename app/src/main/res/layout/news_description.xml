@@ -35,7 +35,6 @@
         android:textColor="@color/secondary_dark" />
 
     <TextView
-        android:id="@+id/description_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/roboto_condensed_regular"
@@ -61,7 +60,6 @@
         android:typeface="normal" />
 
     <TextView
-        android:id="@+id/article_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/roboto_condensed_regular"

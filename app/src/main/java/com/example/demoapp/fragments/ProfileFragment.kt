@@ -18,10 +18,9 @@ class ProfileFragment : Fragment() {
     ): View? {
 
         // Inflate the layout for this fragment
-        val inflatedView = inflater.inflate(R.layout.fragment_profile, container, false)
 
 
-        return inflatedView
+        return inflater.inflate(R.layout.fragment_profile, container, false)
     }
 
 }

@@ -15,7 +15,7 @@ class PageAdapter(fragment: FragmentManager, private val tabCount: Int) :
 
     private val tabTitles = arrayOf("News", "Favourites", "Profile")
 
-    override fun getPageTitle(position: Int): CharSequence? {
+    override fun getPageTitle(position: Int): CharSequence {
         return tabTitles[position]
     }
 
