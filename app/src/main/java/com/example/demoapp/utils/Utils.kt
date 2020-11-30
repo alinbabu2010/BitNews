@@ -13,6 +13,7 @@ import com.example.demoapp.R
 import com.example.demoapp.activities.ArticleActivity
 import com.example.demoapp.activities.MainActivity
 import com.example.demoapp.models.Articles
+import com.google.firebase.auth.FirebaseAuth
 
 /**
  * Function to add a new fragment to the layout
@@ -43,8 +44,8 @@ fun showAlert(context: Context, activity: Activity) {
     builder.setMessage("Do you really want to logout?")
     builder.setIcon(android.R.drawable.ic_dialog_alert)
     builder.setPositiveButton("Yes") { _, _ ->
+        FirebaseAuth.getInstance().signOut()
         activity.startActivity(Intent(context, MainActivity::class.java))
-        activity.getSharedPreferences(SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE).edit().clear().apply()
         activity.finish()
     }
     builder.setNegativeButton("No") { _: DialogInterface, _: Int -> }
