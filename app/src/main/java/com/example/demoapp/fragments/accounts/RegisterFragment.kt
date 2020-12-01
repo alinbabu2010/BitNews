@@ -60,7 +60,9 @@ class RegisterFragment : Fragment() {
                 )
             }
         }
-        spannableTextView.setSpan(clickableSpanTextView, 31, 35, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        val start = spannableTextView.length - 4
+        val end = spannableTextView.length
+        spannableTextView.setSpan(clickableSpanTextView, start,end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         loginTextView.text = spannableTextView
         loginTextView.movementMethod = LinkMovementMethod.getInstance()
 
