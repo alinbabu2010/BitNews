@@ -46,6 +46,9 @@ class RegisterFragment : Fragment() {
         redirectToLogin(loginTextView)
     }
 
+    /**
+     * Method to make clickable text view and redirect to login on click
+     */
     private fun redirectToLogin(loginTextView: TextView) {
         val spannableTextView = SpannableString(loginTextView.text.toString())
         val clickableSpanTextView: ClickableSpan = object : ClickableSpan() {
