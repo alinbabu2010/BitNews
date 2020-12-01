@@ -13,7 +13,6 @@ import com.example.demoapp.utils.INVALID_EMAIL_MESSAGE
 import com.example.demoapp.utils.PASSWORD_RESET_MESSAGE
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.fragment_forgot_password.*
 
 /**
  * A simple [Fragment] subclass for forgot password fragment
@@ -31,12 +30,15 @@ class ForgotPasswordFragment : Fragment() {
 
         // Inflate the layout for this fragment
         val inflatedView = inflater.inflate(R.layout.fragment_forgot_password, container, false)
-        inflatedView.findViewById<ProgressBar>(R.id.resetProgressBar).visibility = View.INVISIBLE
+        val resetProgressBar : ProgressBar = inflatedView.findViewById(R.id.resetProgressBar)
+
+        resetProgressBar.visibility = View.INVISIBLE
+
 
         inflatedView.findViewById<Button>(R.id.reset_button).setOnClickListener {
             val email = inflatedView.findViewById<TextInputEditText>(R.id.email_input).text.toString()
-            inflatedView.findViewById<ProgressBar>(R.id.resetProgressBar).visibility = View.VISIBLE
-            resetPassword(email)
+            resetProgressBar.visibility = View.VISIBLE
+            resetPassword(email,resetProgressBar)
 
         }
         return inflatedView
@@ -45,7 +47,7 @@ class ForgotPasswordFragment : Fragment() {
     /**
      * Method to check email and send the password reset link
      */
-    private fun resetPassword(email: String) {
+    private fun resetPassword(email: String, resetProgressBar: ProgressBar) {
         if (email.matches(emailPattern.toRegex())) {
             val validUser = FirebaseAuth.getInstance().sendPasswordResetEmail(email)
             validUser.addOnCompleteListener {

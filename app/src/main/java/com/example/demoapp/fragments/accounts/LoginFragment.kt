@@ -21,7 +21,6 @@ import com.example.demoapp.utils.WRONG_CREDENTIALS_MESSAGE
 import com.example.demoapp.utils.replaceFragment
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.fragment_login.*
 
 
 /**
@@ -57,7 +56,7 @@ class LoginFragment : Fragment() {
             if (userName.isBlank() && password.isBlank()) {
                 Toast.makeText(context, FIELD_EMPTY_MESSAGE, Toast.LENGTH_SHORT).show()
             } else {
-                progressBar.visibility = View.VISIBLE
+                inflatedView.findViewById<ProgressBar>(R.id.progressBar).visibility = View.VISIBLE
                 loginUser(userName, password)
             }
         }
