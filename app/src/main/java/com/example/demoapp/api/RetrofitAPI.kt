@@ -7,7 +7,7 @@ import retrofit2.http.GET
 /**
  * API interface for news
  */
-interface NewsAPI {
+interface RetrofitAPI {
 
     @GET("everything?q=bitcoin&apiKey=$API_KEY")
     fun getNews(): Call<News>
