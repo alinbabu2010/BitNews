@@ -1,5 +1,6 @@
 package com.example.demoapp.utils
 
+import com.example.demoapp.api.RetrofitManager
 import com.example.demoapp.models.APIError
 
 import okhttp3.ResponseBody
@@ -12,8 +13,8 @@ import java.io.IOException
  */
 class  ErrorUtils {
 
-    fun parseError(response: Response<*>): APIError? {
-        val converter: Converter<ResponseBody, APIError> = RetrofitService.getRetrofit("https://jsonplaceholder.typicode.com/")
+    fun parseError(response: Response<*>, baseURL: String): APIError? {
+        val converter: Converter<ResponseBody, APIError> = RetrofitManager.getRetrofit(baseURL)
             .responseBodyConverter(APIError::class.java, arrayOfNulls<Annotation>(0))
         val error: APIError?
         error = try {

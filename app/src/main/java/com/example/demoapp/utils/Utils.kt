@@ -12,7 +12,7 @@ import androidx.fragment.app.FragmentManager
 import com.example.demoapp.R
 import com.example.demoapp.activities.ArticleActivity
 import com.example.demoapp.activities.MainActivity
-import com.example.demoapp.models.Articles
+import com.example.demoapp.models.News.Articles
 import com.google.firebase.auth.FirebaseAuth
 
 /**
