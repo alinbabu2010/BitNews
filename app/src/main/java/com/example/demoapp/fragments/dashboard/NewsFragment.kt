@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.demoapp.R
 import com.example.demoapp.adapter.NewsAdapter
-import com.example.demoapp.models.Articles
+import com.example.demoapp.models.News.Articles
 import com.example.demoapp.utils.EMPTY_FILTER_MESSAGE
 import com.example.demoapp.viewmodels.NewsViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog

@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.bumptech.glide.Glide
 import com.example.demoapp.R
-import com.example.demoapp.models.Articles
+import com.example.demoapp.models.News
 import com.example.demoapp.utils.showAlert
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import java.text.SimpleDateFormat
@@ -40,7 +40,7 @@ class ArticleActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_article)
 
-        val article = intent.getParcelableExtra<Articles>("article")
+        val article = intent.getParcelableExtra<News.Articles>("article")
         val newsImage: ImageView = findViewById(R.id.appbar_news_image)
         val newsDesc: TextView = findViewById(R.id.news_desc2)
         val newsSrc: TextView = findViewById(R.id.source_text_display)
