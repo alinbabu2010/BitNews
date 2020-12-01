@@ -27,7 +27,7 @@ class NewsViewModel : ViewModel() {
     fun getNews(activity: Activity, recyclerView: RecyclerView) {
         val newsRepository = NewsRepository()
         newsRepository.loadNews(activity) {
-            newsArticles = it
+            newsArticles = it.distinctBy { articles ->  articles.title } as ArrayList<Articles>
             recyclerView.adapter = NewsAdapter(newsArticles,this)
             recyclerView.setHasFixedSize(true)
         }
