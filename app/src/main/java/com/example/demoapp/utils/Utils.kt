@@ -40,15 +40,15 @@ fun replaceFragment(fragment: Fragment, id: Int, fragmentManager: FragmentManage
  */
 fun showAlert(context: Context, activity: Activity) {
     val builder = AlertDialog.Builder(context, R.style.DialogBoxTheme)
-    builder.setTitle("Logout")
-    builder.setMessage("Do you really want to logout?")
+    builder.setTitle(LOGOUT_STRING)
+    builder.setMessage(ALERT_DIALOG_QUESTION)
     builder.setIcon(android.R.drawable.ic_dialog_alert)
-    builder.setPositiveButton("Yes") { _, _ ->
+    builder.setPositiveButton(YES) { _, _ ->
         FirebaseAuth.getInstance().signOut()
         activity.startActivity(Intent(context, MainActivity::class.java))
         activity.finish()
     }
-    builder.setNegativeButton("No") { _: DialogInterface, _: Int -> }
+    builder.setNegativeButton(NO) { _: DialogInterface, _: Int -> }
     val alertDialog: AlertDialog = builder.create()
     alertDialog.setCancelable(false)
     alertDialog.show()
