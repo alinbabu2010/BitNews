@@ -12,14 +12,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.demoapp.R
 import com.example.demoapp.adapter.NewsAdapter
+import com.example.demoapp.databinding.FragmentNewsBinding
 import com.example.demoapp.models.News.Articles
 import com.example.demoapp.utils.EMPTY_FILTER_MESSAGE
 import com.example.demoapp.viewmodels.NewsViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
 /**
@@ -32,21 +31,23 @@ class NewsFragment : Fragment() {
     private var checkedRadio: RadioButton? = null
     private var publishedDate: String? = null
     private var articles : ArrayList<Articles>? = arrayListOf()
+    private lateinit var binding : FragmentNewsBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         this.container = container
-        return inflater.inflate(R.layout.fragment_news, container, false)
+        binding = FragmentNewsBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         newsViewModel = activity?.let { ViewModelProvider(it).get(NewsViewModel::class.java) }
-        val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view)
+        val recyclerView: RecyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(context)
         newsViewModel?.getNews()
 
@@ -56,6 +57,7 @@ class NewsFragment : Fragment() {
 
         newsViewModel?.newsArticles?.observe(viewLifecycleOwner,{
             articles = it
+            binding.progressBarNews.visibility = View.INVISIBLE
             recyclerView.adapter = NewsAdapter(articles,newsViewModel)
             recyclerView.setHasFixedSize(true)
         })
@@ -66,25 +68,25 @@ class NewsFragment : Fragment() {
         })
 
         // Refresh on swipe by calling recycler view
-        val refreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.swipeRefresh)
-        refreshLayout.setProgressBackgroundColorSchemeColor(Color.YELLOW)
-        refreshLayout.setColorSchemeResources(R.color.secondary_dark)
-        refreshLayout.setOnRefreshListener {
-            recyclerView.adapter?.notifyDataSetChanged()
-            refreshLayout.isRefreshing = false
+        with(binding.swipeRefresh){
+            setProgressBackgroundColorSchemeColor(Color.YELLOW)
+            setColorSchemeResources(R.color.secondary_dark)
+            setOnRefreshListener {
+                recyclerView.adapter?.notifyDataSetChanged()
+                isRefreshing = false
+            }
         }
 
         // Inflate bottom sheet dialog on floating action button click
-        val filter: FloatingActionButton = view.findViewById(R.id.filter_button)
-        filter.setOnClickListener {
-            setBottomSheetDialog(recyclerView, articles)
+        binding.filterButton.setOnClickListener {
+            setBottomSheetDialog(articles)
         }
     }
 
     /**
      * Method to set radio buttons and datepicker for filter bottom sheet dialog and process the filter clicks
      */
-    private fun setBottomSheetDialog(recyclerView: RecyclerView, article: ArrayList<Articles>?) {
+    private fun setBottomSheetDialog(article: ArrayList<Articles>?) {
 
         val source = mutableSetOf<String>()
         val bottomSheet = context?.let { it1 -> BottomSheetDialog(it1) }
@@ -143,7 +145,7 @@ class NewsFragment : Fragment() {
 
         val applyButton: Button = bottomSheetView.findViewById(R.id.apply_button)
         applyButton.setOnClickListener {
-            filterNews(bottomSheet, dateView, sourceRadioGroup, article, recyclerView)
+            filterNews(bottomSheet, dateView, sourceRadioGroup, article)
         }
 
         val clearButton: Button = bottomSheetView.findViewById(R.id.clear_button)
@@ -153,7 +155,7 @@ class NewsFragment : Fragment() {
             checkedRadio = null
             publishedDate = null
             view?.findViewById<TextView>(R.id.no_matching_textView)?.visibility = View.INVISIBLE
-            recyclerView.swapAdapter(NewsAdapter(article, newsViewModel), false)
+            binding.recyclerView.swapAdapter(NewsAdapter(article, newsViewModel), false)
         }
 
     }
@@ -166,8 +168,7 @@ class NewsFragment : Fragment() {
         bottomSheet: BottomSheetDialog?,
         dateView: TextView,
         sourceRadioGroup: RadioGroup,
-        article: ArrayList<Articles>?,
-        recyclerView: RecyclerView
+        article: ArrayList<Articles>?
     ) {
         checkedRadio = bottomSheet?.findViewById(sourceRadioGroup.checkedRadioButtonId)
         val sourceName = checkedRadio?.text
@@ -191,11 +192,11 @@ class NewsFragment : Fragment() {
             }
             if (distinctNewsFilter?.isEmpty() == true) {
                 view?.findViewById<TextView>(R.id.no_matching_textView)?.visibility = View.VISIBLE
-                recyclerView.swapAdapter(NewsAdapter(null, newsViewModel), false)
+                binding.recyclerView.swapAdapter(NewsAdapter(null, newsViewModel), false)
                 bottomSheet?.dismiss()
             } else {
                 view?.findViewById<TextView>(R.id.no_matching_textView)?.visibility = View.INVISIBLE
-                recyclerView.swapAdapter(NewsAdapter(distinctNewsFilter, newsViewModel), false)
+                binding.recyclerView.swapAdapter(NewsAdapter(distinctNewsFilter, newsViewModel), false)
                 bottomSheet?.dismiss()
             }
 
