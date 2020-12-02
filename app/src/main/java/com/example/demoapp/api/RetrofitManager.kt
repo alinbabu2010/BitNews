@@ -1,12 +1,9 @@
 package com.example.demoapp.api
 
-import android.app.Activity
-import android.widget.Toast
+import androidx.lifecycle.MutableLiveData
 import com.example.demoapp.models.APIError
 import com.example.demoapp.utils.ErrorUtils
 import com.example.demoapp.utils.NETWORK_ERROR_MESSAGE
-import com.example.demoapp.utils.NOT_FOUND
-import com.example.demoapp.utils.SERVER_ERROR
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -14,7 +11,10 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 
+
 object RetrofitManager {
+
+    val toastMessageObserver: MutableLiveData<String?> = MutableLiveData()
 
     /**
      * Method to initialize and build an retrofit object
@@ -29,7 +29,7 @@ object RetrofitManager {
     /**
      * Method to create retrofit service using RetrofitAPI interface
      */
-    fun getRetrofitService(baseURL : String): RetrofitAPI {
+    fun getRetrofitService(baseURL: String): RetrofitAPI {
         val retrofit = getRetrofit(baseURL)
         return retrofit.create(RetrofitAPI::class.java)
     }
@@ -37,36 +37,21 @@ object RetrofitManager {
     /**
      * Method to fetch news from API
      */
-    fun <T> loadNews(activity: Activity, call: Call<T>,baseURL: String, articles: (T) -> Unit) {
+    fun <T> loadData(call: Call<T>, baseURL: String, articles: (T) -> Unit) {
+        val apiResponse = APIResponse<T>()
         call.enqueue(object : Callback<T> {
             override fun onResponse(call: Call<T>, response: Response<T>) {
-                if (response.isSuccessful) response.body()?.let { articles(it) }
+                if (response.isSuccessful) response.body()?.let { apiResponse.success(it) }?.value?.let { articles(it) }
                 else {
-                    val error: APIError? = ErrorUtils().parseError(response,baseURL)
-                    when (error?.status()){
-                        404 -> Toast.makeText(activity.applicationContext, NOT_FOUND, Toast.LENGTH_SHORT).show()
-                        500 -> Toast.makeText(activity.applicationContext, SERVER_ERROR, Toast.LENGTH_SHORT).show()
-                        else -> Toast.makeText(activity.applicationContext, error?.message(), Toast.LENGTH_SHORT).show()
-                    }
+                    val error: APIError? = ErrorUtils().parseError(response, baseURL)
+                    toastMessageObserver.value = apiResponse.error(error)
                 }
             }
 
             override fun onFailure(call: Call<T>, t: Throwable) {
-                if( t is IOException) {
-                    Toast.makeText(
-                        activity.applicationContext,
-                        NETWORK_ERROR_MESSAGE,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } else {
-                    Toast.makeText(
-                        activity.applicationContext,
-                        t.message,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
+                if (t is IOException) toastMessageObserver.value = NETWORK_ERROR_MESSAGE
+                else toastMessageObserver.value = t.message.toString()
             }
-
         })
     }
 }
