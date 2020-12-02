@@ -31,6 +31,7 @@ class NewsFragment : Fragment() {
     private var container: ViewGroup? = null
     private var checkedRadio: RadioButton? = null
     private var publishedDate: String? = null
+    private var articles : ArrayList<Articles>? = arrayListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,7 +48,17 @@ class NewsFragment : Fragment() {
         newsViewModel = activity?.let { ViewModelProvider(it).get(NewsViewModel::class.java) }
         val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(context)
-        activity?.let { newsViewModel?.getNews(it,recyclerView) }
+        newsViewModel?.getNews()
+
+        newsViewModel?.getToastObserver()?.observe(viewLifecycleOwner,{
+            Toast.makeText(activity,it, Toast.LENGTH_SHORT).show()
+        })
+
+        newsViewModel?.newsArticles?.observe(viewLifecycleOwner,{
+            articles = it
+            recyclerView.adapter = NewsAdapter(articles,newsViewModel)
+            recyclerView.setHasFixedSize(true)
+        })
 
         newsViewModel?.newsLiveData?.observe(viewLifecycleOwner, {
             recyclerView.adapter?.notifyDataSetChanged()
@@ -66,9 +77,8 @@ class NewsFragment : Fragment() {
         // Inflate bottom sheet dialog on floating action button click
         val filter: FloatingActionButton = view.findViewById(R.id.filter_button)
         filter.setOnClickListener {
-            setBottomSheetDialog(recyclerView, newsViewModel?.newsArticles)
+            setBottomSheetDialog(recyclerView, articles)
         }
-
     }
 
     /**

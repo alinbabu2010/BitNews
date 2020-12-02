@@ -1,13 +1,13 @@
 package com.example.demoapp.viewmodels
 
-import android.app.Activity
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.recyclerview.widget.RecyclerView
-import com.example.demoapp.adapter.NewsAdapter
 import com.example.demoapp.api.RetrofitManager
-import com.example.demoapp.api.RetrofitManager.loadNews
+import com.example.demoapp.api.RetrofitManager.loadData
+import com.example.demoapp.api.RetrofitManager.toastMessageObserver
 import com.example.demoapp.models.News
+
 
 /**
  * This class is used to define view model for favourite news storing
@@ -15,8 +15,15 @@ import com.example.demoapp.models.News
 class NewsViewModel : ViewModel() {
 
     var newsLiveData = MutableLiveData<MutableSet<News.Articles>>()
-    var newsArticles = ArrayList<News.Articles>()
+    var newsArticles = MutableLiveData<ArrayList<News.Articles>>()
     private var articles: MutableSet<News.Articles>? = mutableSetOf()
+
+    /**
+     * Method to get error message from API requests
+     */
+    fun getToastObserver(): LiveData<String?> {
+        return toastMessageObserver
+    }
 
     init {
         newsLiveData.value = mutableSetOf()
@@ -25,13 +32,11 @@ class NewsViewModel : ViewModel() {
     /**
      * Method to get the news from API url
      */
-    fun getNews(activity: Activity, recyclerView: RecyclerView) {
+    fun getNews() {
         val baseURL = "http://newsapi.org/v2/"
         val call = RetrofitManager.getRetrofitService(baseURL).getNews()
-        loadNews(activity,call,baseURL) {
-            newsArticles = it.articles.distinctBy { articles ->  articles.title } as ArrayList<News.Articles>
-            recyclerView.adapter = NewsAdapter(newsArticles,this)
-            recyclerView.setHasFixedSize(true)
+        loadData(call, baseURL) {
+            newsArticles.postValue(it.articles.distinctBy { articles -> articles.title } as ArrayList<News.Articles>)
         }
     }
 
