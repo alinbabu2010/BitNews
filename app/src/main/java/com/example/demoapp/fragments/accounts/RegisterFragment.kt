@@ -1,6 +1,7 @@
 package com.example.demoapp.fragments.accounts
 
 import android.content.Intent
+import android.content.res.Resources
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
@@ -16,7 +17,7 @@ import com.example.demoapp.R
 import com.example.demoapp.activities.DashboardActivity
 import com.example.demoapp.databinding.FragmentRegisterBinding
 import com.example.demoapp.models.Users
-import com.example.demoapp.utils.replaceFragment
+import com.example.demoapp.utils.Utils.Companion.replaceFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 
@@ -107,7 +108,7 @@ class RegisterFragment : Fragment() {
         }
         else {
             binding.registerProgressBar.visibility = View.INVISIBLE
-            Toast.makeText(context,"Password not matching",Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, Resources.getSystem().getString(R.string.password_matching_error),Toast.LENGTH_SHORT).show()
         }
     }
 

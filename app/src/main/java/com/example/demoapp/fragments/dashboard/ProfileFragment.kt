@@ -7,6 +7,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.demoapp.databinding.FragmentProfileBinding
+import com.example.demoapp.utils.Const.Companion.EMAIL_STRING
+import com.example.demoapp.utils.Const.Companion.NAME_STRING
+import com.example.demoapp.utils.Const.Companion.USERNAME_STRING
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -41,9 +44,9 @@ class ProfileFragment : Fragment() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if(dataSnapshot.exists()){
                     binding.progressBarProfile.visibility = View.INVISIBLE
-                    binding.nameDisplay.text = currentUser?.let { dataSnapshot.child(it).child("name").value } as CharSequence?
-                    binding.usernameDisplay.text = currentUser?.let { dataSnapshot.child(it).child("username").value } as CharSequence?
-                    binding.emailDisplay.text = currentUser?.let { dataSnapshot.child(it).child("email").value } as CharSequence?
+                    binding.nameDisplay.text = currentUser?.let { dataSnapshot.child(it).child(NAME_STRING).value } as CharSequence?
+                    binding.usernameDisplay.text = currentUser?.let { dataSnapshot.child(it).child(USERNAME_STRING).value } as CharSequence?
+                    binding.emailDisplay.text = currentUser?.let { dataSnapshot.child(it).child(EMAIL_STRING).value } as CharSequence?
                 }
             }
 

@@ -1,6 +1,7 @@
 package com.example.demoapp.fragments.accounts
 
 import android.content.Intent
+import android.content.res.Resources
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
@@ -16,9 +17,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.demoapp.R
 import com.example.demoapp.activities.DashboardActivity
-import com.example.demoapp.utils.FIELD_EMPTY_MESSAGE
-import com.example.demoapp.utils.WRONG_CREDENTIALS_MESSAGE
-import com.example.demoapp.utils.replaceFragment
+import com.example.demoapp.utils.Utils.Companion.replaceFragment
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 
@@ -54,7 +53,7 @@ class LoginFragment : Fragment() {
             val password =
                 inflatedView.findViewById<TextInputEditText>(R.id.password_input).text.toString()
             if (userName.isBlank() && password.isBlank()) {
-                Toast.makeText(context, FIELD_EMPTY_MESSAGE, Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, Resources.getSystem().getString(R.string.field_empty_text), Toast.LENGTH_SHORT).show()
             } else {
                 inflatedView.findViewById<ProgressBar>(R.id.progressBar).visibility = View.VISIBLE
                 loginUser(userName, password)
@@ -94,7 +93,7 @@ class LoginFragment : Fragment() {
                 startActivity(Intent(context, DashboardActivity::class.java))
                 activity?.finish()
             } else {
-                Toast.makeText(context, WRONG_CREDENTIALS_MESSAGE, Toast.LENGTH_LONG).show()
+                Toast.makeText(context,Resources.getSystem().getString(R.string.wrong_credentials_text), Toast.LENGTH_LONG).show()
             }
         }
     }

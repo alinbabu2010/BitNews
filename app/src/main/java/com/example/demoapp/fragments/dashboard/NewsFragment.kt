@@ -1,6 +1,7 @@
 package com.example.demoapp.fragments.dashboard
 
 import android.app.DatePickerDialog
+import android.content.res.Resources
 import android.graphics.Color
 import android.icu.util.Calendar
 import android.os.Bundle
@@ -17,7 +18,6 @@ import com.example.demoapp.adapter.NewsAdapter
 import com.example.demoapp.api.Resource
 import com.example.demoapp.databinding.FragmentNewsBinding
 import com.example.demoapp.models.News.Articles
-import com.example.demoapp.utils.EMPTY_FILTER_MESSAGE
 import com.example.demoapp.viewmodels.NewsViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
@@ -185,7 +185,7 @@ class NewsFragment : Fragment() {
         publishedDate = dateView.text as String?
 
         if (sourceName.isNullOrEmpty() && publishedDate.isNullOrEmpty()) {
-            Toast.makeText(context, EMPTY_FILTER_MESSAGE, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, Resources.getSystem().getString(R.string.empty_filter_text), Toast.LENGTH_SHORT).show()
         } else {
             val sourceFilter =
                 article?.filter { it.source.name == sourceName.toString() } as ArrayList<Articles>?
