@@ -1,7 +1,5 @@
 package com.example.demoapp.api
 
-import androidx.lifecycle.MutableLiveData
-import com.example.demoapp.models.APIError
 import com.example.demoapp.utils.ErrorUtils
 import com.example.demoapp.utils.NETWORK_ERROR_MESSAGE
 import retrofit2.Call
@@ -13,8 +11,6 @@ import java.io.IOException
 
 
 object RetrofitManager {
-
-    val toastMessageObserver: MutableLiveData<String?> = MutableLiveData()
 
     /**
      * Method to initialize and build an retrofit object
@@ -37,20 +33,20 @@ object RetrofitManager {
     /**
      * Method to fetch news from API
      */
-    fun <T> loadData(call: Call<T>, baseURL: String, articles: (T) -> Unit) {
-        val apiResponse = APIResponse<T>()
+    fun <T : Any> loadData(call: Call<T>, baseURL: String , apiResponse: (Resource<T?>) -> Unit) {
         call.enqueue(object : Callback<T> {
             override fun onResponse(call: Call<T>, response: Response<T>) {
-                if (response.isSuccessful) response.body()?.let { apiResponse.success(it) }?.value?.let { articles(it) }
+                Resource.loading(response)
+                if (response.isSuccessful) apiResponse(Resource.success(APIResponse.Success(response.body()).data))
                 else {
-                    val error: APIError? = ErrorUtils().parseError(response, baseURL)
-                    toastMessageObserver.value = apiResponse.error(error)
+                    val apiError = APIResponse.Error<T>(ErrorUtils().parseError(response, baseURL))
+                    val errorMessage = "${apiError.error?.status()} - ${apiError.error?.message()}"
+                    apiResponse(Resource.error(null,errorMessage))
                 }
             }
-
             override fun onFailure(call: Call<T>, t: Throwable) {
-                if (t is IOException) toastMessageObserver.value = NETWORK_ERROR_MESSAGE
-                else toastMessageObserver.value = t.message.toString()
+                if (t is IOException) apiResponse(Resource.error(null, NETWORK_ERROR_MESSAGE))
+                else apiResponse(Resource.error(null,t.message.toString()))
             }
         })
     }
