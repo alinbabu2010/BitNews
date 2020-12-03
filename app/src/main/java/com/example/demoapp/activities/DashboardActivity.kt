@@ -10,8 +10,8 @@ import androidx.viewpager.widget.ViewPager
 import com.example.demoapp.R
 import com.example.demoapp.adapter.PageAdapter
 import com.example.demoapp.fragments.dashboard.NewsFragment
-import com.example.demoapp.utils.addFragment
-import com.example.demoapp.utils.showAlert
+import com.example.demoapp.utils.Utils.Companion.addFragment
+import com.example.demoapp.utils.Utils.Companion.showAlert
 import com.google.android.material.tabs.TabLayout
 
 

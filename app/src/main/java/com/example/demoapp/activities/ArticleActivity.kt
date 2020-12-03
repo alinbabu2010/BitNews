@@ -15,7 +15,7 @@ import androidx.appcompat.widget.Toolbar
 import com.bumptech.glide.Glide
 import com.example.demoapp.R
 import com.example.demoapp.models.News
-import com.example.demoapp.utils.showAlert
+import com.example.demoapp.utils.Utils.Companion.showAlert
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import java.text.SimpleDateFormat
 import java.util.*

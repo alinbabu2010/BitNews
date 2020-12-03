@@ -11,8 +11,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.demoapp.R
-import com.example.demoapp.utils.openArticle
-import com.example.demoapp.utils.shareNews
+import com.example.demoapp.utils.Utils.Companion.openArticle
+import com.example.demoapp.utils.Utils.Companion.shareNews
 import com.example.demoapp.viewmodels.NewsViewModel
 import java.text.SimpleDateFormat
 import java.util.*
