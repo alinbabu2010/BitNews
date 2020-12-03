@@ -15,6 +15,8 @@ import androidx.appcompat.widget.Toolbar
 import com.bumptech.glide.Glide
 import com.example.demoapp.R
 import com.example.demoapp.models.News
+import com.example.demoapp.utils.Const.Companion.DATE_FORMAT_DECODE
+import com.example.demoapp.utils.Const.Companion.DATE_FORMAT_ENCODE
 import com.example.demoapp.utils.Utils.Companion.showAlert
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import java.text.SimpleDateFormat
@@ -62,11 +64,11 @@ class ArticleActivity : AppCompatActivity() {
 
         val date =
             SimpleDateFormat(
-                "yyyy-MM-dd'T'HH:mm:ss'Z'",
+                DATE_FORMAT_ENCODE,
                 Locale.US
             ).parse(article?.publishedAt.toString())
         val formattedDate =
-            date?.let { SimpleDateFormat("MMM dd, y hh:mm a", Locale.US).format(it) }
+            date?.let { SimpleDateFormat(DATE_FORMAT_DECODE, Locale.US).format(it) }
 
         val publishDate = "Published on $formattedDate"
         newsDate.text = publishDate

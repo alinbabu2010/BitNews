@@ -10,6 +10,7 @@ import com.example.demoapp.databinding.FragmentProfileBinding
 import com.example.demoapp.utils.Const.Companion.EMAIL_STRING
 import com.example.demoapp.utils.Const.Companion.NAME_STRING
 import com.example.demoapp.utils.Const.Companion.USERNAME_STRING
+import com.example.demoapp.utils.Const.Companion.USERS
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -38,7 +39,7 @@ class ProfileFragment : Fragment() {
      */
    private fun getDataFromFirebase() {
         val currentUser = FirebaseAuth.getInstance().currentUser?.uid
-        val user = FirebaseDatabase.getInstance().getReference("Users")
+        val user = FirebaseDatabase.getInstance().getReference(USERS)
         val getUser = user.orderByKey().equalTo(currentUser)
         getUser.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -55,6 +56,6 @@ class ProfileFragment : Fragment() {
             }
         })
 
-    }
+   }
 
 }
