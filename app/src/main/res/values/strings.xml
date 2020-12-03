@@ -43,4 +43,6 @@
     <string name="server_error_message">Sorry, Server error occurred</string>
     <string name="not_found_text">Item not found</string>
     <string name="password_matching_error">Password not matching</string>
+    <string name="news_title">News</string>
+    <string name="favourite_title">Favourites</string>
 </resources>

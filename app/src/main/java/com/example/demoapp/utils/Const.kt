@@ -13,5 +13,8 @@ class Const {
         const val USERNAME_STRING = "username"
         const val EMAIL_STRING = "email"
         const val EMAIL_PATTERN = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"
+        const val USERS = "Users"
+        const val DATE_FORMAT_ENCODE = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+        const val DATE_FORMAT_DECODE ="MMM dd, y hh:mm a"
     }
 }
