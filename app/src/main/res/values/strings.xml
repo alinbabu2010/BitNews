@@ -31,4 +31,16 @@
     <string name="login_redirect_string">Already have an account. Click here</string>
     <string name="confirm_password_string">Confirm Password</string>
     <string name="register_text">New to our app! Register here</string>
+    <string name="field_empty_text">Fields cannot be empty</string>
+    <string name="wrong_credentials_text">Incorrect credentials entered</string>
+    <string name="empty_filter_text">Select at least one filter</string>
+    <string name="password_reset">Password reset link send to email</string>
+    <string name="invalid_message">Invalid email address entered</string>
+    <string name="alert_dialog_question">Do you really want to logout?</string>
+    <string name="yes_string">Yes</string>
+    <string name="no_string">No</string>
+    <string name="network_error_message">Network failure</string>
+    <string name="server_error_message">Sorry, Server error occurred</string>
+    <string name="not_found_text">Item not found</string>
+    <string name="password_matching_error">Password not matching</string>
 </resources>
