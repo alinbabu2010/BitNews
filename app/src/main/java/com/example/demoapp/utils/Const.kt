@@ -12,5 +12,6 @@ class Const {
         const val NAME_STRING = "name"
         const val USERNAME_STRING = "username"
         const val EMAIL_STRING = "email"
+        const val EMAIL_PATTERN = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"
     }
 }

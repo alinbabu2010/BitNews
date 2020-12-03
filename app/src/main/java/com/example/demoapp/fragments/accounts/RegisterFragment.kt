@@ -31,6 +31,7 @@ class RegisterFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        activity?.title = Resources.getSystem().getString(R.string.reset_password_string)
         binding = FragmentRegisterBinding.inflate(inflater, container, false)
         return binding.root
     }

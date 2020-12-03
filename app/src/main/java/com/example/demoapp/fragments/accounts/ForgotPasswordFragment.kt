@@ -1,5 +1,6 @@
 package com.example.demoapp.fragments.accounts
 
+import android.content.res.Resources
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,8 +10,7 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.demoapp.R
-import com.example.demoapp.utils.INVALID_EMAIL_MESSAGE
-import com.example.demoapp.utils.PASSWORD_RESET_MESSAGE
+import com.example.demoapp.utils.Const.Companion.EMAIL_PATTERN
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 
@@ -19,14 +19,12 @@ import com.google.firebase.auth.FirebaseAuth
  */
 class ForgotPasswordFragment : Fragment() {
 
-    private val emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        activity?.title = "Reset Password"
+        activity?.title = Resources.getSystem().getString(R.string.reset_password_string)
 
         // Inflate the layout for this fragment
         val inflatedView = inflater.inflate(R.layout.fragment_forgot_password, container, false)
@@ -48,12 +46,12 @@ class ForgotPasswordFragment : Fragment() {
      * Method to check email and send the password reset link
      */
     private fun resetPassword(email: String, resetProgressBar: ProgressBar) {
-        if (email.matches(emailPattern.toRegex())) {
+        if (email.matches(EMAIL_PATTERN.toRegex())) {
             val validUser = FirebaseAuth.getInstance().sendPasswordResetEmail(email)
             validUser.addOnCompleteListener {
                 if(it.isSuccessful) {
                     resetProgressBar.visibility = View.INVISIBLE
-                    Toast.makeText(context, PASSWORD_RESET_MESSAGE, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, Resources.getSystem().getString(R.string.password_reset), Toast.LENGTH_SHORT).show()
                     parentFragmentManager.popBackStack()
                 }
                 else {
@@ -64,7 +62,7 @@ class ForgotPasswordFragment : Fragment() {
             }
         } else {
             resetProgressBar.visibility = View.INVISIBLE
-            Toast.makeText(context, INVALID_EMAIL_MESSAGE, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, Resources.getSystem().getString(R.string.invalid_message), Toast.LENGTH_SHORT).show()
         }
     }
 }
