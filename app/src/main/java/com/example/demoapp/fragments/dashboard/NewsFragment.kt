@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.demoapp.R
 import com.example.demoapp.adapter.NewsAdapter
+import com.example.demoapp.api.Resource
 import com.example.demoapp.databinding.FragmentNewsBinding
 import com.example.demoapp.models.News.Articles
 import com.example.demoapp.utils.EMPTY_FILTER_MESSAGE
@@ -51,13 +52,22 @@ class NewsFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
         newsViewModel?.getNews()
 
-        newsViewModel?.getToastObserver()?.observe(viewLifecycleOwner,{
-            Toast.makeText(activity,it, Toast.LENGTH_SHORT).show()
-        })
-
         newsViewModel?.newsArticles?.observe(viewLifecycleOwner,{
-            articles = it
-            binding.progressBarNews.visibility = View.INVISIBLE
+            when (it.status) {
+                Resource.Status.SUCCESS -> {
+                    binding.progressBarNews.visibility = View.GONE
+                    val items = it.data
+                    articles = items?.articles
+                }
+                Resource.Status.ERROR -> {
+                    binding.progressBarNews.visibility = View.GONE
+                    Toast.makeText(activity,it.message, Toast.LENGTH_LONG).show()
+                }
+                Resource.Status.LOADING -> {
+                    binding.progressBarNews.visibility = View.VISIBLE
+                    recyclerView.visibility = View.GONE
+                }
+            }
             recyclerView.adapter = NewsAdapter(articles,newsViewModel)
             recyclerView.setHasFixedSize(true)
         })
