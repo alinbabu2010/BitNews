@@ -1,13 +1,11 @@
 package com.example.demoapp.api
 
 import com.example.demoapp.utils.ErrorUtils
-import com.example.demoapp.utils.NETWORK_ERROR_MESSAGE
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.io.IOException
 
 
 object RetrofitManager {
@@ -40,13 +38,11 @@ object RetrofitManager {
                 if (response.isSuccessful) apiResponse(Resource.success(APIResponse.Success(response.body()).data))
                 else {
                     val apiError = APIResponse.Error<T>(ErrorUtils().parseError(response, baseURL))
-                    val errorMessage = "${apiError.error?.status()} - ${apiError.error?.message()}"
-                    apiResponse(Resource.error(null,errorMessage))
+                    apiResponse(Resource.error(null,apiError.error))
                 }
             }
             override fun onFailure(call: Call<T>, t: Throwable) {
-                if (t is IOException) apiResponse(Resource.error(null, NETWORK_ERROR_MESSAGE))
-                else apiResponse(Resource.error(null,t.message.toString()))
+                apiResponse(Resource.failure(null,t))
             }
         })
     }
