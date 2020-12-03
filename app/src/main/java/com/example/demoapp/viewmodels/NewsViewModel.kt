@@ -1,11 +1,10 @@
 package com.example.demoapp.viewmodels
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.demoapp.api.Resource
 import com.example.demoapp.api.RetrofitManager
 import com.example.demoapp.api.RetrofitManager.loadData
-import com.example.demoapp.api.RetrofitManager.toastMessageObserver
 import com.example.demoapp.models.News
 
 
@@ -15,15 +14,8 @@ import com.example.demoapp.models.News
 class NewsViewModel : ViewModel() {
 
     var newsLiveData = MutableLiveData<MutableSet<News.Articles>>()
-    var newsArticles = MutableLiveData<ArrayList<News.Articles>>()
+    var newsArticles = MutableLiveData<Resource<News?>>()
     private var articles: MutableSet<News.Articles>? = mutableSetOf()
-
-    /**
-     * Method to get error message from API requests
-     */
-    fun getToastObserver(): LiveData<String?> {
-        return toastMessageObserver
-    }
 
     init {
         newsLiveData.value = mutableSetOf()
@@ -35,9 +27,10 @@ class NewsViewModel : ViewModel() {
     fun getNews() {
         val baseURL = "http://newsapi.org/v2/"
         val call = RetrofitManager.getRetrofitService(baseURL).getNews()
-        loadData(call, baseURL) {
-            newsArticles.postValue(it.articles.distinctBy { articles -> articles.title } as ArrayList<News.Articles>)
+        loadData(call, baseURL){
+            newsArticles.value = it
         }
+
     }
 
     /**
