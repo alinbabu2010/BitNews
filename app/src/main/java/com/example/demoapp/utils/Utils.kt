@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.content.res.Resources
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -49,12 +48,10 @@ class Utils {
          */
         fun showAlert(context: Context, activity: Activity) {
             val builder = AlertDialog.Builder(context, R.style.DialogBoxTheme)
-            builder.setTitle(Resources.getSystem().getString(R.string.logout_string))
-            builder.setMessage(Resources.getSystem().getString(R.string.alert_dialog_question))
+            builder.setTitle(R.string.logout_string)
+            builder.setMessage(R.string.alert_dialog_question)
             builder.setIcon(android.R.drawable.ic_dialog_alert)
-            builder.setPositiveButton(
-                Resources.getSystem().getString(R.string.yes_string)
-            ) { _, _ ->
+            builder.setPositiveButton(R.string.yes_string) { _, _ ->
                 FirebaseAuth.getInstance().signOut()
                 activity.startActivity(Intent(context, MainActivity::class.java))
                 activity.finish()
