@@ -17,24 +17,24 @@ data class Resource<out T>(
 ) {
     companion object {
 
-        fun <T> success(data: T): Resource<T> = Resource(Status.SUCCESS, data, null, null)
+        fun <T> success(data: T): Resource<T> = Resource<T>(Status.SUCCESS,data,null,null)
 
-        fun <T> error(data: T?, apiError: APIError?): Resource<T> {
-            val errorMessage = when (apiError?.status()) {
+        fun <T> error(apiError: APIError?): Resource<T> {
+            val errorMessage = when (apiError?.status()){
                 404 -> "${apiError.status()} - $NOT_FOUND"
                 500 -> "${apiError.status()} - $SERVER_ERROR"
                 else -> "${apiError?.status()} - ${apiError?.message()}"
             }
-            return Resource(Status.ERROR, data, errorMessage, null)
+            return Resource<T>(Status.ERROR,null,errorMessage,null)
         }
 
-        fun <T> failure(data: T?, exception: Throwable): Resource<T> {
-            val message: String = if (exception is IOException) NETWORK_FAILURE
+        fun <T> failure(exception: Throwable): Resource<T> {
+            val message : String = if( exception is IOException )  NETWORK_FAILURE
             else exception.message.toString()
-            return Resource(Status.ERROR, data, message, exception)
+            return Resource<T>(Status.ERROR, null, message, exception)
         }
 
-        fun <T> loading(data: T?): Resource<T> = Resource(Status.LOADING, data, null, null)
+        fun <T> loading(data: T?): Resource<T> = Resource<T>(Status.LOADING,data,null,null)
     }
 
     enum class Status {

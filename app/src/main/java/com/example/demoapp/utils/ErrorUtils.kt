@@ -13,8 +13,8 @@ import java.io.IOException
  */
 class  ErrorUtils {
 
-    fun parseError(response: Response<*>, baseURL: String): APIError? {
-        val converter: Converter<ResponseBody, APIError> = RetrofitManager.getRetrofit(baseURL)
+    fun parseError(response: Response<*>): APIError? {
+        val converter: Converter<ResponseBody, APIError> = RetrofitManager.getRetrofit
             .responseBodyConverter(APIError::class.java, arrayOfNulls<Annotation>(0))
         val error: APIError?
         error = try {

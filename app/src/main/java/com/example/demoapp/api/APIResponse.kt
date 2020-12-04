@@ -8,4 +8,5 @@ import com.example.demoapp.models.APIError
 sealed class APIResponse<out T : Any> {
     data class Success<out T : Any>(val data: T?) : APIResponse<T>()
     data class Error<out T : Any>(val error: APIError?) : APIResponse<T>()
+    data class Failure<out T : Any>(val exception: Throwable) : APIResponse<T>()
 }
