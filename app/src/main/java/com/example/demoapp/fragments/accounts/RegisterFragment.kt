@@ -1,7 +1,6 @@
 package com.example.demoapp.fragments.accounts
 
 import android.content.Intent
-import android.content.res.Resources
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
@@ -31,7 +30,7 @@ class RegisterFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        activity?.title = Resources.getSystem().getString(R.string.reset_password_string)
+        activity?.title = getString(R.string.reset_password_string)
         binding = FragmentRegisterBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -109,7 +108,7 @@ class RegisterFragment : Fragment() {
         }
         else {
             binding.registerProgressBar.visibility = View.INVISIBLE
-            Toast.makeText(context, Resources.getSystem().getString(R.string.password_matching_error),Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, R.string.password_matching_error,Toast.LENGTH_SHORT).show()
         }
     }
 

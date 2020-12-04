@@ -1,7 +1,6 @@
 package com.example.demoapp.fragments.accounts
 
 import android.content.Intent
-import android.content.res.Resources
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
@@ -34,7 +33,7 @@ class LoginFragment : Fragment() {
     ): View? {
 
         activity?.actionBar?.setDisplayShowTitleEnabled(true)
-        activity?.title = Resources.getSystem().getString(R.string.login_string)
+        activity?.title = getString(R.string.login_string)
 
         // Inflate the layout for this fragment
         val inflatedView = inflater.inflate(R.layout.fragment_login, container, false)
@@ -53,7 +52,7 @@ class LoginFragment : Fragment() {
             val password =
                 inflatedView.findViewById<TextInputEditText>(R.id.password_input).text.toString()
             if (userName.isBlank() && password.isBlank()) {
-                Toast.makeText(context, Resources.getSystem().getString(R.string.field_empty_text), Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, R.string.field_empty_text, Toast.LENGTH_SHORT).show()
             } else {
                 inflatedView.findViewById<ProgressBar>(R.id.progressBar).visibility = View.VISIBLE
                 loginUser(userName, password)
@@ -93,7 +92,7 @@ class LoginFragment : Fragment() {
                 startActivity(Intent(context, DashboardActivity::class.java))
                 activity?.finish()
             } else {
-                Toast.makeText(context,Resources.getSystem().getString(R.string.wrong_credentials_text), Toast.LENGTH_LONG).show()
+                Toast.makeText(context,R.string.wrong_credentials_text, Toast.LENGTH_LONG).show()
             }
         }
     }

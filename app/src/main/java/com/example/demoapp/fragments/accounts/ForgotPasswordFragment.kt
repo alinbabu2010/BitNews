@@ -1,6 +1,5 @@
 package com.example.demoapp.fragments.accounts
 
-import android.content.res.Resources
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -24,7 +23,7 @@ class ForgotPasswordFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        activity?.title = Resources.getSystem().getString(R.string.reset_password_string)
+        activity?.title = getString(R.string.reset_password_string)
 
         // Inflate the layout for this fragment
         val inflatedView = inflater.inflate(R.layout.fragment_forgot_password, container, false)
@@ -51,7 +50,7 @@ class ForgotPasswordFragment : Fragment() {
             validUser.addOnCompleteListener {
                 if(it.isSuccessful) {
                     resetProgressBar.visibility = View.INVISIBLE
-                    Toast.makeText(context, Resources.getSystem().getString(R.string.password_reset), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, R.string.password_reset, Toast.LENGTH_SHORT).show()
                     parentFragmentManager.popBackStack()
                 }
                 else {
@@ -62,7 +61,7 @@ class ForgotPasswordFragment : Fragment() {
             }
         } else {
             resetProgressBar.visibility = View.INVISIBLE
-            Toast.makeText(context, Resources.getSystem().getString(R.string.invalid_message), Toast.LENGTH_SHORT).show()
+            Toast.makeText(context,R.string.invalid_message, Toast.LENGTH_SHORT).show()
         }
     }
 }
