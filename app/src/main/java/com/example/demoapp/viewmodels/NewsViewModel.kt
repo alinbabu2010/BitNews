@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.demoapp.api.Resource
 import com.example.demoapp.api.RetrofitManager
-import com.example.demoapp.api.RetrofitManager.loadData
 import com.example.demoapp.models.News
 
 
@@ -13,57 +12,60 @@ import com.example.demoapp.models.News
  */
 class NewsViewModel : ViewModel() {
 
-    var newsLiveData = MutableLiveData<MutableSet<News.Articles>>()
-    var newsArticles = MutableLiveData<Resource<News?>>()
-    private var articles: MutableSet<News.Articles>? = mutableSetOf()
+    val newsLiveData = MutableLiveData<Resource<News?>>()
+
+    val newsArticles : ArrayList<News.Articles> by lazy {
+            ArrayList()
+    }
+
+    val favouritesLiveData = MutableLiveData<MutableSet<News.Articles>>()
+    private var favouriteArticles : MutableSet<News.Articles>? = mutableSetOf()
 
     init {
-        newsLiveData.value = mutableSetOf()
+        favouritesLiveData.value = mutableSetOf()
     }
 
     /**
      * Method to get the news from API url
      */
     fun getNews() {
-        val baseURL = "http://newsapi.org/v2/"
-        val call = RetrofitManager.getRetrofitService(baseURL).getNews()
-        loadData(call, baseURL){
-            newsArticles.value = it
+        RetrofitManager.getRetrofitService {
+            newsLiveData.postValue(it)
+            it.data?.articles?.let { it1 -> newsArticles.addAll(it1) }
         }
-
     }
 
     /**
      * Method to add news article to favourites
      */
     fun addToFavourites(article: News.Articles?) {
-        articles = newsLiveData.value
-        article?.let { articles?.add(it) }
-        newsLiveData.postValue(articles)
+        favouriteArticles = favouritesLiveData.value
+        article?.let { favouriteArticles?.add(it) }
+        favouritesLiveData.postValue(favouriteArticles)
     }
 
     /**
      * Method to remove news article from favourites
      */
     fun removeFromFavourites(article: News.Articles?) {
-        articles = newsLiveData.value
-        articles?.remove(article)
-        newsLiveData.postValue(articles)
+        favouriteArticles = favouritesLiveData.value
+        favouriteArticles?.remove(article)
+        favouritesLiveData.postValue(favouriteArticles)
     }
 
     /**
      * Method to check news article in favourites set
      */
     fun isFavouriteNews(article: News.Articles?): Boolean? {
-        return newsLiveData.value?.contains(article)
+        return favouritesLiveData.value?.contains(article)
     }
 
     /**
      * Method to return set of favourites
      */
     fun getFavourites(): MutableSet<News.Articles>? {
-        articles = newsLiveData.value
-        return articles
+        favouriteArticles = favouritesLiveData.value
+        return favouriteArticles
     }
 
 }

@@ -62,7 +62,7 @@ class FavouritesFragment : Fragment() {
             adapter?.notifyDataSetChanged()
             setHasFixedSize(true)
         }
-        newsViewModel?.newsLiveData?.observe(viewLifecycleOwner, {
+        newsViewModel?.favouritesLiveData?.observe(viewLifecycleOwner, {
             val articles = newsViewModel.getFavourites()
             if (articles.isNullOrEmpty()) {
                 view?.findViewById<TextView>(R.id.empty_textView)?.visibility = View.VISIBLE

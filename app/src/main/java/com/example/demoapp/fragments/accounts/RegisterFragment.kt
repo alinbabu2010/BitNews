@@ -41,10 +41,60 @@ class RegisterFragment : Fragment() {
         binding.registerProgressBar.visibility = View.INVISIBLE
         binding.registerButton.setOnClickListener {
             binding.registerProgressBar.visibility = View.VISIBLE
-            registerUser()
+            if (validateForm()) registerUser()
         }
         val loginTextView :TextView = view.findViewById(R.id.login_redirect)
         redirectToLogin(loginTextView)
+    }
+
+    /**
+     *
+     */
+    private fun validateForm(): Boolean {
+
+        val username = binding.usernameInputSignUp.text.toString()
+        val name = binding.nameInputSignUp.text.toString()
+        val email = binding.emailInputSignUp.text.toString()
+        val password = binding.passwordInputSignUp.text.toString()
+        val confirmPassword = binding.confirmPasswordInputSignUp.text.toString()
+        var isFormValid = true
+
+        if (username.isEmpty()){
+            binding.registerProgressBar.visibility = View.INVISIBLE
+            binding.usernameInputSignUp.error = getString(R.string.field_empty_text)
+            binding.usernameInputSignUp.isFocusable = true
+            isFormValid = false
+        }
+        if (name.isEmpty()){
+            binding.registerProgressBar.visibility = View.INVISIBLE
+            binding.nameInputSignUp.error = getString(R.string.field_empty_text)
+            binding.nameInputSignUp.isFocusable = true
+            isFormValid = false
+        }
+        if (email.isEmpty()){
+            binding.registerProgressBar.visibility = View.INVISIBLE
+            binding.emailInputSignUp.error = getString(R.string.field_empty_text)
+            binding.emailInputSignUp.isFocusable = true
+            isFormValid = false
+        }
+        if (password.isEmpty()){
+            binding.registerProgressBar.visibility = View.INVISIBLE
+            binding.passwordInputSignUp.error = getString(R.string.field_empty_text)
+            binding.passwordInputSignUp.isFocusable = true
+            isFormValid = false
+        }
+        if (confirmPassword.isEmpty()){
+            binding.registerProgressBar.visibility = View.INVISIBLE
+            binding.confirmPasswordInputSignUp.error = getString(R.string.field_empty_text)
+            binding.confirmPasswordInputSignUp.isFocusable = true
+            isFormValid = false
+        }
+        if (password!=confirmPassword){
+            Toast.makeText(context, R.string.password_matching_error,Toast.LENGTH_SHORT).show()
+            isFormValid = false
+        }
+
+        return isFormValid
     }
 
     /**
@@ -77,9 +127,7 @@ class RegisterFragment : Fragment() {
         val name = binding.nameInputSignUp.text.toString()
         val email = binding.emailInputSignUp.text.toString()
         val password = binding.passwordInputSignUp.text.toString()
-        val confirmPassword = binding.confirmPasswordInputSignUp.text.toString()
 
-        if(password == confirmPassword) {
             val auth = FirebaseAuth.getInstance()
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener {
@@ -105,11 +153,6 @@ class RegisterFragment : Fragment() {
                         Toast.makeText(context,it.exception?.message,Toast.LENGTH_SHORT).show()
                     }
                 }
-        }
-        else {
-            binding.registerProgressBar.visibility = View.INVISIBLE
-            Toast.makeText(context, R.string.password_matching_error,Toast.LENGTH_SHORT).show()
-        }
     }
 
 

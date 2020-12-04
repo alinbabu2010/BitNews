@@ -102,6 +102,6 @@ class FavouritesAdapter(
     /**
      * Return the size of your data set (invoked by the layout manager)
      */
-    override fun getItemCount(): Int = newsViewModel?.newsLiveData?.value?.size ?: 0
+    override fun getItemCount(): Int = newsViewModel?.favouritesLiveData?.value?.size ?: 0
 
 }
