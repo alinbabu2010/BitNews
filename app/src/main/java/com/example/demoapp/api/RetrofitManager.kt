@@ -9,23 +9,23 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-
+/**
+ * Singleton class to create and use Retrofit service
+ */
 object RetrofitManager {
 
-    /**
-     * Method to initialize and build an retrofit object
-     */
+    // To initialize and build an retrofit variable
     val getRetrofit: Retrofit = Retrofit.Builder().baseUrl(BuildConfig.BASE_URL)
         .addConverterFactory(GsonConverterFactory.create()).build()
 
-
-    /**
-     * Method to create retrofit service using RetrofitAPI interface
-     */
+    // To provide retrofit service using RetrofitAPI interface
     private val getAPIService: RetrofitAPI = getRetrofit.create(RetrofitAPI::class.java)
 
+    /**
+     * Method to call retrofit service using [getAPIService] and get APIResponse from [loadData]
+     */
     fun getRetrofitService( resource: (Resource<News?>) -> Unit ){
-        val call = getAPIService.getNews()
+        val call = getAPIService.getNews("bitcoin",BuildConfig.API_KEY)
         loadData(call){
             resource( when (it) {
                 is APIResponse.Success -> Resource.success(it.data)
