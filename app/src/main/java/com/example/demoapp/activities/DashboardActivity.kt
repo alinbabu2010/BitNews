@@ -46,9 +46,14 @@ class DashboardActivity : AppCompatActivity() {
             intArrayOf(R.drawable.ic_news, R.drawable.ic_favourite_outlined, R.drawable.ic_profile)
         val tabLayout: TabLayout = findViewById(R.id.tab_layout)
         val viewPager: ViewPager = findViewById(R.id.dashboard_viewpager)
+        val tabTitles = arrayOf(
+            getString(R.string.news_title),
+            getString(R.string.favourite_title),
+            getString(R.string.profile_text)
+        )
 
         // Set the adapter for each tab item
-        val pageAdapter = PageAdapter(supportFragmentManager, tabLayout.tabCount)
+        val pageAdapter = PageAdapter(supportFragmentManager, tabLayout.tabCount,tabTitles)
         viewPager.adapter = pageAdapter
         tabLayout.TabView(this)
         tabLayout.setupWithViewPager(viewPager)
