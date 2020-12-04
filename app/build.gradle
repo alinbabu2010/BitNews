@@ -19,8 +19,9 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField "String","BASE_URL","\"http://newsapi.org/v2/\""
+        buildConfigField "String","API_KEY" , "\"19b71eb781b0404b93feafc1badf4324\""
     }
 
     buildTypes {
