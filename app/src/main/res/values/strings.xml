@@ -11,11 +11,11 @@
     <string name="logout_string">Logout</string>
     <string name="reset_password_string">Reset Password</string>
     <string name="email_text">Enter your email</string>
-    <string name="news_image">News Image</string>
-    <string name="share_button">share_button_image</string>
+    <string name="news_image" translatable="false">News Image</string>
+    <string name="share_button" translatable="false">share_button_image</string>
     <string name="description">Description</string>
     <string name="article">Article</string>
-    <string name="filter_icon">Filter floating action button</string>
+    <string name="filter_icon" translatable="false">Filter floating action button</string>
     <string name="empty_favourites_string">No Favourites added</string>
     <string name="source">Filter by source</string>
     <string name="published_date">Filter by published date</string>
@@ -39,9 +39,6 @@
     <string name="alert_dialog_question">Do you really want to logout?</string>
     <string name="yes_string">Yes</string>
     <string name="no_string">No</string>
-    <string name="network_error_message">Network failure</string>
-    <string name="server_error_message">Sorry, Server error occurred</string>
-    <string name="not_found_text">Item not found</string>
     <string name="password_matching_error">Password not matching</string>
     <string name="news_title">News</string>
     <string name="favourite_title">Favourites</string>

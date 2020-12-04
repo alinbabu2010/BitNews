@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Demo App</string>
+    <string name="email_inputHint">البريد الإلكتروني</string>
+    <string name="login_string">دخول</string>
+    <string name="password_text">كلمة المرور</string>
+    <string name="forgot_password_text">نسيت رقمك السري. انقر هنا لإعادة التعيين</string>
+    <string name="profile_text">الملف الشخصي</string>
+    <string name="email_dashboard">البريد الإلكتروني</string>
+    <string name="name_dashboard">اسم</string>
+    <string name="username_dashboard">اسم المستخدم</string>
+    <string name="logout_string">تسجيل خروج</string>
+    <string name="reset_password_string">إعادة تعيين كلمة المرور</string>
+    <string name="email_text">أدخل بريدك الإلكتروني</string>
+    <string name="description">وصف</string>
+    <string name="article">مقالة - سلعة</string>
+    <string name="empty_favourites_string">لم تتم إضافة أي مفضلات</string>
+    <string name="source">تصفية حسب المصدر</string>
+    <string name="published_date">تصفية حسب التاريخ المنشور</string>
+    <string name="apply">تطبيق</string>
+    <string name="clear">واضح</string>
+    <string name="select_date">انقر لتحديد تاريخ منشور</string>
+    <string name="no_matching">لم يتم العثور على تطابق</string>
+    <string name="browser_btn_string">افتح في المتصفح.</string>
+    <string name="register_string">تسجيل</string>
+    <string name="name_string">اسم</string>
+    <string name="username_string">اسم المستخدم</string>
+    <string name="password_string">كلمه السر</string>
+    <string name="login_redirect_string">هل لديك حساب. انقر هنا</string>
+    <string name="confirm_password_string">تأكيد كلمة المرور</string>
+    <string name="register_text">جديد في تطبيقنا! سجل هنا</string>
+    <string name="field_empty_text">لا يمكن أن تكون الحقول فارغة</string>
+    <string name="wrong_credentials_text">تم إدخال بيانات اعتماد غير صحيحة</string>
+    <string name="empty_filter_text">حدد مرشحًا واحدًا على الأقل</string>
+    <string name="password_reset">إرسال رابط إعادة تعيين كلمة المرور إلى البريد الإلكتروني</string>
+    <string name="invalid_message">تم إدخال عنوان بريد إلكتروني غير صالح</string>
+    <string name="alert_dialog_question">هل تريد حقًا تسجيل الخروج؟</string>
+    <string name="yes_string">نعم</string>
+    <string name="no_string">لا</string>
+    <string name="password_matching_error">كلمة المرور غير متطابقة</string>
+    <string name="news_title">أخبار</string>
+    <string name="favourite_title">المفضلة</string>
+</resources>
