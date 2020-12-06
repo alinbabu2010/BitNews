@@ -4,7 +4,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.demoapp.api.Resource
 import com.example.demoapp.api.RetrofitManager
+import com.example.demoapp.firebase.FirebaseOperations.Companion.retrieveDataFromFirebase
+import com.example.demoapp.firebase.FirebaseOperations.Companion.storeDataOnFirebase
+import com.example.demoapp.models.Articles
 import com.example.demoapp.models.News
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 /**
@@ -14,12 +20,12 @@ class NewsViewModel : ViewModel() {
 
     val newsLiveData = MutableLiveData<Resource<News?>>()
 
-    val newsArticles : ArrayList<News.Articles> by lazy {
-            ArrayList()
+    val newsArticles: ArrayList<Articles> by lazy {
+        ArrayList()
     }
 
-    val favouritesLiveData = MutableLiveData<MutableSet<News.Articles>>()
-    private var favouriteArticles : MutableSet<News.Articles>? = mutableSetOf()
+    var favouritesLiveData = MutableLiveData<MutableSet<Articles>>()
+    private var favouriteArticles: MutableSet<Articles>? = mutableSetOf()
 
     init {
         favouritesLiveData.value = mutableSetOf()
@@ -31,6 +37,7 @@ class NewsViewModel : ViewModel() {
     fun getNews() {
         RetrofitManager.getRetrofitService {
             newsLiveData.postValue(it)
+            newsArticles.clear()
             it.data?.articles?.let { it1 -> newsArticles.addAll(it1) }
         }
     }
@@ -38,32 +45,43 @@ class NewsViewModel : ViewModel() {
     /**
      * Method to add news article to favourites
      */
-    fun addToFavourites(article: News.Articles?) {
+    fun addToFavourites(article: Articles?) {
         favouriteArticles = favouritesLiveData.value
         article?.let { favouriteArticles?.add(it) }
-        favouritesLiveData.postValue(favouriteArticles)
+        CoroutineScope(Dispatchers.IO).launch {
+            if (storeDataOnFirebase(favouriteArticles))
+                favouritesLiveData.postValue(favouriteArticles)
+        }
     }
 
     /**
      * Method to remove news article from favourites
      */
-    fun removeFromFavourites(article: News.Articles?) {
+    fun removeFromFavourites(article: Articles?) {
         favouriteArticles = favouritesLiveData.value
         favouriteArticles?.remove(article)
-        favouritesLiveData.postValue(favouriteArticles)
+        CoroutineScope(Dispatchers.IO).launch {
+            if (storeDataOnFirebase(favouriteArticles))
+                favouritesLiveData.postValue(favouriteArticles)
+        }
     }
 
     /**
      * Method to check news article in favourites set
      */
-    fun isFavouriteNews(article: News.Articles?): Boolean? {
+    fun isFavouriteNews(article: Articles?): Boolean? {
         return favouritesLiveData.value?.contains(article)
     }
 
     /**
      * Method to return set of favourites
      */
-    fun getFavourites(): MutableSet<News.Articles>? {
+    fun getFavourites(): MutableSet<Articles>? {
+        CoroutineScope(Dispatchers.IO).launch {
+            retrieveDataFromFirebase {
+                favouritesLiveData.postValue(it)
+            }
+        }
         favouriteArticles = favouritesLiveData.value
         return favouriteArticles
     }
