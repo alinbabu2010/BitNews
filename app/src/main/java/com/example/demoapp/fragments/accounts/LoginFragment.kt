@@ -44,7 +44,8 @@ class LoginFragment : Fragment() {
         val registerTextView = inflatedView.findViewById<TextView>(R.id.register_redirect)
         clickableText(registerTextView,registerTextView.length()-4,registerTextView.length(), RegisterFragment())
 
-        inflatedView.findViewById<ProgressBar>(R.id.progressBar).visibility = View.INVISIBLE
+        val progressBar : ProgressBar = inflatedView.findViewById(R.id.progressBar)
+        progressBar.visibility = View.INVISIBLE
 
         inflatedView.findViewById<Button>(R.id.login_button).setOnClickListener {
             val userName =
@@ -54,8 +55,8 @@ class LoginFragment : Fragment() {
             if (userName.isBlank() && password.isBlank()) {
                 Toast.makeText(context, R.string.field_empty_text, Toast.LENGTH_SHORT).show()
             } else {
-                inflatedView.findViewById<ProgressBar>(R.id.progressBar).visibility = View.VISIBLE
-                loginUser(userName, password)
+                progressBar.visibility = View.VISIBLE
+                loginUser(userName, password,progressBar)
             }
         }
         return inflatedView
@@ -85,13 +86,14 @@ class LoginFragment : Fragment() {
     /**
      * Method to check user provided login credentials and move to [DashboardActivity] if it is true
      */
-    private fun loginUser(userName: String, password: String) {
+    private fun loginUser(userName: String, password: String, progressBar: ProgressBar) {
         val userAuth = FirebaseAuth.getInstance()
         userAuth.signInWithEmailAndPassword(userName,password).addOnCompleteListener {
             if(it.isSuccessful){
                 startActivity(Intent(context, DashboardActivity::class.java))
                 activity?.finish()
             } else {
+                progressBar.visibility = View.INVISIBLE
                 Toast.makeText(context,R.string.wrong_credentials_text, Toast.LENGTH_LONG).show()
             }
         }
