@@ -12,7 +12,7 @@ import androidx.fragment.app.FragmentManager
 import com.example.demoapp.R
 import com.example.demoapp.activities.ArticleActivity
 import com.example.demoapp.activities.MainActivity
-import com.example.demoapp.models.News.Articles
+import com.example.demoapp.models.Articles
 import com.example.demoapp.utils.Const.Companion.ARTICLE
 import com.example.demoapp.utils.Const.Companion.SHARE_TYPE
 import com.google.firebase.auth.FirebaseAuth
@@ -23,6 +23,9 @@ import com.google.firebase.auth.FirebaseAuth
 class Utils {
 
     companion object {
+
+        var firebaseError : String? = null
+
         /**
          * Function to add a new fragment to the layout
          */
