@@ -16,7 +16,7 @@ import com.example.demoapp.R
 import com.example.demoapp.adapter.NewsAdapter
 import com.example.demoapp.api.Resource
 import com.example.demoapp.databinding.FragmentNewsBinding
-import com.example.demoapp.models.News.Articles
+import com.example.demoapp.models.Articles
 import com.example.demoapp.viewmodels.NewsViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
@@ -104,7 +104,7 @@ class NewsFragment : Fragment() {
 
         val sourceRadioGroup: RadioGroup = bottomSheetView.findViewById(R.id.source_radioGroup)
         val dateView: TextView = bottomSheetView.findViewById(R.id.publish_datepicker)
-        article?.forEach { source.add(it.source.name) }
+        article?.forEach { it.source?.name?.let { it1 -> source.add(it1) } }
 
         // Adding radio button based on the source set
         for (i in source.indices) {
@@ -186,7 +186,7 @@ class NewsFragment : Fragment() {
             Toast.makeText(context, R.string.empty_filter_text, Toast.LENGTH_SHORT).show()
         } else {
             val sourceFilter =
-                article?.filter { it.source.name == sourceName.toString() } as ArrayList<Articles>?
+                article?.filter { it.source?.name == sourceName.toString() } as ArrayList<Articles>?
             var dateFilter: ArrayList<Articles>? = arrayListOf()
             if (publishedDate?.isNotEmpty() == true) {
                 dateFilter =
@@ -196,7 +196,7 @@ class NewsFragment : Fragment() {
             distinctNewsFilter = when {
                 (sourceFilter?.isEmpty() == true) -> dateFilter
                 (publishedDate?.isEmpty() == true) -> sourceFilter
-                else -> dateFilter?.filter { it.source.name == sourceName.toString() } as ArrayList<Articles>?
+                else -> dateFilter?.filter { it.source?.name  == sourceName.toString() } as ArrayList<Articles>?
             }
             if (distinctNewsFilter?.isEmpty() == true) {
                 view?.findViewById<TextView>(R.id.no_matching_textView)?.visibility = View.VISIBLE

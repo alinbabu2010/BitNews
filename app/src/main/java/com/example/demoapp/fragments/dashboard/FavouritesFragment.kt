@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.demoapp.R
 import com.example.demoapp.adapter.FavouritesAdapter
+import com.example.demoapp.utils.Utils.Companion.firebaseError
 import com.example.demoapp.viewmodels.NewsViewModel
 
 
@@ -41,6 +43,18 @@ class FavouritesFragment : Fragment() {
         val recyclerView: RecyclerView = view.findViewById(R.id.fragment_view)
         loadRecyclerView(recyclerView, newsViewModel)
 
+        newsViewModel?.favouritesLiveData?.observe(viewLifecycleOwner, {
+            val articles = newsViewModel?.getFavourites()
+            if (firebaseError!=null) Toast.makeText(context, firebaseError,Toast.LENGTH_SHORT).show()
+            if (articles.isNullOrEmpty()) {
+                view.findViewById<TextView>(R.id.empty_textView)?.visibility = View.VISIBLE
+            } else {
+                view.findViewById<TextView>(R.id.empty_textView)?.visibility = View.INVISIBLE
+            }
+            recyclerView.adapter?.notifyDataSetChanged()
+            onCreate(savedInstanceState)
+        })
+
         // Refresh on swipe by calling recycler view
         val refreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.swipeRefresh)
         refreshLayout.setProgressBackgroundColorSchemeColor(Color.YELLOW)
@@ -62,16 +76,6 @@ class FavouritesFragment : Fragment() {
             adapter?.notifyDataSetChanged()
             setHasFixedSize(true)
         }
-        newsViewModel?.favouritesLiveData?.observe(viewLifecycleOwner, {
-            val articles = newsViewModel.getFavourites()
-            if (articles.isNullOrEmpty()) {
-                view?.findViewById<TextView>(R.id.empty_textView)?.visibility = View.VISIBLE
-            } else {
-                view?.findViewById<TextView>(R.id.empty_textView)?.visibility = View.INVISIBLE
-            }
-            recyclerView.adapter?.notifyDataSetChanged()
-        })
-
     }
 
 }

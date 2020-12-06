@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import com.example.demoapp.R
 import com.example.demoapp.activities.DashboardActivity
 import com.example.demoapp.databinding.FragmentRegisterBinding
+import com.example.demoapp.firebase.FirebaseOperations
 import com.example.demoapp.models.Users
 import com.example.demoapp.utils.Utils.Companion.replaceFragment
 import com.google.firebase.auth.FirebaseAuth
@@ -25,7 +26,7 @@ import com.google.firebase.database.FirebaseDatabase
  */
 class RegisterFragment : Fragment() {
 
-    private lateinit var binding : FragmentRegisterBinding
+    private lateinit var binding: FragmentRegisterBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,7 +44,7 @@ class RegisterFragment : Fragment() {
             binding.registerProgressBar.visibility = View.VISIBLE
             if (validateForm()) registerUser()
         }
-        val loginTextView :TextView = view.findViewById(R.id.login_redirect)
+        val loginTextView: TextView = view.findViewById(R.id.login_redirect)
         redirectToLogin(loginTextView)
     }
 
@@ -59,38 +60,38 @@ class RegisterFragment : Fragment() {
         val confirmPassword = binding.confirmPasswordInputSignUp.text.toString()
         var isFormValid = true
 
-        if (username.isEmpty()){
+        if (username.isEmpty()) {
             binding.registerProgressBar.visibility = View.INVISIBLE
             binding.usernameInputSignUp.error = getString(R.string.field_empty_text)
             binding.usernameInputSignUp.isFocusable = true
             isFormValid = false
         }
-        if (name.isEmpty()){
+        if (name.isEmpty()) {
             binding.registerProgressBar.visibility = View.INVISIBLE
             binding.nameInputSignUp.error = getString(R.string.field_empty_text)
             binding.nameInputSignUp.isFocusable = true
             isFormValid = false
         }
-        if (email.isEmpty()){
+        if (email.isEmpty()) {
             binding.registerProgressBar.visibility = View.INVISIBLE
             binding.emailInputSignUp.error = getString(R.string.field_empty_text)
             binding.emailInputSignUp.isFocusable = true
             isFormValid = false
         }
-        if (password.isEmpty()){
+        if (password.isEmpty()) {
             binding.registerProgressBar.visibility = View.INVISIBLE
             binding.passwordInputSignUp.error = getString(R.string.field_empty_text)
             binding.passwordInputSignUp.isFocusable = true
             isFormValid = false
         }
-        if (confirmPassword.isEmpty()){
+        if (confirmPassword.isEmpty()) {
             binding.registerProgressBar.visibility = View.INVISIBLE
             binding.confirmPasswordInputSignUp.error = getString(R.string.field_empty_text)
             binding.confirmPasswordInputSignUp.isFocusable = true
             isFormValid = false
         }
-        if (password!=confirmPassword){
-            Toast.makeText(context, R.string.password_matching_error,Toast.LENGTH_SHORT).show()
+        if (password != confirmPassword) {
+            Toast.makeText(context, R.string.password_matching_error, Toast.LENGTH_SHORT).show()
             isFormValid = false
         }
 
@@ -113,7 +114,12 @@ class RegisterFragment : Fragment() {
         }
         val start = spannableTextView.length - 4
         val end = spannableTextView.length
-        spannableTextView.setSpan(clickableSpanTextView, start,end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannableTextView.setSpan(
+            clickableSpanTextView,
+            start,
+            end,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
         loginTextView.text = spannableTextView
         loginTextView.movementMethod = LinkMovementMethod.getInstance()
 
@@ -128,31 +134,33 @@ class RegisterFragment : Fragment() {
         val email = binding.emailInputSignUp.text.toString()
         val password = binding.passwordInputSignUp.text.toString()
 
-            val auth = FirebaseAuth.getInstance()
-            auth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        val user = Users(username,name,email)
-                        FirebaseAuth.getInstance().currentUser?.uid?.let { it1 ->
-                            FirebaseDatabase.getInstance().getReference("Users")
-                                .child(it1).setValue(user).addOnCompleteListener { task ->
-                                    if(task.isSuccessful){
-                                        binding.registerProgressBar.visibility = View.INVISIBLE
-                                        startActivity(Intent(context, DashboardActivity::class.java))
-                                        activity?.finish()
-                                    }
-                                    else {
-                                        binding.registerProgressBar.visibility = View.INVISIBLE
-                                        Toast.makeText(context,task.exception?.message,Toast.LENGTH_SHORT).show()
-                                    }
+        val auth = FirebaseAuth.getInstance()
+        auth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    val user = Users(username, name, email)
+                    FirebaseOperations.getCurrentUser()?.let { it1 ->
+                        FirebaseDatabase.getInstance().getReference("Users")
+                            .child(it1).setValue(user).addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    binding.registerProgressBar.visibility = View.INVISIBLE
+                                    startActivity(Intent(context, DashboardActivity::class.java))
+                                    activity?.finish()
+                                } else {
+                                    binding.registerProgressBar.visibility = View.INVISIBLE
+                                    Toast.makeText(
+                                        context,
+                                        task.exception?.message,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                 }
-                        }
+                            }
                     }
-                    else {
-                        binding.registerProgressBar.visibility = View.INVISIBLE
-                        Toast.makeText(context,it.exception?.message,Toast.LENGTH_SHORT).show()
-                    }
+                } else {
+                    binding.registerProgressBar.visibility = View.INVISIBLE
+                    Toast.makeText(context, it.exception?.message, Toast.LENGTH_SHORT).show()
                 }
+            }
     }
 
 
