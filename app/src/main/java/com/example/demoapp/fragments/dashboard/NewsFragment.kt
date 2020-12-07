@@ -30,8 +30,8 @@ class NewsFragment : Fragment() {
     private var container: ViewGroup? = null
     private var checkedRadio: RadioButton? = null
     private var publishedDate: String? = null
-    private var articles : ArrayList<Articles>? = arrayListOf()
-    private lateinit var binding : FragmentNewsBinding
+    private var articles: ArrayList<Articles>? = arrayListOf()
+    private lateinit var binding: FragmentNewsBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,7 +51,7 @@ class NewsFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
         newsViewModel?.getNews()
 
-        newsViewModel?.newsLiveData?.observe(viewLifecycleOwner,{
+        newsViewModel?.newsLiveData?.observe(viewLifecycleOwner, {
             when (it.status) {
                 Resource.Status.SUCCESS -> {
                     binding.progressBarNews.visibility = View.GONE
@@ -59,14 +59,19 @@ class NewsFragment : Fragment() {
                 }
                 Resource.Status.ERROR -> {
                     binding.progressBarNews.visibility = View.GONE
-                    Toast.makeText(activity,it.message, Toast.LENGTH_LONG).show()
+                    Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
                 }
                 Resource.Status.LOADING -> {
                     binding.progressBarNews.visibility = View.VISIBLE
                     recyclerView.visibility = View.GONE
                 }
+                Resource.Status.REFRESHING -> {
+                    newsViewModel?.getNews()
+                    recyclerView.adapter?.notifyDataSetChanged()
+                    binding.swipeRefresh.isRefreshing = false
+                }
             }
-            recyclerView.adapter = NewsAdapter(articles,newsViewModel)
+            recyclerView.adapter = NewsAdapter(articles, newsViewModel)
             recyclerView.setHasFixedSize(true)
         })
 
@@ -76,12 +81,11 @@ class NewsFragment : Fragment() {
         })
 
         // Refresh on swipe by calling recycler view
-        with(binding.swipeRefresh){
+        with(binding.swipeRefresh) {
             setProgressBackgroundColorSchemeColor(Color.YELLOW)
             setColorSchemeResources(R.color.secondary_dark)
             setOnRefreshListener {
-                recyclerView.adapter?.notifyDataSetChanged()
-                isRefreshing = false
+                newsViewModel?.newsLiveData?.postValue(Resource.refreshing())
             }
         }
 
@@ -140,7 +144,7 @@ class NewsFragment : Fragment() {
             }
         dateView.setOnClickListener {
             datePicker?.show()
-            if(publishedDate?.isNotEmpty() == true) {
+            if (publishedDate?.isNotEmpty() == true) {
                 publishedDate?.substring(0, 4)?.toInt()?.let { year ->
                     publishedDate?.substring(5, 7)?.toInt()?.let { month ->
                         publishedDate?.substringAfterLast("-")?.toInt()?.let { day ->
@@ -196,7 +200,7 @@ class NewsFragment : Fragment() {
             distinctNewsFilter = when {
                 (sourceFilter?.isEmpty() == true) -> dateFilter
                 (publishedDate?.isEmpty() == true) -> sourceFilter
-                else -> dateFilter?.filter { it.source?.name  == sourceName.toString() } as ArrayList<Articles>?
+                else -> dateFilter?.filter { it.source?.name == sourceName.toString() } as ArrayList<Articles>?
             }
             if (distinctNewsFilter?.isEmpty() == true) {
                 view?.findViewById<TextView>(R.id.no_matching_textView)?.visibility = View.VISIBLE
@@ -204,7 +208,10 @@ class NewsFragment : Fragment() {
                 bottomSheet?.dismiss()
             } else {
                 view?.findViewById<TextView>(R.id.no_matching_textView)?.visibility = View.INVISIBLE
-                binding.recyclerView.swapAdapter(NewsAdapter(distinctNewsFilter, newsViewModel), false)
+                binding.recyclerView.swapAdapter(
+                    NewsAdapter(distinctNewsFilter, newsViewModel),
+                    false
+                )
                 bottomSheet?.dismiss()
             }
 
