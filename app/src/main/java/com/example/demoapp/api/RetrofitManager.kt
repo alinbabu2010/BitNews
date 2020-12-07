@@ -24,14 +24,10 @@ object RetrofitManager {
     /**
      * Method to call retrofit service using [getAPIService] and get APIResponse from [loadData]
      */
-    fun getRetrofitService( resource: (Resource<News?>) -> Unit ){
+    fun getRetrofitService( resource: (APIResponse<News>) -> Unit ){
         val call = getAPIService.getNews("bitcoin",BuildConfig.API_KEY)
         loadData(call){
-            resource( when (it) {
-                is APIResponse.Success -> Resource.success(it.data)
-                is APIResponse.Error -> Resource.error(it.error)
-                is APIResponse.Failure -> Resource.failure(it.exception)
-            })
+            resource(it)
         }
     }
 

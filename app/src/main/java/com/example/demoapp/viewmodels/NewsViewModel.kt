@@ -2,6 +2,7 @@ package com.example.demoapp.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.demoapp.api.APIResponse
 import com.example.demoapp.api.Resource
 import com.example.demoapp.api.RetrofitManager
 import com.example.demoapp.firebase.FirebaseOperations.Companion.retrieveDataFromFirebase
@@ -36,9 +37,14 @@ class NewsViewModel : ViewModel() {
      */
     fun getNews() {
         RetrofitManager.getRetrofitService {
-            newsLiveData.postValue(it)
-            newsArticles.clear()
-            it.data?.articles?.let { it1 -> newsArticles.addAll(it1) }
+            when (it) {
+                is APIResponse.Success -> {
+                    newsLiveData.postValue(Resource.success(it.data))
+                    it.data?.articles?.let { it1 -> newsArticles.addAll(it1) }
+                }
+                is APIResponse.Error -> newsLiveData.postValue(Resource.error(it.error))
+                is APIResponse.Failure -> newsLiveData.postValue(Resource.failure(it.exception))
+            }
         }
     }
 
