@@ -92,6 +92,7 @@ class RegisterFragment : Fragment() {
             isFormValid = false
         }
         if (password != confirmPassword) {
+            binding.registerProgressBar.visibility = View.INVISIBLE
             Toast.makeText(context, R.string.password_matching_error, Toast.LENGTH_SHORT).show()
             isFormValid = false
         }
