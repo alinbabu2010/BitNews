@@ -19,5 +19,6 @@ class Const {
         const val SERVER_ERROR = "Sorry, Server error occurred"
         const val NETWORK_FAILURE = "Network failure"
         const val FAVOURITES = "Favourites"
+        const val NO_INTERNET = "No Internet Connection"
     }
 }

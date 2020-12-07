@@ -17,6 +17,7 @@ import com.example.demoapp.activities.ArticleActivity
 import com.example.demoapp.activities.MainActivity
 import com.example.demoapp.models.Articles
 import com.example.demoapp.utils.Const.Companion.ARTICLE
+import com.example.demoapp.utils.Const.Companion.NO_INTERNET
 import com.example.demoapp.utils.Const.Companion.SHARE_TYPE
 import com.google.firebase.auth.FirebaseAuth
 
@@ -99,7 +100,7 @@ class Utils {
             } else {
                 Toast.makeText(
                     context,
-                    "No Internet Connection",
+                     NO_INTERNET,
                     Toast.LENGTH_SHORT
                 ).show()
             }
