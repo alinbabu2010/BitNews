@@ -52,7 +52,6 @@ class NewsViewModel : ViewModel() {
      * Method to add news article to favourites
      */
     fun addToFavourites(article: Articles?) {
-        favouriteArticles = favouritesLiveData.value
         article?.let { favouriteArticles?.add(it) }
         CoroutineScope(Dispatchers.IO).launch {
             if (storeDataOnFirebase(favouriteArticles))
@@ -64,7 +63,6 @@ class NewsViewModel : ViewModel() {
      * Method to remove news article from favourites
      */
     fun removeFromFavourites(article: Articles?) {
-        favouriteArticles = favouritesLiveData.value
         favouriteArticles?.remove(article)
         CoroutineScope(Dispatchers.IO).launch {
             if (storeDataOnFirebase(favouriteArticles))
