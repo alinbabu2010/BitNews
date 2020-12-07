@@ -4,7 +4,10 @@ import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -86,5 +89,35 @@ class Utils {
             val shareIntent = Intent.createChooser(sendIntent, null)
             ContextCompat.startActivity(context, shareIntent, Bundle.EMPTY)
         }
+
+        /**
+         * Method that check network connection before calling the request function
+         */
+        fun checkNetworkConnection(context: Context?,function: () -> Unit) {
+            if (isNetworkConnected(context)) {
+                function()
+            } else {
+                Toast.makeText(
+                    context,
+                    "No Internet Connection",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+        }
+
+        /**
+         * Method to check if network is connected or not
+         */
+        private fun isNetworkConnected(context: Context?): Boolean {
+
+            val connectivityManager =
+                context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val activeNetwork = connectivityManager.activeNetwork
+            val networkCapabilities = connectivityManager.getNetworkCapabilities(activeNetwork)
+            return networkCapabilities != null &&
+                    networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        }
+
     }
 }

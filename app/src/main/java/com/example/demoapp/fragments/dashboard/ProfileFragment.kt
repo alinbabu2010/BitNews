@@ -11,6 +11,7 @@ import com.example.demoapp.utils.Const.Companion.EMAIL_STRING
 import com.example.demoapp.utils.Const.Companion.NAME_STRING
 import com.example.demoapp.utils.Const.Companion.USERNAME_STRING
 import com.example.demoapp.utils.Const.Companion.USERS
+import com.example.demoapp.utils.Utils.Companion.checkNetworkConnection
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -30,7 +31,9 @@ class ProfileFragment : Fragment() {
     ): View {
 
         binding = FragmentProfileBinding.inflate(inflater, container, false)
-        getDataFromFirebase()
+        checkNetworkConnection(context) {
+            getDataFromFirebase()
+        }
         return binding.root
     }
 

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.demoapp.R
 import com.example.demoapp.adapter.FavouritesAdapter
+import com.example.demoapp.utils.Utils.Companion.checkNetworkConnection
 import com.example.demoapp.utils.Utils.Companion.firebaseError
 import com.example.demoapp.viewmodels.NewsViewModel
 
@@ -41,7 +42,10 @@ class FavouritesFragment : Fragment() {
 
         // Getting recyclerView and invoke layoutManager and recyclerViewAdapter
         val recyclerView: RecyclerView = view.findViewById(R.id.fragment_view)
-        loadRecyclerView(recyclerView, newsViewModel)
+        checkNetworkConnection(context) {
+            loadRecyclerView(recyclerView, newsViewModel)
+        }
+
 
         newsViewModel?.favouritesLiveData?.observe(viewLifecycleOwner, {
             val articles = newsViewModel?.getFavourites()

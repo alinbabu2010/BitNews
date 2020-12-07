@@ -16,6 +16,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.demoapp.R
 import com.example.demoapp.activities.DashboardActivity
+import com.example.demoapp.utils.Utils.Companion.checkNetworkConnection
 import com.example.demoapp.utils.Utils.Companion.replaceFragment
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
@@ -56,7 +57,9 @@ class LoginFragment : Fragment() {
                 Toast.makeText(context, R.string.field_empty_text, Toast.LENGTH_SHORT).show()
             } else {
                 progressBar.visibility = View.VISIBLE
-                loginUser(userName, password,progressBar)
+                checkNetworkConnection(context) {
+                   loginUser(userName, password,progressBar)
+                }
             }
         }
         return inflatedView

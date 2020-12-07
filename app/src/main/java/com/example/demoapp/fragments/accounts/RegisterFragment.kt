@@ -18,6 +18,7 @@ import com.example.demoapp.databinding.FragmentRegisterBinding
 import com.example.demoapp.firebase.FirebaseOperations
 import com.example.demoapp.models.Users
 import com.example.demoapp.utils.Const.Companion.USERS
+import com.example.demoapp.utils.Utils.Companion.checkNetworkConnection
 import com.example.demoapp.utils.Utils.Companion.replaceFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -43,7 +44,10 @@ class RegisterFragment : Fragment() {
         binding.registerProgressBar.visibility = View.INVISIBLE
         binding.registerButton.setOnClickListener {
             binding.registerProgressBar.visibility = View.VISIBLE
-            if (validateForm()) registerUser()
+            checkNetworkConnection(context){
+                if (validateForm()) registerUser()
+            }
+
         }
         val loginTextView: TextView = view.findViewById(R.id.login_redirect)
         redirectToLogin(loginTextView)
