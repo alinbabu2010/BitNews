@@ -14,12 +14,13 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.example.demoapp.R
 import com.example.demoapp.activities.DashboardActivity
 import com.example.demoapp.utils.Utils.Companion.checkNetworkConnection
 import com.example.demoapp.utils.Utils.Companion.replaceFragment
+import com.example.demoapp.viewmodels.AccountsViewModel
 import com.google.android.material.textfield.TextInputEditText
-import com.google.firebase.auth.FirebaseAuth
 
 
 /**
@@ -27,6 +28,7 @@ import com.google.firebase.auth.FirebaseAuth
  */
 class LoginFragment : Fragment() {
 
+    var viewModel : AccountsViewModel? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -90,15 +92,16 @@ class LoginFragment : Fragment() {
      * Method to check user provided login credentials and move to [DashboardActivity] if it is true
      */
     private fun loginUser(userName: String, password: String, progressBar: ProgressBar) {
-        val userAuth = FirebaseAuth.getInstance()
-        userAuth.signInWithEmailAndPassword(userName,password).addOnCompleteListener {
-            if(it.isSuccessful){
+        viewModel = activity?.let { ViewModelProvider(it).get(AccountsViewModel::class.java) }
+        viewModel?.sigInUser(userName,password)
+        viewModel?.operationExecuted?.observe(viewLifecycleOwner, {
+            if(it){
                 startActivity(Intent(context, DashboardActivity::class.java))
                 activity?.finish()
             } else {
                 progressBar.visibility = View.INVISIBLE
                 Toast.makeText(context,R.string.wrong_credentials_text, Toast.LENGTH_LONG).show()
             }
-        }
+        })
     }
 }

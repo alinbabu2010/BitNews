@@ -12,16 +12,15 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.example.demoapp.R
 import com.example.demoapp.activities.DashboardActivity
 import com.example.demoapp.databinding.FragmentRegisterBinding
-import com.example.demoapp.firebase.FirebaseOperations
 import com.example.demoapp.models.Users
-import com.example.demoapp.utils.Const.Companion.USERS
 import com.example.demoapp.utils.Utils.Companion.checkNetworkConnection
+import com.example.demoapp.utils.Utils.Companion.firebaseError
 import com.example.demoapp.utils.Utils.Companion.replaceFragment
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
+import com.example.demoapp.viewmodels.AccountsViewModel
 
 /**
  * A simple [Fragment] subclass to register new users
@@ -29,6 +28,8 @@ import com.google.firebase.database.FirebaseDatabase
 class RegisterFragment : Fragment() {
 
     private lateinit var binding: FragmentRegisterBinding
+    var viewModel: AccountsViewModel? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -44,7 +45,7 @@ class RegisterFragment : Fragment() {
         binding.registerProgressBar.visibility = View.INVISIBLE
         binding.registerButton.setOnClickListener {
             binding.registerProgressBar.visibility = View.VISIBLE
-            checkNetworkConnection(context){
+            checkNetworkConnection(context) {
                 if (validateForm()) registerUser()
             }
 
@@ -132,42 +133,25 @@ class RegisterFragment : Fragment() {
     }
 
     /**
-     * Method to register a user to firebase
+     * Method to create a news user
      */
     private fun registerUser() {
         val username = binding.usernameInputSignUp.text.toString()
         val name = binding.nameInputSignUp.text.toString()
         val email = binding.emailInputSignUp.text.toString()
         val password = binding.passwordInputSignUp.text.toString()
-
-        val auth = FirebaseAuth.getInstance()
-        auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener {
-                if (it.isSuccessful) {
-                    val user = Users(username, name, email)
-                    FirebaseOperations.getCurrentUser()?.let { it1 ->
-                        FirebaseDatabase.getInstance().getReference(USERS)
-                            .child(it1).setValue(user).addOnCompleteListener { task ->
-                                if (task.isSuccessful) {
-                                    binding.registerProgressBar.visibility = View.INVISIBLE
-                                    startActivity(Intent(context, DashboardActivity::class.java))
-                                    activity?.finish()
-                                } else {
-                                    binding.registerProgressBar.visibility = View.INVISIBLE
-                                    Toast.makeText(
-                                        context,
-                                        task.exception?.message,
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                            }
-                    }
-                } else {
-                    binding.registerProgressBar.visibility = View.INVISIBLE
-                    Toast.makeText(context, it.exception?.message, Toast.LENGTH_SHORT).show()
-                }
+        val user = Users(username, name, email)
+        viewModel = activity?.let { ViewModelProvider(it).get(AccountsViewModel::class.java) }
+        viewModel?.createUser(email, password, user)
+        viewModel?.operationExecuted?.observe(viewLifecycleOwner, {
+            if (it) {
+                binding.registerProgressBar.visibility = View.INVISIBLE
+                startActivity(Intent(context, DashboardActivity::class.java))
+                activity?.finish()
+            } else {
+                binding.registerProgressBar.visibility = View.INVISIBLE
+                Toast.makeText(context, firebaseError, Toast.LENGTH_SHORT).show()
             }
+        })
     }
-
-
 }
