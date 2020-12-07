@@ -18,5 +18,6 @@ class Const {
         const val NOT_FOUND = "Item not found"
         const val SERVER_ERROR = "Sorry, Server error occurred"
         const val NETWORK_FAILURE = "Network failure"
+        const val FAVOURITES = "Favourites"
     }
 }

@@ -17,6 +17,7 @@ import com.example.demoapp.activities.DashboardActivity
 import com.example.demoapp.databinding.FragmentRegisterBinding
 import com.example.demoapp.firebase.FirebaseOperations
 import com.example.demoapp.models.Users
+import com.example.demoapp.utils.Const.Companion.USERS
 import com.example.demoapp.utils.Utils.Companion.replaceFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -140,7 +141,7 @@ class RegisterFragment : Fragment() {
                 if (it.isSuccessful) {
                     val user = Users(username, name, email)
                     FirebaseOperations.getCurrentUser()?.let { it1 ->
-                        FirebaseDatabase.getInstance().getReference("Users")
+                        FirebaseDatabase.getInstance().getReference(USERS)
                             .child(it1).setValue(user).addOnCompleteListener { task ->
                                 if (task.isSuccessful) {
                                     binding.registerProgressBar.visibility = View.INVISIBLE
