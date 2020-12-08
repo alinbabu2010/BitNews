@@ -16,20 +16,19 @@ class FirebaseOperations {
         private val firebaseReference =
             FirebaseDatabase.getInstance().getReference(FAVOURITES)
 
-        /**
-         * Method to get the current user
-         */
-        fun getCurrentUser(): String? {
-            return FirebaseAuth.getInstance().currentUser?.uid
-        }
+        // Creating firebase auth instance
+        val getAuthInstance = FirebaseAuth.getInstance()
+
+        // Getting the current user id
+        val getCurrentUser = getAuthInstance.currentUser?.uid
+
 
         /**
          * Method to store favourite articles of user
          */
         fun storeDataOnFirebase(favouriteArticles: MutableSet<Articles>?): Boolean {
             var isSuccess = false
-            val currentUser = getCurrentUser()
-            currentUser?.let {
+            getCurrentUser?.let {
                 val favourites = firebaseReference.child(it).setValue(favouriteArticles?.toList())
                 favourites.addOnSuccessListener {
                     isSuccess = true
@@ -42,8 +41,7 @@ class FirebaseOperations {
          * Method to retrieve the favourite articles of particular user
          */
         fun retrieveDataFromFirebase(favouriteArticles: (MutableSet<Articles>?) -> Unit) {
-            val currentUser = getCurrentUser()
-            val favourites = firebaseReference.orderByKey().equalTo(currentUser)
+            val favourites = firebaseReference.orderByKey().equalTo(getCurrentUser)
             favourites.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     val t: GenericTypeIndicator<MutableList<Articles>> = object : GenericTypeIndicator<MutableList<Articles>>() {}

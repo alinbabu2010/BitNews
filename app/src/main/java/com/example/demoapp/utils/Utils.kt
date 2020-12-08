@@ -15,11 +15,11 @@ import androidx.fragment.app.FragmentManager
 import com.example.demoapp.R
 import com.example.demoapp.activities.ArticleActivity
 import com.example.demoapp.activities.MainActivity
+import com.example.demoapp.firebase.FirebaseOperations.Companion.getAuthInstance
 import com.example.demoapp.models.Articles
 import com.example.demoapp.utils.Const.Companion.ARTICLE
 import com.example.demoapp.utils.Const.Companion.NO_INTERNET
 import com.example.demoapp.utils.Const.Companion.SHARE_TYPE
-import com.google.firebase.auth.FirebaseAuth
 
 /**
  * Utility class for holding utility functions
@@ -59,7 +59,7 @@ class Utils {
             builder.setMessage(R.string.alert_dialog_question)
             builder.setIcon(android.R.drawable.ic_dialog_alert)
             builder.setPositiveButton(R.string.yes_string) { _, _ ->
-                FirebaseAuth.getInstance().signOut()
+                getAuthInstance.signOut()
                 activity.startActivity(Intent(context, MainActivity::class.java))
                 activity.finish()
             }
