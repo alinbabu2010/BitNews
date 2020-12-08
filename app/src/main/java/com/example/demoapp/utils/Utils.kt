@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.example.demoapp.R
 import com.example.demoapp.activities.ArticleActivity
+import com.example.demoapp.activities.DummyActivity
 import com.example.demoapp.activities.MainActivity
 import com.example.demoapp.firebase.FirebaseOperations.Companion.getAuthInstance
 import com.example.demoapp.models.Articles
@@ -120,5 +121,13 @@ class Utils {
                     networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
         }
 
+        /**
+         * Function to start dummy activity
+         */
+        fun openDummyActivity(context: Context, article: Articles?) {
+            val intent = Intent(context, DummyActivity::class.java)
+            intent.putExtra(ARTICLE, article)
+            ContextCompat.startActivity(context, intent, Bundle.EMPTY)
+        }
     }
 }

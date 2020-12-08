@@ -14,6 +14,7 @@ import com.example.demoapp.R
 import com.example.demoapp.utils.Const.Companion.DATE_FORMAT_DECODE
 import com.example.demoapp.utils.Const.Companion.DATE_FORMAT_ENCODE
 import com.example.demoapp.utils.Utils.Companion.openArticle
+import com.example.demoapp.utils.Utils.Companion.openDummyActivity
 import com.example.demoapp.utils.Utils.Companion.shareNews
 import com.example.demoapp.viewmodels.NewsViewModel
 import java.text.SimpleDateFormat
@@ -87,7 +88,7 @@ class FavouritesAdapter(
         }
 
         holder.newsImage.setOnClickListener {
-            openArticle(holder.context, item)
+            openDummyActivity(holder.context, item)
         }
 
         holder.newsTitle.setOnClickListener {
