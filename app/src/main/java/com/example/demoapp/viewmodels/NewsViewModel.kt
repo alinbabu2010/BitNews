@@ -21,10 +21,6 @@ class NewsViewModel : ViewModel() {
 
     val newsLiveData = MutableLiveData<Resource<News?>>()
 
-    val newsArticles: ArrayList<Articles> by lazy {
-        ArrayList()
-    }
-
     var favouritesLiveData = MutableLiveData<MutableSet<Articles>>()
     private var favouriteArticles: MutableSet<Articles>? = mutableSetOf()
 
@@ -38,10 +34,7 @@ class NewsViewModel : ViewModel() {
     fun getNews() {
         RetrofitManager.getRetrofitService {
             when (it) {
-                is APIResponse.Success -> {
-                    newsLiveData.postValue(Resource.success(it.data))
-                    it.data?.articles?.let { it1 -> newsArticles.addAll(it1) }
-                }
+                is APIResponse.Success -> newsLiveData.postValue(Resource.success(it.data))
                 is APIResponse.Error -> newsLiveData.postValue(Resource.error(it.error))
                 is APIResponse.Failure -> newsLiveData.postValue(Resource.failure(it.exception))
             }

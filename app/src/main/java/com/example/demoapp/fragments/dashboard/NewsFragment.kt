@@ -58,7 +58,9 @@ class NewsFragment : Fragment() {
             when (it.status) {
                 Resource.Status.SUCCESS -> {
                     binding.progressBarNews.visibility = View.GONE
-                    articles = newsViewModel?.newsArticles
+                    articles = it.data?.articles
+                    recyclerView.adapter = NewsAdapter(articles, newsViewModel)
+                    recyclerView.setHasFixedSize(true)
                 }
                 Resource.Status.ERROR -> {
                     binding.progressBarNews.visibility = View.GONE
@@ -69,13 +71,10 @@ class NewsFragment : Fragment() {
                     recyclerView.visibility = View.GONE
                 }
                 Resource.Status.REFRESHING -> {
-                    newsViewModel?.getNews()
                     recyclerView.adapter?.notifyDataSetChanged()
                     binding.swipeRefresh.isRefreshing = false
                 }
             }
-            recyclerView.adapter = NewsAdapter(articles, newsViewModel)
-            recyclerView.setHasFixedSize(true)
         })
 
         newsViewModel?.favouritesLiveData?.observe(viewLifecycleOwner, {
