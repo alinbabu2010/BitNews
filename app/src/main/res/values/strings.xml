@@ -42,4 +42,5 @@
     <string name="password_matching_error">Password not matching</string>
     <string name="news_title">News</string>
     <string name="favourite_title">Favourites</string>
+    <string name="download_string" translatable="false">Download</string>
 </resources>
