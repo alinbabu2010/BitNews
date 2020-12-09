@@ -53,8 +53,8 @@ class ArticleActivity : AppCompatActivity() {
         val openNews: Button = findViewById(R.id.open_button)
 
         Glide.with(applicationContext).load(article?.urlToImage).override(800).into(newsImage)
-        newsDesc.text = article?.description
-        newsContent.text = article?.content
+        newsDesc.text = article?.description.toString()
+        newsContent.text = article?.content.toString()
 
         val author = "Author: ${article?.author}"
         newsAuthor.text = author
@@ -76,13 +76,13 @@ class ArticleActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val collapsingToolbarLayout = findViewById<CollapsingToolbarLayout>(R.id.collapsingToolbar)
-        collapsingToolbarLayout.title = article?.title
+        collapsingToolbarLayout.title = article?.title.toString()
         collapsingToolbarLayout.setExpandedTitleTextColor(ColorStateList.valueOf(getColor(R.color.secondary_dark)))
 
         // Open the news in browser on button click
         openNews.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse(article?.url)
+            intent.data = Uri.parse(article?.url.toString())
             startActivity(intent)
         }
     }

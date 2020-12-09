@@ -9,11 +9,11 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class Articles(
     var source: Source? = null,
-    var author: Source? = null,
-    var title: Source? = null,
-    var description: Source? = null,
-    var url: Source? = null,
-    var urlToImage: Source? = null,
-    var publishedAt: Source? = null,
-    var content: Source? = null
+    var author: String? = null,
+    var title: String? = null,
+    var description: String? = null,
+    var url: String? = null,
+    var urlToImage: String? = null,
+    var publishedAt: String? = null,
+    var content: String? = null
 ) : Parcelable
