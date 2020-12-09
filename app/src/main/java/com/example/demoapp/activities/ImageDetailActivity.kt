@@ -9,6 +9,7 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -34,7 +35,7 @@ import java.io.File
 /**
  * Activity class for storage and permissions check demo
  */
-class DummyActivity : AppCompatActivity() {
+class ImageDetailActivity : AppCompatActivity() {
 
     /**
      * This method creates the options menu
@@ -50,16 +51,17 @@ class DummyActivity : AppCompatActivity() {
     private var progressBar: ProgressBar? = null
     private var url: String? = null
     private var storageType: String? = null
+    private var directory : File? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_dummy)
+        setContentView(R.layout.activity_image_detail)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val newsImage: ImageView = findViewById(R.id.article_image)
         val article = intent.getParcelableExtra<Articles>(ARTICLE)
         progressBar = findViewById(R.id.progressBar_download)
         progressBar?.visibility = View.INVISIBLE
-        url = article?.urlToImage
+        url = article?.urlToImage.toString()
         Glide.with(applicationContext).load(url).override(800).into(newsImage)
         findViewById<Button>(R.id.button_download).setOnClickListener {
             showStorageOptions()
@@ -75,16 +77,36 @@ class DummyActivity : AppCompatActivity() {
         builder.setTitle("Please select one of the storage option and click OK")
         builder.setIcon(android.R.drawable.ic_menu_save)
         val storageOptions  = arrayOf("Internal", "External", "Private")
-        builder.setSingleChoiceItems(storageOptions,0) { _: DialogInterface, index: Int ->
+        builder.setSingleChoiceItems(storageOptions,-1) { _: DialogInterface, index: Int ->
             storageType = storageOptions[index]
         }
         builder.setPositiveButton("OK"){ _: DialogInterface, _: Int ->
             progressBar?.visibility = View.VISIBLE
-            checkAppPermissions()
+            getStorageType()
         }
         val alertDialog: AlertDialog = builder.create()
         alertDialog.setCancelable(false)
         alertDialog.show()
+    }
+
+    private fun getStorageType(){
+
+        when (storageType) {
+            "Internal" -> {
+                directory  = filesDir
+                downloadImage(url)
+            }
+            "External" -> {
+                directory = File(Environment.DIRECTORY_PICTURES)
+                if (directory?.exists()==false) directory?.mkdirs()
+                checkAppPermissions()
+            }
+            "Private" -> {
+                directory  = getDir("Downloads",Context.MODE_PRIVATE)
+                if (directory?.exists()==false) directory?.mkdirs()
+                downloadImage(url)
+            }
+        }
     }
 
     /**
@@ -127,25 +149,6 @@ class DummyActivity : AppCompatActivity() {
      * Method to download image from url using download manager
      */
     private fun downloadImage(url: String?) {
-        var directory  = File(Environment.DIRECTORY_DCIM)
-
-        when (storageType) {
-            "Internal" -> {
-                directory  = File(Environment.DIRECTORY_PICTURES)
-                if (!directory.exists()) directory.mkdirs()
-            }
-            "External" -> {
-                directory = File(Environment.DIRECTORY_DCIM)
-                if (!directory.exists()) directory.mkdirs()
-            }
-            "Private" -> {
-                directory  = File(getDir("Downloads",0).toURI())
-                if (!directory.exists()) directory.mkdirs()
-            }
-        }
-
-
-        File(Environment.DIRECTORY_DCIM)
 
         val downloadManager = this.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         val downloadUri = Uri.parse(url)
@@ -176,6 +179,7 @@ class DummyActivity : AppCompatActivity() {
                 val msg = statusMessage(url, directory, status)
                 if (msg != lastMsg) {
                     GlobalScope.launch(Dispatchers.Main) {
+                        Log.i("Location",msg)
                         Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
                     }
                     lastMsg = msg
@@ -191,7 +195,7 @@ class DummyActivity : AppCompatActivity() {
     /**
      * Method to show download status messages
      */
-    private fun statusMessage(url: String?, directory: File, status: Int): String {
+    private fun statusMessage(url: String?, directory: File?, status: Int): String {
         return when (status) {
             DownloadManager.STATUS_FAILED -> "Download has been failed, please try again"
             DownloadManager.STATUS_PAUSED -> "Paused"
