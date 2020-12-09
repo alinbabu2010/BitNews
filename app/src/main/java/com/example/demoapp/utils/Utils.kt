@@ -18,6 +18,7 @@ import com.example.demoapp.activities.DummyActivity
 import com.example.demoapp.activities.MainActivity
 import com.example.demoapp.firebase.FirebaseOperations.Companion.getAuthInstance
 import com.example.demoapp.models.Articles
+import com.example.demoapp.models.Source
 import com.example.demoapp.utils.Const.Companion.ARTICLE
 import com.example.demoapp.utils.Const.Companion.NO_INTERNET
 import com.example.demoapp.utils.Const.Companion.SHARE_TYPE
@@ -82,7 +83,7 @@ class Utils {
         /**
          * Function to share news to others
          */
-        fun shareNews(context: Context, url: String?) {
+        fun shareNews(context: Context, url: Source?) {
             val sendIntent: Intent = Intent().apply {
                 action = Intent.ACTION_SEND
                 putExtra(Intent.EXTRA_TEXT, url)

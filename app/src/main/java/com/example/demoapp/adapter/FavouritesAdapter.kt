@@ -62,8 +62,8 @@ class FavouritesAdapter(
         val articles = newsViewModel?.getFavourites()
         val item = articles?.toMutableList()?.get(position)
         Glide.with(holder.context).load(item?.urlToImage).override(800).into(holder.newsImage)
-        holder.newsTitle.text = item?.title
-        holder.newsDesc.text = item?.description
+        holder.newsTitle.text = item?.title.toString()
+        holder.newsDesc.text = item?.description.toString()
 
         val author = "Author: ${item?.author}"
         holder.newsAuthor.text = author

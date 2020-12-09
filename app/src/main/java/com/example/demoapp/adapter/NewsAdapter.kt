@@ -64,8 +64,8 @@ class NewsAdapter(
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
         val item = news?.get(position)
         Glide.with(holder.context).load(item?.urlToImage).override(800).into(holder.newsImage)
-        holder.newsTitle.text = item?.title
-        holder.newsDesc.text = item?.description
+        holder.newsTitle.text = item?.title.toString()
+        holder.newsDesc.text = item?.description.toString()
 
         val author = "Author: ${item?.author}"
         holder.newsAuthor.text = author
