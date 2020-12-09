@@ -77,33 +77,35 @@ class ImageDetailActivity : AppCompatActivity() {
         builder.setTitle("Please select one of the storage option and click OK")
         builder.setIcon(android.R.drawable.ic_menu_save)
         val storageOptions  = arrayOf("Internal", "External", "Private")
-        builder.setSingleChoiceItems(storageOptions,-1) { _: DialogInterface, index: Int ->
+        builder.setSingleChoiceItems(storageOptions, -1) { _: DialogInterface, index: Int ->
             storageType = storageOptions[index]
         }
         builder.setPositiveButton("OK"){ _: DialogInterface, _: Int ->
             progressBar?.visibility = View.VISIBLE
-            getStorageType()
+            setDirectory()
         }
         val alertDialog: AlertDialog = builder.create()
         alertDialog.setCancelable(false)
         alertDialog.show()
     }
 
-    private fun getStorageType(){
-
+    /**
+     * Method to set the directory of the storage type selected
+     */
+    private fun setDirectory(){
         when (storageType) {
             "Internal" -> {
-                directory  = filesDir
+                directory = filesDir
                 downloadImage(url)
             }
             "External" -> {
                 directory = File(Environment.DIRECTORY_PICTURES)
-                if (directory?.exists()==false) directory?.mkdirs()
+                if (directory?.exists() == false) directory?.mkdirs()
                 checkAppPermissions()
             }
             "Private" -> {
-                directory  = getDir("Downloads",Context.MODE_PRIVATE)
-                if (directory?.exists()==false) directory?.mkdirs()
+                directory = getDir("Downloads", Context.MODE_PRIVATE)
+                if (directory?.exists() == false) directory?.mkdirs()
                 downloadImage(url)
             }
         }
@@ -159,14 +161,17 @@ class ImageDetailActivity : AppCompatActivity() {
             setTitle(url?.substring(url.lastIndexOf("/") + 1))
             setDescription("Downloading article image")
             setMimeType("*/*")
-            setDestinationInExternalPublicDir(
-                directory.toString(),
+            setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+            setDestinationInExternalFilesDir(
+                applicationContext, directory.toString(),
                 url?.substring(url.lastIndexOf("/") + 1)
             )
         }
 
         val downloadId = downloadManager.enqueue(request)
         val query = DownloadManager.Query().setFilterById(downloadId)
+        progressBar?.progress = 0
+        progressBar?.max = 100
         CoroutineScope(Dispatchers.Default).launch {
             var downloading = true
             while (downloading) {
@@ -176,10 +181,15 @@ class ImageDetailActivity : AppCompatActivity() {
                     downloading = false
                 }
                 val status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
-                val msg = statusMessage(url, directory, status)
+                val bytesDownloaded =
+                    cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR))
+                val bytesTotal =
+                    cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES))
+                progressBar?.progress = bytesDownloaded * 100 / bytesTotal
+                val msg = statusMessage(status)
                 if (msg != lastMsg) {
                     GlobalScope.launch(Dispatchers.Main) {
-                        Log.i("Location",msg)
+                        Log.i("Location", msg)
                         Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
                     }
                     lastMsg = msg
@@ -195,15 +205,13 @@ class ImageDetailActivity : AppCompatActivity() {
     /**
      * Method to show download status messages
      */
-    private fun statusMessage(url: String?, directory: File?, status: Int): String {
+    private fun statusMessage(status: Int): String {
         return when (status) {
             DownloadManager.STATUS_FAILED -> "Download has been failed, please try again"
             DownloadManager.STATUS_PAUSED -> "Paused"
             DownloadManager.STATUS_PENDING -> "Pending"
             DownloadManager.STATUS_RUNNING -> "Downloading..."
-            DownloadManager.STATUS_SUCCESSFUL -> "Image downloaded successfully in $directory" + File.separator + url?.substring(
-                url.lastIndexOf("/") + 1
-            )
+            DownloadManager.STATUS_SUCCESSFUL -> "Image downloaded successfully"
             else -> "There's nothing to download"
         }
     }
