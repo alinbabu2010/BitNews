@@ -14,7 +14,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.example.demoapp.R
 import com.example.demoapp.activities.DashboardActivity
 import com.example.demoapp.utils.Utils.Companion.checkNetworkConnection
@@ -78,7 +78,7 @@ class LoginFragment : Fragment() {
                 replaceFragment(
                     fragment,
                     R.id.fragment_container,
-                    parentFragmentManager
+                    fragmentManager
                 )
             }
         }
@@ -92,7 +92,7 @@ class LoginFragment : Fragment() {
      * Method to check user provided login credentials and move to [DashboardActivity] if it is true
      */
     private fun loginUser(userName: String, password: String, progressBar: ProgressBar) {
-        viewModel = activity?.let { ViewModelProvider(it).get(AccountsViewModel::class.java) }
+        viewModel = activity?.let { ViewModelProviders.of(it).get(AccountsViewModel::class.java) }
         viewModel?.sigInUser(userName,password)
         viewModel?.operationExecuted?.observe(viewLifecycleOwner, {
             if(it){

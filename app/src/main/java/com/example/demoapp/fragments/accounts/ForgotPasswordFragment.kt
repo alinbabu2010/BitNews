@@ -8,7 +8,7 @@ import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.example.demoapp.R
 import com.example.demoapp.utils.Const.Companion.EMAIL_PATTERN
 import com.example.demoapp.utils.Utils.Companion.firebaseError
@@ -51,13 +51,13 @@ class ForgotPasswordFragment : Fragment() {
      */
     private fun resetPassword(email: String, resetProgressBar: ProgressBar) {
         if (email.matches(EMAIL_PATTERN.toRegex())) {
-            viewModel = activity?.let { ViewModelProvider(it).get(AccountsViewModel::class.java) }
+            viewModel = activity?.let { ViewModelProviders.of(it).get(AccountsViewModel::class.java) }
             viewModel?.resetPassword(email)
             viewModel?.operationExecuted?.observe(viewLifecycleOwner, {
                 if (it) {
                     resetProgressBar.visibility = View.INVISIBLE
                     Toast.makeText(context, R.string.password_reset, Toast.LENGTH_SHORT).show()
-                    parentFragmentManager.popBackStack()
+                    fragmentManager?.popBackStack()
                 } else {
                     resetProgressBar.visibility = View.INVISIBLE
                     Toast.makeText(context, firebaseError, Toast.LENGTH_SHORT).show()

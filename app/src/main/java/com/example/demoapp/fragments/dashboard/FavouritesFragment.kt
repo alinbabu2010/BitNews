@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -38,7 +38,7 @@ class FavouritesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         super.onViewCreated(view, savedInstanceState)
-        newsViewModel = activity?.let { ViewModelProvider(it).get(NewsViewModel::class.java) }
+        newsViewModel = activity?.let { ViewModelProviders.of(it).get(NewsViewModel::class.java) }
 
         // Getting recyclerView and invoke layoutManager and recyclerViewAdapter
         val recyclerView: RecyclerView = view.findViewById(R.id.fragment_view)

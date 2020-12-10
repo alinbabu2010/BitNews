@@ -43,11 +43,11 @@ class Utils {
         /**
          * Function to replace a fragment by another
          */
-        fun replaceFragment(fragment: Fragment, id: Int, fragmentManager: FragmentManager) {
-            val fragmentTransaction = fragmentManager.beginTransaction()
-            fragmentTransaction.replace(id, fragment)
-            fragmentTransaction.addToBackStack(null)
-            fragmentTransaction.commit()
+        fun replaceFragment(fragment: Fragment, id: Int, fragmentManager: FragmentManager?) {
+            val fragmentTransaction = fragmentManager?.beginTransaction()
+            fragmentTransaction?.replace(id, fragment)
+            fragmentTransaction?.addToBackStack(null)
+            fragmentTransaction?.commit()
         }
 
 
