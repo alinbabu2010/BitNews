@@ -1,13 +1,10 @@
 <resources>
     <string name="app_name">Demo App</string>
-    <string name="email_inputHint">Email</string>
+    <string name="email_string">Email</string>
     <string name="login_string">Login</string>
     <string name="password_text">Password</string>
     <string name="forgot_password_text">Forgot your password. Click here to reset</string>
     <string name="profile_text">Profile</string>
-    <string name="email_dashboard">Email:</string>
-    <string name="name_dashboard">Name:</string>
-    <string name="username_dashboard">Username:</string>
     <string name="logout_string">Logout</string>
     <string name="reset_password_string">Reset Password</string>
     <string name="email_text">Enter your email</string>
@@ -43,4 +40,12 @@
     <string name="news_title">News</string>
     <string name="favourite_title">Favourites</string>
     <string name="download_string" translatable="false">Download</string>
+    <string name="user_image" translatable="false">user_image</string>
+    <string name="profile_photo">Profile Photo</string>
+    <string name="remove_photo">Remove Photo</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="camera_image" translatable="false">camera_image</string>
+    <string name="gallery_icon" translatable="false">gallery_icon</string>
+    <string name="delete_icon" translatable="false">delete_icon</string>
 </resources>

@@ -28,7 +28,7 @@
         android:id="@+id/username_input_layout"
         style="@style/input_layout_style"
         android:layout_marginTop="70dp"
-        android:hint="@string/email_inputHint"
+        android:hint="@string/email_string"
         android:textColorHint="@color/secondary_dark"
         app:boxBackgroundColor="@color/background_color"
         app:boxBackgroundMode="filled"

@@ -85,7 +85,7 @@
         android:id="@+id/signUp_email"
         style="@style/input_layout_style"
         android:layout_height="wrap_content"
-        android:hint="@string/email_inputHint"
+        android:hint="@string/email_string"
         android:textColorHint="@color/secondary_dark"
         app:boxBackgroundColor="@color/background_color"
         app:boxBackgroundMode="filled"
