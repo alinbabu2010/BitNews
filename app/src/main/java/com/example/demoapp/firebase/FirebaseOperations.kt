@@ -26,15 +26,13 @@ class FirebaseOperations {
         /**
          * Method to store favourite articles of user
          */
-        fun storeDataOnFirebase(favouriteArticles: MutableSet<Articles>?): Boolean {
-            var isSuccess = false
+        fun storeDataOnFirebase(favouriteArticles: MutableSet<Articles>?, isSuccess : (Boolean) -> Unit){
             getCurrentUser?.let {
                 val favourites = firebaseReference.child(it).setValue(favouriteArticles?.toList())
                 favourites.addOnSuccessListener {
-                    isSuccess = true
+                    isSuccess(true)
                 }
             }
-            return isSuccess
         }
 
         /**

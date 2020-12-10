@@ -46,10 +46,7 @@ class NewsViewModel : ViewModel() {
      */
     fun addToFavourites(article: Articles?) {
         article?.let { favouriteArticles?.add(it) }
-        CoroutineScope(Dispatchers.IO).launch {
-            if (storeDataOnFirebase(favouriteArticles))
-                favouritesLiveData.postValue(favouriteArticles)
-        }
+        storeOnFirebase()
     }
 
     /**
@@ -57,9 +54,17 @@ class NewsViewModel : ViewModel() {
      */
     fun removeFromFavourites(article: Articles?) {
         favouriteArticles?.remove(article)
+        storeOnFirebase()
+    }
+
+    /**
+     * Method to save favourites on firbase
+     */
+    private fun storeOnFirebase(){
         CoroutineScope(Dispatchers.IO).launch {
-            if (storeDataOnFirebase(favouriteArticles))
-                favouritesLiveData.postValue(favouriteArticles)
+            storeDataOnFirebase(favouriteArticles){
+                if(it) favouritesLiveData.postValue(favouriteArticles)
+            }
         }
     }
 
