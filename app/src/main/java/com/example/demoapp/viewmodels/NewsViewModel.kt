@@ -9,9 +9,6 @@ import com.example.demoapp.firebase.FirebaseOperations.Companion.retrieveDataFro
 import com.example.demoapp.firebase.FirebaseOperations.Companion.storeDataOnFirebase
 import com.example.demoapp.models.Articles
 import com.example.demoapp.models.News
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 
 /**
@@ -58,13 +55,11 @@ class NewsViewModel : ViewModel() {
     }
 
     /**
-     * Method to save favourites on firbase
+     * Method to save favourites on firebase
      */
-    private fun storeOnFirebase(){
-        CoroutineScope(Dispatchers.IO).launch {
-            storeDataOnFirebase(favouriteArticles){
-                if(it) favouritesLiveData.postValue(favouriteArticles)
-            }
+    private fun storeOnFirebase() {
+        storeDataOnFirebase(favouriteArticles) {
+            if (it) favouritesLiveData.postValue(favouriteArticles)
         }
     }
 
@@ -79,10 +74,8 @@ class NewsViewModel : ViewModel() {
      * Method to return set of favourites
      */
     fun getFavourites(): MutableSet<Articles>? {
-        CoroutineScope(Dispatchers.IO).launch {
-            retrieveDataFromFirebase {
-                favouritesLiveData.postValue(it)
-            }
+        retrieveDataFromFirebase {
+            favouritesLiveData.postValue(it)
         }
         favouriteArticles = favouritesLiveData.value
         return favouriteArticles
