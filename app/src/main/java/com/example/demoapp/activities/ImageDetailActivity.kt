@@ -2,14 +2,12 @@ package com.example.demoapp.activities
 
 import android.Manifest
 import android.app.DownloadManager
-import android.content.Context
-import android.content.DialogInterface
+import android.content.*
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -26,16 +24,18 @@ import com.example.demoapp.R
 import com.example.demoapp.models.Articles
 import com.example.demoapp.utils.Const.Companion.ARTICLE
 import com.example.demoapp.utils.Utils.Companion.showAlert
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import java.io.File
 
 /**
  * Activity class for storage and permissions check demo
  */
 class ImageDetailActivity : AppCompatActivity() {
+
+    private var progressBar: ProgressBar? = null
+    private var url: String? = null
+    private var storageType: String? = null
+    private var directory : File? = null
+    var downloadId : Long = 0
 
     /**
      * This method creates the options menu
@@ -46,12 +46,6 @@ class ImageDetailActivity : AppCompatActivity() {
         inflater.inflate(R.menu.logout_menu, menu)
         return true
     }
-
-    private var lastMsg: String? = null
-    private var progressBar: ProgressBar? = null
-    private var url: String? = null
-    private var storageType: String? = null
-    private var directory : File? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,6 +61,27 @@ class ImageDetailActivity : AppCompatActivity() {
             showStorageOptions()
         }
 
+        // Broadcast receiver for downloading images
+        val dataReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                val downloadManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+                val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, 0)
+                if (downloadId==id) {
+                    Toast.makeText(context, "Image downloaded successfully", Toast.LENGTH_SHORT).show()
+                    val query = DownloadManager.Query().setFilterById(id)
+                    val cursor: Cursor = downloadManager.query(query)
+                    cursor.moveToFirst()
+                    if (cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)) == DownloadManager.STATUS_SUCCESSFUL) {
+                        progressBar?.visibility = View.INVISIBLE
+                        Toast.makeText(context, "Image downloaded successfully", Toast.LENGTH_SHORT).show()
+                    }
+                    cursor.close()
+                }
+            }
+        }
+        val downloadCompleteIntentName = DownloadManager.ACTION_DOWNLOAD_COMPLETE
+        val downloadCompleteIntentFilter = IntentFilter(downloadCompleteIntentName)
+        registerReceiver(dataReceiver, downloadCompleteIntentFilter)
     }
 
     /**
@@ -151,10 +166,8 @@ class ImageDetailActivity : AppCompatActivity() {
      * Method to download image from url using download manager
      */
     private fun downloadImage(url: String?) {
-
         val downloadManager = this.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         val downloadUri = Uri.parse(url)
-
         val request = DownloadManager.Request(downloadUri).apply {
             setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
             setAllowedOverRoaming(false)
@@ -167,53 +180,7 @@ class ImageDetailActivity : AppCompatActivity() {
                 url?.substring(url.lastIndexOf("/") + 1)
             )
         }
-
-        val downloadId = downloadManager.enqueue(request)
-        val query = DownloadManager.Query().setFilterById(downloadId)
-        progressBar?.progress = 0
-        progressBar?.max = 100
-        CoroutineScope(Dispatchers.Default).launch {
-            var downloading = true
-            while (downloading) {
-                val cursor: Cursor = downloadManager.query(query)
-                cursor.moveToFirst()
-                if (cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)) == DownloadManager.STATUS_SUCCESSFUL) {
-                    downloading = false
-                }
-                val status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
-                val bytesDownloaded =
-                    cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR))
-                val bytesTotal =
-                    cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES))
-                progressBar?.progress = bytesDownloaded * 100 / bytesTotal
-                val msg = statusMessage(status)
-                if (msg != lastMsg) {
-                    GlobalScope.launch(Dispatchers.Main) {
-                        Log.i("Location", msg)
-                        Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
-                    }
-                    lastMsg = msg
-                }
-                if (status == DownloadManager.STATUS_SUCCESSFUL){
-                    progressBar?.visibility = View.INVISIBLE
-                }
-                cursor.close()
-            }
-        }
-    }
-
-    /**
-     * Method to show download status messages
-     */
-    private fun statusMessage(status: Int): String {
-        return when (status) {
-            DownloadManager.STATUS_FAILED -> "Download has been failed, please try again"
-            DownloadManager.STATUS_PAUSED -> "Paused"
-            DownloadManager.STATUS_PENDING -> "Pending"
-            DownloadManager.STATUS_RUNNING -> "Downloading..."
-            DownloadManager.STATUS_SUCCESSFUL -> "Image downloaded successfully"
-            else -> "There's nothing to download"
-        }
+        downloadId = downloadManager.enqueue(request)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
