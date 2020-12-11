@@ -56,7 +56,6 @@ class FavouritesFragment : Fragment() {
                 view.findViewById<TextView>(R.id.empty_textView)?.visibility = View.INVISIBLE
             }
             recyclerView.adapter?.notifyDataSetChanged()
-            onCreate(savedInstanceState)
         })
 
         // Refresh on swipe by calling recycler view

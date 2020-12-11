@@ -140,7 +140,7 @@ class RegisterFragment : Fragment() {
         val name = binding.nameInputSignUp.text.toString()
         val email = binding.emailInputSignUp.text.toString()
         val password = binding.passwordInputSignUp.text.toString()
-        val user = Users(username, name, email)
+        val user = Users(username, name, email,null)
         viewModel = activity?.let { ViewModelProviders.of(it).get(AccountsViewModel::class.java) }
         viewModel?.createUser(email, password, user)
         viewModel?.operationExecuted?.observe(viewLifecycleOwner, {
