@@ -31,11 +31,11 @@ import java.io.File
  */
 class ImageDetailActivity : AppCompatActivity() {
 
-    private var progressBar: ProgressBar? = null
-    private var url: String? = null
-    private var storageType: String? = null
+    private var progressBar : ProgressBar? = null
+    private var url =  String()
     private var directory : File? = null
-    var downloadId : Long = 0
+    private var downloadId : Long = 0
+    private var fileName =  String()
 
     /**
      * This method creates the options menu
@@ -56,6 +56,7 @@ class ImageDetailActivity : AppCompatActivity() {
         progressBar = findViewById(R.id.progressBar_download)
         progressBar?.visibility = View.INVISIBLE
         url = article?.urlToImage.toString()
+        fileName = article?.source?.name ?: "news_image"
         Glide.with(applicationContext).load(url).override(800).into(newsImage)
         findViewById<Button>(R.id.button_download).setOnClickListener {
             showStorageOptions()
@@ -67,7 +68,6 @@ class ImageDetailActivity : AppCompatActivity() {
                 val downloadManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
                 val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, 0)
                 if (downloadId==id) {
-                    Toast.makeText(context, "Image downloaded successfully", Toast.LENGTH_SHORT).show()
                     val query = DownloadManager.Query().setFilterById(id)
                     val cursor: Cursor = downloadManager.query(query)
                     cursor.moveToFirst()
@@ -92,12 +92,13 @@ class ImageDetailActivity : AppCompatActivity() {
         builder.setTitle("Please select one of the storage option and click OK")
         builder.setIcon(android.R.drawable.ic_menu_save)
         val storageOptions  = arrayOf("Internal", "External", "Private")
+        var storageType = String()
         builder.setSingleChoiceItems(storageOptions, -1) { _: DialogInterface, index: Int ->
             storageType = storageOptions[index]
         }
         builder.setPositiveButton("OK"){ _: DialogInterface, _: Int ->
             progressBar?.visibility = View.VISIBLE
-            setDirectory()
+            setDirectory(storageType)
         }
         val alertDialog: AlertDialog = builder.create()
         alertDialog.setCancelable(false)
@@ -107,7 +108,7 @@ class ImageDetailActivity : AppCompatActivity() {
     /**
      * Method to set the directory of the storage type selected
      */
-    private fun setDirectory(){
+    private fun setDirectory(storageType: String) {
         when (storageType) {
             "Internal" -> {
                 directory = filesDir
@@ -115,15 +116,14 @@ class ImageDetailActivity : AppCompatActivity() {
             }
             "External" -> {
                 directory = File(Environment.DIRECTORY_PICTURES)
-                if (directory?.exists() == false) directory?.mkdirs()
                 checkAppPermissions()
             }
             "Private" -> {
-                directory = getDir("Downloads", Context.MODE_PRIVATE)
-                if (directory?.exists() == false) directory?.mkdirs()
+                directory = cacheDir
                 downloadImage(url)
             }
         }
+        println(directory)
     }
 
     /**
@@ -175,10 +175,7 @@ class ImageDetailActivity : AppCompatActivity() {
             setDescription("Downloading article image")
             setMimeType("*/*")
             setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-            setDestinationInExternalFilesDir(
-                applicationContext, directory.toString(),
-                url?.substring(url.lastIndexOf("/") + 1)
-            )
+            setDestinationInExternalFilesDir(applicationContext, directory.toString(),"$fileName.jpg")
         }
         downloadId = downloadManager.enqueue(request)
     }
