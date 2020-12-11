@@ -11,6 +11,7 @@ class Const {
         const val NAME_STRING = "name"
         const val USERNAME_STRING = "username"
         const val EMAIL_STRING = "email"
+        const val IMAGE_URL = "userImageUrl"
         const val EMAIL_PATTERN = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"
         const val USERS = "Users"
         const val DATE_FORMAT_ENCODE = "yyyy-MM-dd'T'HH:mm:ss'Z'"
@@ -20,5 +21,6 @@ class Const {
         const val NETWORK_FAILURE = "Network failure"
         const val FAVOURITES = "Favourites"
         const val NO_INTERNET = "No Internet Connection"
+        const val PROFILE_UPDATE = "Profile picture updated"
     }
 }
