@@ -55,7 +55,7 @@ class ImageDetailActivity : AppCompatActivity() {
         val article = intent.getParcelableExtra<Articles>(ARTICLE)
         progressBar = findViewById(R.id.progressBar_download)
         progressBar?.visibility = View.INVISIBLE
-        url = article?.urlToImage.toString()
+        url = article?.imageUrl.toString()
         fileName = article?.source?.name ?: "news_image"
         Glide.with(applicationContext).load(url).override(800).into(newsImage)
         findViewById<Button>(R.id.button_download).setOnClickListener {

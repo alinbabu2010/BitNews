@@ -196,7 +196,7 @@ class NewsFragment : Fragment() {
             var dateFilter: ArrayList<Articles>? = arrayListOf()
             if (publishedDate?.isNotEmpty() == true) {
                 dateFilter =
-                    article?.filter { it.publishedAt?.equals(publishedDate.toString()) == true } as ArrayList<Articles>?
+                    article?.filter { it.publishedDate?.equals(publishedDate.toString()) == true } as ArrayList<Articles>?
             }
             val distinctNewsFilter: ArrayList<Articles>?
             distinctNewsFilter = when {

@@ -52,7 +52,7 @@ class ArticleActivity : AppCompatActivity() {
         val toolbar: Toolbar? = findViewById(R.id.toolbar)
         val openNews: Button = findViewById(R.id.open_button)
 
-        Glide.with(applicationContext).load(article?.urlToImage).override(800).into(newsImage)
+        Glide.with(applicationContext).load(article?.imageUrl).override(800).into(newsImage)
         newsDesc.text = article?.description.toString()
         newsContent.text = article?.content.toString()
 
@@ -66,7 +66,7 @@ class ArticleActivity : AppCompatActivity() {
             SimpleDateFormat(
                 DATE_FORMAT_ENCODE,
                 Locale.US
-            ).parse(article?.publishedAt.toString())
+            ).parse(article?.publishedDate.toString())
         val formattedDate =
             date?.let { SimpleDateFormat(DATE_FORMAT_DECODE, Locale.US).format(it) }
 

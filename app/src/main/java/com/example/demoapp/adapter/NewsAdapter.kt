@@ -63,7 +63,7 @@ class NewsAdapter(
      */
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
         val item = news?.get(position)
-        Glide.with(holder.context).load(item?.urlToImage).override(800).into(holder.newsImage)
+        Glide.with(holder.context).load(item?.imageUrl).override(800).into(holder.newsImage)
         holder.newsTitle.text = item?.title.toString()
         holder.newsDesc.text = item?.description.toString()
 
@@ -76,7 +76,7 @@ class NewsAdapter(
         val date = SimpleDateFormat(
             DATE_FORMAT_ENCODE,
             Locale.US
-        ).parse(item?.publishedAt.toString())
+        ).parse(item?.publishedDate.toString())
         val formattedDate =
             date?.let { SimpleDateFormat(DATE_FORMAT_DECODE, Locale.US).format(it) }
 

@@ -61,7 +61,7 @@ class FavouritesAdapter(
     override fun onBindViewHolder(holder: FavouritesViewHolder, position: Int) {
         val articles = newsViewModel?.getFavourites()
         val item = articles?.toMutableList()?.get(position)
-        Glide.with(holder.context).load(item?.urlToImage).override(800).into(holder.newsImage)
+        Glide.with(holder.context).load(item?.imageUrl).override(800).into(holder.newsImage)
         holder.newsTitle.text = item?.title.toString()
         holder.newsDesc.text = item?.description.toString()
 
@@ -70,11 +70,11 @@ class FavouritesAdapter(
 
         val src = "Source: ${item?.source?.name}"
         holder.newsSrc.text = src
-
+        println(item?.publishedDate)
         val date = SimpleDateFormat(
             DATE_FORMAT_ENCODE,
             Locale.US
-        ).parse(item?.publishedAt.toString())
+        ).parse(item?.publishedDate.toString())
         val formattedDate =
             date?.let { SimpleDateFormat(DATE_FORMAT_DECODE, Locale.US).format(it) }
 
