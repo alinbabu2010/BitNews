@@ -3,13 +3,13 @@ package com.example.demoapp.fragments.dashboard
 import android.Manifest
 import android.app.Activity
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.provider.MediaStore.Images
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -22,8 +22,8 @@ import com.bumptech.glide.Glide
 import com.example.demoapp.R
 import com.example.demoapp.activities.ImageDetailActivity
 import com.example.demoapp.databinding.FragmentProfileBinding
-import com.example.demoapp.firebase.ProfileOperationsFirebase
 import com.example.demoapp.firebase.ProfileOperationsFirebase.Companion.getDataFromFirebase
+import com.example.demoapp.firebase.ProfileOperationsFirebase.Companion.uploadImageToFirebase
 import com.example.demoapp.utils.Const.Companion.EMAIL_STRING
 import com.example.demoapp.utils.Const.Companion.IMAGE_URL
 import com.example.demoapp.utils.Const.Companion.NAME_STRING
@@ -31,6 +31,9 @@ import com.example.demoapp.utils.Const.Companion.USERNAME_STRING
 import com.example.demoapp.utils.Utils.Companion.checkNetworkConnection
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 
 
 /**
@@ -62,6 +65,9 @@ class ProfileFragment : Fragment() {
         return binding.root
     }
 
+    /**
+     * Method to set the profile data in fragment layout
+     */
     private fun setProfileData(data: Map<String, String>) {
         binding.progressBarProfile.visibility = View.INVISIBLE
         binding.nameDisplay.setText(data[NAME_STRING])
@@ -120,6 +126,9 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    /**
+     * Method to open camera intent
+     */
     private fun openCamera(){
         val pictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         startActivityForResult(pictureIntent, IMAGE_CAPTURE_CODE)
@@ -166,13 +175,27 @@ class ProfileFragment : Fragment() {
     private fun getImageUri(context: Context?, inImage: Bitmap) {
         val bytes = ByteArrayOutputStream()
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
-        @Suppress("DEPRECATION") val path = Images.Media.insertImage(context?.contentResolver, inImage, "Title", null)
-        saveUserImage(Uri.parse(path))
+        val contextWrapper=  ContextWrapper(context?.applicationContext )
+        val directory = contextWrapper.getDir( "imgDir",Context.MODE_APPEND )
+        val destination=  File( directory,"capture_01.bmp" )
+        inImage.compress( Bitmap.CompressFormat.JPEG, 100, bytes )
+        val outputStream : FileOutputStream
+        try {
+            outputStream = FileOutputStream( destination )
+            outputStream.write( bytes.toByteArray() )
+            outputStream.close()
+        } catch (e: IOException) {
+            Toast.makeText( context,e.message,Toast.LENGTH_SHORT ).show()
+        }
+        saveUserImage(Uri.fromFile(destination))
     }
 
+    /**
+     * Method to save user image by calling [uploadImageToFirebase]
+     */
     private fun saveUserImage(data: Uri?) {
         binding.progressProfileImage.visibility = View.VISIBLE
-        ProfileOperationsFirebase.uploadImageToFirebase(data, userData) {
+        uploadImageToFirebase(data, userData) {
             binding.progressProfileImage.visibility = View.INVISIBLE
             Toast.makeText(this.activity, it, Toast.LENGTH_SHORT).show()
         }
