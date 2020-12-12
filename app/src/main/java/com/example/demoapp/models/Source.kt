@@ -1,6 +1,7 @@
 package com.example.demoapp.models
 
 import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -8,6 +9,6 @@ import kotlinx.parcelize.Parcelize
  */
 @Parcelize
 data class Source(
-    var id: String? = null,
-    var name: String? = null
+    @SerializedName("sourceId") var id: String? = null,
+    @SerializedName("sourceName") var name: String? = null
 ) : Parcelable

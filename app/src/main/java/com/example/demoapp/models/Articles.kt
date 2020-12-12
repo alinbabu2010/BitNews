@@ -1,6 +1,7 @@
 package com.example.demoapp.models
 
 import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -8,12 +9,12 @@ import kotlinx.parcelize.Parcelize
  */
 @Parcelize
 data class Articles(
-    var source: Source? = null,
-    var author: String? = null,
-    var title: String? = null,
-    var description: String? = null,
-    var url: String? = null,
-    var urlToImage: String? = null,
-    var publishedAt: String? = null,
-    var content: String? = null
+    @SerializedName("Source") var source: Source? = null,
+    @SerializedName("author") var author: String? = null,
+    @SerializedName("title") var title: String? = null,
+    @SerializedName("description") var description: String? = null,
+    @SerializedName("url") var url: String? = null,
+    @SerializedName("urlToImage") var imageUrl: String? = null,
+    @SerializedName("publishedAt") var publishedDate: String? = null,
+    @SerializedName("content") var content: String? = null
 ) : Parcelable
