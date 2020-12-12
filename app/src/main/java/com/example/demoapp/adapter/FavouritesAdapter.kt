@@ -70,7 +70,6 @@ class FavouritesAdapter(
 
         val src = "Source: ${item?.source?.name}"
         holder.newsSrc.text = src
-        println(item?.publishedDate)
         val date = SimpleDateFormat(
             DATE_FORMAT_ENCODE,
             Locale.US

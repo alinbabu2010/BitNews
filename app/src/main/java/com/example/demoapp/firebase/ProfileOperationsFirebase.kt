@@ -1,7 +1,6 @@
 package com.example.demoapp.firebase
 
 import android.net.Uri
-import android.util.Log
 import com.example.demoapp.firebase.FirebaseOperations.Companion.getCurrentUser
 import com.example.demoapp.fragments.dashboard.ProfileFragment.Companion.firebaseResponseMessage
 import com.example.demoapp.models.Users
@@ -88,7 +87,6 @@ class ProfileOperationsFirebase {
                                     }
                             }
                         } else {
-                            Log.i("JKF", taskSnapshot.exception?.message.toString())
                             message(taskSnapshot.exception?.message.toString())
                         }
                     }
