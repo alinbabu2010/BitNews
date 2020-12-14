@@ -175,8 +175,8 @@ class ProfileFragment : Fragment() {
         val bytes = ByteArrayOutputStream()
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
         val contextWrapper=  ContextWrapper(context?.applicationContext )
-        val directory = contextWrapper.getDir( "imgDir",Context.MODE_APPEND )
-        val destination=  File( directory,"capture_01.bmp" )
+        val directory = contextWrapper.filesDir
+        val destination=  File( directory,"user_image.bmp" )
         inImage.compress( Bitmap.CompressFormat.JPEG, 100, bytes )
         val outputStream : FileOutputStream
         try {
