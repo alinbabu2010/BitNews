@@ -13,22 +13,12 @@ class FirebaseOperations {
 
     companion object {
 
-        private val firebaseReference =
-            FirebaseDatabase.getInstance().getReference(FAVOURITES)
-
-        // Creating firebase auth instance
-        val getAuthInstance = FirebaseAuth.getInstance()
-
-        // Getting the current user id
-        val getCurrentUser = getAuthInstance.currentUser?.uid
-
-
         /**
          * Method to store favourite articles of user
          */
         fun storeDataOnFirebase(favouriteArticles: MutableSet<Articles>?, isSuccess : (Boolean) -> Unit){
-            getCurrentUser?.let {
-                val favourites = firebaseReference.child(it).setValue(favouriteArticles?.toList())
+            FirebaseAuth.getInstance().currentUser?.uid?.let {
+                val favourites = FirebaseDatabase.getInstance().getReference(FAVOURITES).child(it).setValue(favouriteArticles?.toList())
                 favourites.addOnSuccessListener {
                     isSuccess(true)
                 }
@@ -39,7 +29,9 @@ class FirebaseOperations {
          * Method to retrieve the favourite articles of particular user
          */
         fun retrieveDataFromFirebase(favouriteArticles: (MutableSet<Articles>?) -> Unit) {
-            val favourites = firebaseReference.orderByKey().equalTo(getCurrentUser)
+            val getCurrentUser = FirebaseAuth.getInstance().currentUser?.uid
+            val user = FirebaseDatabase.getInstance().getReference(FAVOURITES)
+            val favourites = user.orderByKey().equalTo(getCurrentUser.toString())
             favourites.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     val t: GenericTypeIndicator<MutableList<Articles>> = object : GenericTypeIndicator<MutableList<Articles>>() {}
