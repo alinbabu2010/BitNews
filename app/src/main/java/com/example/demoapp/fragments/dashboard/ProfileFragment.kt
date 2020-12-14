@@ -2,11 +2,9 @@ package com.example.demoapp.fragments.dashboard
 
 import android.Manifest
 import android.app.Activity
-import android.content.Context
-import android.content.ContextWrapper
+import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -29,10 +27,7 @@ import com.example.demoapp.utils.Const.Companion.NAME_STRING
 import com.example.demoapp.utils.Const.Companion.USERNAME_STRING
 import com.example.demoapp.utils.Utils.Companion.checkNetworkConnection
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
+import java.io.OutputStream
 
 
 /**
@@ -42,7 +37,8 @@ class ProfileFragment : Fragment() {
 
     private lateinit var binding: FragmentProfileBinding
     private var container: ViewGroup? = null
-    private var userData : Map<String, String> = mapOf()
+    private var userData: Map<String, String> = mapOf()
+    private var photoUri: Uri? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -73,8 +69,8 @@ class ProfileFragment : Fragment() {
         binding.usernameDisplay.setText(data[USERNAME_STRING])
         binding.emailDisplay.setText(data[EMAIL_STRING])
         if (!data[IMAGE_URL].equals("NONE"))
-        context?.let { Glide.with(it).load(data[IMAGE_URL]).into(binding.userImage) }
-        if(firebaseResponseMessage?.isNotEmpty() == true) {
+            context?.let { Glide.with(it).load(data[IMAGE_URL]).into(binding.userImage) }
+        if (firebaseResponseMessage?.isNotEmpty() == true) {
             Toast.makeText(context, firebaseResponseMessage, Toast.LENGTH_SHORT).show()
         }
     }
@@ -109,30 +105,58 @@ class ProfileFragment : Fragment() {
      * Method to check storage permissions
      */
     private fun checkAppPermissions() {
-        val permission = context?.let { ContextCompat.checkSelfPermission(
-            it,
-            Manifest.permission.CAMERA
-        )
-        }
-
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(
-                arrayOf(Manifest.permission.CAMERA), REQUEST_CODE
+        val cameraPermission = context?.let {
+            ContextCompat.checkSelfPermission(
+                it,
+                Manifest.permission.CAMERA
             )
         }
-        else {
-            openCamera()
+        val storagePermission = context?.let {
+            ContextCompat.checkSelfPermission(
+                it,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+        }
+        if (cameraPermission != PackageManager.PERMISSION_GRANTED && storagePermission != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ), REQUEST_CODE
+            )
+        } else {
+            takePictureIntent()
         }
     }
 
     /**
-     * Method to open camera intent
+     * Method to create a image file in external storage for saving user profile image
      */
-    private fun openCamera(){
-        val pictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        startActivityForResult(pictureIntent, IMAGE_CAPTURE_CODE)
+    private fun createImageFile(): Uri? {
+        var fileOutputStream: OutputStream?
+        var imageUri: Uri? = null
+        context?.contentResolver?.also { resolver ->
+            val contentValues = ContentValues().apply {
+                put(MediaStore.MediaColumns.MIME_TYPE, "image/jpg")
+            }
+            println(MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+            fileOutputStream = imageUri?.let { resolver.openOutputStream(it) }
+            fileOutputStream?.close()
+        }
+
+        return imageUri
     }
 
+    /**
+     * Method to open camera intent to take picture
+     */
+    private fun takePictureIntent() {
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        photoUri = createImageFile()
+        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
+        startActivityForResult(takePictureIntent, IMAGE_CAPTURE_CODE)
+    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -140,59 +164,33 @@ class ProfileFragment : Fragment() {
         grantResults: IntArray
     ) {
         if (requestCode == ImageDetailActivity.PERMISSION_REQUEST_CODE) {
-            println(requestCode)
             if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                openCamera()
+                takePictureIntent()
             } else {
                 Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show()
             }
-        }
-        else {
+        } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && data != null){
+        if (resultCode == Activity.RESULT_OK) {
             if (requestCode == REQUEST_CODE) {
-                context?.let { Glide.with(it).load(data.data).into(binding.userImage) }
-                saveUserImage(data.data)
+                saveUserImage(data?.data)
             }
             if (requestCode == IMAGE_CAPTURE_CODE) {
-                val bitmap = data.extras?.get("data") as Bitmap
-                binding.userImage.setImageBitmap(bitmap)
-                getImageUri(context,bitmap)
-
+                saveUserImage(photoUri)
             }
         }
-    }
-
-    /**
-     * Get URI from image bitmap capture by camera.
-     */
-    private fun getImageUri(context: Context?, inImage: Bitmap) {
-        val bytes = ByteArrayOutputStream()
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
-        val contextWrapper=  ContextWrapper(context?.applicationContext )
-        val directory = contextWrapper.filesDir
-        val destination=  File( directory,"user_image.bmp" )
-        inImage.compress( Bitmap.CompressFormat.JPEG, 100, bytes )
-        val outputStream : FileOutputStream
-        try {
-            outputStream = FileOutputStream( destination )
-            outputStream.write( bytes.toByteArray() )
-            outputStream.close()
-        } catch (e: IOException) {
-            Toast.makeText( context,e.message,Toast.LENGTH_SHORT ).show()
-        }
-        saveUserImage(Uri.fromFile(destination))
     }
 
     /**
      * Method to save user image by calling [uploadImageToFirebase]
      */
     private fun saveUserImage(data: Uri?) {
+        context?.let { Glide.with(it).load(data).into(binding.userImage) }
         binding.progressProfileImage.visibility = View.VISIBLE
         uploadImageToFirebase(data, userData) {
             binding.progressProfileImage.visibility = View.INVISIBLE
@@ -202,7 +200,7 @@ class ProfileFragment : Fragment() {
 
     companion object {
         private const val REQUEST_CODE = 200
-        var firebaseResponseMessage : String? = null
+        var firebaseResponseMessage: String? = null
         private const val IMAGE_CAPTURE_CODE = 100
     }
 
