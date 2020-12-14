@@ -45,7 +45,7 @@ class LoginFragment : Fragment() {
         clickableText(forgotTextView,forgotTextView.length()-13,forgotTextView.length()-9, ForgotPasswordFragment())
 
         val registerTextView = inflatedView.findViewById<TextView>(R.id.register_redirect)
-        clickableText(registerTextView,registerTextView.length()-4,registerTextView.length(), RegisterFragment())
+        clickableText(registerTextView,registerTextView.length()-4,registerTextView.length(), null)
 
         val progressBar : ProgressBar = inflatedView.findViewById(R.id.progressBar)
         progressBar.visibility = View.INVISIBLE
@@ -70,16 +70,21 @@ class LoginFragment : Fragment() {
     /**
      * Method to set the [TextView] as clickable span and replace the fragment on click.
      */
-    private fun clickableText(view: TextView?,start :Int,end:Int,fragment: Fragment) {
+    private fun clickableText(view: TextView?,start :Int,end:Int,fragment: Fragment?) {
 
         val spannableTextView = SpannableString(view?.text.toString())
         val clickableSpanTextView: ClickableSpan = object : ClickableSpan() {
             override fun onClick(widget: View) {
-                replaceFragment(
-                    fragment,
-                    R.id.fragment_container,
-                    fragmentManager
-                )
+                if (fragment != null) {
+                    replaceFragment(
+                        fragment,
+                        R.id.fragment_container,
+                        fragmentManager
+                    )
+                }
+                else {
+                    fragmentManager?.popBackStack()
+                }
             }
         }
         spannableTextView.setSpan(clickableSpanTextView, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
