@@ -48,11 +48,17 @@ class ProfileOperationsFirebase {
                                 EMAIL_STRING
                             ).value
                         } as String
-                        profileInfo[IMAGE_URL] = getCurrentUser.let {
-                            dataSnapshot.child(it).child(
-                                IMAGE_URL
-                            ).value
-                        } as String
+                        if (getCurrentUser.let {
+                                dataSnapshot.child(it).child(IMAGE_URL).value
+                            } == null) {
+                            profileInfo[IMAGE_URL] = "NONE"
+                        } else {
+                            profileInfo[IMAGE_URL] = getCurrentUser.let {
+                                dataSnapshot.child(it).child(
+                                    IMAGE_URL
+                                ).value
+                            } as String
+                        }
                         firebaseResponseMessage = null
                         data(profileInfo)
                     }
@@ -65,7 +71,11 @@ class ProfileOperationsFirebase {
 
         }
 
-        fun uploadImageToFirebase(file: Uri?, userData: Map<String, String>, message: (String) -> Unit ) {
+        fun uploadImageToFirebase(
+            file: Uri?,
+            userData: Map<String, String>,
+            message: (String) -> Unit
+        ) {
 
             val storageRef =
                 getCurrentUser?.let { mStorageRef.child(it).child("images/$getCurrentUser.jpg") }

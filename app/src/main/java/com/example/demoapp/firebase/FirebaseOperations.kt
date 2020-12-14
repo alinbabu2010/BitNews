@@ -39,7 +39,7 @@ class FirebaseOperations {
          * Method to retrieve the favourite articles of particular user
          */
         fun retrieveDataFromFirebase(favouriteArticles: (MutableSet<Articles>?) -> Unit) {
-            val favourites = firebaseReference.equalTo(getCurrentUser).orderByKey()
+            val favourites = firebaseReference.orderByKey().equalTo(getCurrentUser)
             favourites.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     val t: GenericTypeIndicator<MutableList<Articles>> = object : GenericTypeIndicator<MutableList<Articles>>() {}

@@ -10,7 +10,6 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -73,8 +72,8 @@ class ProfileFragment : Fragment() {
         binding.nameDisplay.setText(data[NAME_STRING])
         binding.usernameDisplay.setText(data[USERNAME_STRING])
         binding.emailDisplay.setText(data[EMAIL_STRING])
+        if (!data[IMAGE_URL].equals("NONE"))
         context?.let { Glide.with(it).load(data[IMAGE_URL]).into(binding.userImage) }
-        Log.i(IMAGE_URL, data[IMAGE_URL].toString())
         if(firebaseResponseMessage?.isNotEmpty() == true) {
             Toast.makeText(context, firebaseResponseMessage, Toast.LENGTH_SHORT).show()
         }
