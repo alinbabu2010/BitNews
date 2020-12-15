@@ -3,12 +3,13 @@ package com.example.demoapp.firebase
 import android.net.Uri
 import com.example.demoapp.fragments.dashboard.ProfileFragment.Companion.firebaseResponseMessage
 import com.example.demoapp.models.Users
-import com.example.demoapp.utils.Const
 import com.example.demoapp.utils.Const.Companion.EMAIL_STRING
 import com.example.demoapp.utils.Const.Companion.IMAGE_URL
 import com.example.demoapp.utils.Const.Companion.NAME_STRING
-import com.example.demoapp.utils.Const.Companion.PROFILE_UPDATE
+import com.example.demoapp.utils.Const.Companion.PROFILE_IMAGE_DELETE
+import com.example.demoapp.utils.Const.Companion.PROFILE_IMAGE_UPDATE
 import com.example.demoapp.utils.Const.Companion.USERNAME_STRING
+import com.example.demoapp.utils.Const.Companion.USERS
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -28,7 +29,7 @@ class ProfileOperationsFirebase {
          */
         fun getDataFromFirebase(data: (Map<String, String>) -> Unit) {
             val getCurrentUser = FirebaseAuth.getInstance().currentUser?.uid
-            val user = FirebaseDatabase.getInstance().getReference(Const.USERS)
+            val user = FirebaseDatabase.getInstance().getReference(USERS)
             val getUser = user.orderByKey().equalTo(getCurrentUser)
             getUser.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -92,10 +93,10 @@ class ProfileOperationsFirebase {
                                     userData[EMAIL_STRING],
                                     uri.toString()
                                 )
-                                FirebaseDatabase.getInstance().getReference(Const.USERS)
+                                FirebaseDatabase.getInstance().getReference(USERS)
                                     .child(getCurrentUser).setValue(user)
                                     .addOnSuccessListener {
-                                        message(PROFILE_UPDATE)
+                                        message(PROFILE_IMAGE_UPDATE)
                                     }
                             }
                         } else {
@@ -103,6 +104,18 @@ class ProfileOperationsFirebase {
                         }
                     }
             }
+        }
+
+        fun removeUserImage(){
+            val getCurrentUser = FirebaseAuth.getInstance().currentUser?.uid
+            val storageRef = mStorageRef.child(getCurrentUser.toString()).child("images/$getCurrentUser.jpg")
+            storageRef.delete().addOnSuccessListener {
+                FirebaseDatabase.getInstance().getReference(USERS).child(getCurrentUser.toString()).child("userImageUrl").removeValue()
+                    .addOnSuccessListener {
+                        firebaseResponseMessage = PROFILE_IMAGE_DELETE
+                    }
+            }
+
         }
     }
 }

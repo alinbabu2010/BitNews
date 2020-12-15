@@ -20,10 +20,12 @@ import com.example.demoapp.R
 import com.example.demoapp.activities.MapsActivity
 import com.example.demoapp.databinding.FragmentProfileBinding
 import com.example.demoapp.firebase.ProfileOperationsFirebase.Companion.getDataFromFirebase
+import com.example.demoapp.firebase.ProfileOperationsFirebase.Companion.removeUserImage
 import com.example.demoapp.firebase.ProfileOperationsFirebase.Companion.uploadImageToFirebase
 import com.example.demoapp.utils.Const.Companion.EMAIL_STRING
 import com.example.demoapp.utils.Const.Companion.IMAGE_URL
 import com.example.demoapp.utils.Const.Companion.NAME_STRING
+import com.example.demoapp.utils.Const.Companion.PROFILE_IMAGE_DELETE
 import com.example.demoapp.utils.Const.Companion.USERNAME_STRING
 import com.example.demoapp.utils.Utils.Companion.checkNetworkConnection
 import com.example.demoapp.utils.Utils.Companion.requestPermissionRationale
@@ -102,7 +104,19 @@ class ProfileFragment : Fragment() {
 
         bottomSheetView.findViewById<ImageButton>(R.id.button_photo_remove).setOnClickListener {
             binding.userImage.setImageResource(R.drawable.avatar_anonymous_48dp)
+            callRemoveUserImage()
+            bottomSheet?.hide()
         }
+    }
+
+    /**
+     * Method to remove user image  by calling [removeUserImage]
+     */
+    private fun callRemoveUserImage(){
+        binding.progressProfileImage.visibility = View.VISIBLE
+        removeUserImage()
+        binding.progressProfileImage.visibility = View.INVISIBLE
+        Toast.makeText(context, PROFILE_IMAGE_DELETE, Toast.LENGTH_SHORT).show()
     }
 
     /**
