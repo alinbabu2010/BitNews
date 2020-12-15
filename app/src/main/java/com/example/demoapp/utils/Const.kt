@@ -21,6 +21,7 @@ class Const {
         const val NETWORK_FAILURE = "Network failure"
         const val FAVOURITES = "Favourites"
         const val NO_INTERNET = "No Internet Connection"
-        const val PROFILE_UPDATE = "Profile picture updated"
+        const val PROFILE_IMAGE_UPDATE = "Profile picture updated"
+        const val PROFILE_IMAGE_DELETE = "Profile picture removed"
     }
 }
