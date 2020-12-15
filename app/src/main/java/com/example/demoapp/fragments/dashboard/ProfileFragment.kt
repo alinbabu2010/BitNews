@@ -13,11 +13,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.Toast
-import androidx.core.content.ContextCompat
+import androidx.core.content.PermissionChecker.checkSelfPermission
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.demoapp.R
-import com.example.demoapp.activities.ImageDetailActivity
 import com.example.demoapp.activities.MapsActivity
 import com.example.demoapp.databinding.FragmentProfileBinding
 import com.example.demoapp.firebase.ProfileOperationsFirebase.Companion.getDataFromFirebase
@@ -27,8 +26,8 @@ import com.example.demoapp.utils.Const.Companion.IMAGE_URL
 import com.example.demoapp.utils.Const.Companion.NAME_STRING
 import com.example.demoapp.utils.Const.Companion.USERNAME_STRING
 import com.example.demoapp.utils.Utils.Companion.checkNetworkConnection
+import com.example.demoapp.utils.Utils.Companion.requestPermissionRationale
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import java.io.OutputStream
 
 
 /**
@@ -60,7 +59,7 @@ class ProfileFragment : Fragment() {
         }
 
         binding.userLocation.setOnClickListener {
-            startActivity(Intent(context,MapsActivity::class.java))
+            startActivity(Intent(context, MapsActivity::class.java))
         }
         return binding.root
     }
@@ -110,18 +109,15 @@ class ProfileFragment : Fragment() {
      * Method to check storage permissions
      */
     private fun checkAppPermissions() {
+
         val cameraPermission = context?.let {
-            ContextCompat.checkSelfPermission(
-                it,
-                Manifest.permission.CAMERA
-            )
+            checkSelfPermission(it, Manifest.permission.CAMERA)
         }
+
         val storagePermission = context?.let {
-            ContextCompat.checkSelfPermission(
-                it,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            )
+            checkSelfPermission(it, Manifest.permission.WRITE_EXTERNAL_STORAGE)
         }
+
         if (cameraPermission != PackageManager.PERMISSION_GRANTED && storagePermission != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(
                 arrayOf(
@@ -138,7 +134,6 @@ class ProfileFragment : Fragment() {
      * Method to create a image file in external storage for saving user profile image
      */
     private fun createImageFile(): Uri? {
-        var fileOutputStream: OutputStream?
         var imageUri: Uri? = null
         context?.contentResolver?.also { resolver ->
             val contentValues = ContentValues().apply {
@@ -146,10 +141,7 @@ class ProfileFragment : Fragment() {
             }
             println(MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
-            fileOutputStream = imageUri?.let { resolver.openOutputStream(it) }
-            fileOutputStream?.close()
         }
-
         return imageUri
     }
 
@@ -168,11 +160,16 @@ class ProfileFragment : Fragment() {
         permissions: Array<String>,
         grantResults: IntArray
     ) {
-        if (requestCode == ImageDetailActivity.PERMISSION_REQUEST_CODE) {
-            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+        if (requestCode == REQUEST_CODE) {
+            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED)) {
                 takePictureIntent()
             } else {
-                Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show()
+                if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) || shouldShowRequestPermissionRationale(
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    )
+                ) {
+                    requestPermissionRationale(context, activity?.parent, "camera and storage")
+                }
             }
         } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -204,6 +201,7 @@ class ProfileFragment : Fragment() {
     }
 
     companion object {
+        private const val TAG = "ProfileFragment"
         private const val REQUEST_CODE = 200
         var firebaseResponseMessage: String? = null
         private const val IMAGE_CAPTURE_CODE = 100

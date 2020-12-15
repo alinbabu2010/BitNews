@@ -6,7 +6,9 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -29,7 +31,7 @@ class Utils {
 
     companion object {
 
-        var firebaseError : String? = null
+        var firebaseError: String? = null
 
         /**
          * Function to add a new fragment to the layout
@@ -95,13 +97,13 @@ class Utils {
         /**
          * Method that check network connection before calling the request function
          */
-        fun checkNetworkConnection(context: Context?,function: () -> Unit) {
+        fun checkNetworkConnection(context: Context?, function: () -> Unit) {
             if (isNetworkConnected(context)) {
                 function()
             } else {
                 Toast.makeText(
                     context,
-                     NO_INTERNET,
+                    NO_INTERNET,
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -128,6 +130,32 @@ class Utils {
             val intent = Intent(context, ImageDetailActivity::class.java)
             intent.putExtra(ARTICLE, article)
             ContextCompat.startActivity(context, intent, Bundle.EMPTY)
+        }
+
+        /**
+         * Method to show dialog about permission request
+         */
+        fun requestPermissionRationale(
+            context: Context?,
+            activity: Activity?,
+            requestingType: String
+        ) {
+            val builder = context?.let { AlertDialog.Builder(it, R.style.DialogBoxTheme) }
+            builder?.setTitle("Permission Needed")
+            builder?.setMessage("Please enable $requestingType permission in app settings")
+            builder?.setIcon(android.R.drawable.ic_dialog_alert)
+            builder?.setPositiveButton("OK") { _, _ ->
+                val intent = Intent(
+                    Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                    Uri.parse("package:${activity?.packageName}")
+                )
+                intent.addCategory(Intent.CATEGORY_DEFAULT)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                activity?.startActivity(intent)
+            }
+            val alertDialog: AlertDialog? = builder?.create()
+            alertDialog?.setCancelable(false)
+            alertDialog?.show()
         }
     }
 }

@@ -8,6 +8,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.demoapp.R
+import com.example.demoapp.utils.Utils.Companion.requestPermissionRationale
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -138,11 +139,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         locationPermissionGranted = false
         when (requestCode) {
             PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION -> {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.isNotEmpty() &&
-                    grantResults[0] == PackageManager.PERMISSION_GRANTED
-                ) {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     locationPermissionGranted = true
+                } else {
+                    if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
+                        requestPermissionRationale(applicationContext, this, "location")
+                    }
                 }
             }
         }
