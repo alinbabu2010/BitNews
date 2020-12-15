@@ -48,4 +48,5 @@
     <string name="camera_image" translatable="false">camera_image</string>
     <string name="gallery_icon" translatable="false">gallery_icon</string>
     <string name="delete_icon" translatable="false">delete_icon</string>
+    <string name="title_activity_maps" translatable="false">Map</string>
 </resources>

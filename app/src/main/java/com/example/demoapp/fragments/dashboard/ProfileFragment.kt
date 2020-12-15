@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.demoapp.R
 import com.example.demoapp.activities.ImageDetailActivity
+import com.example.demoapp.activities.MapsActivity
 import com.example.demoapp.databinding.FragmentProfileBinding
 import com.example.demoapp.firebase.ProfileOperationsFirebase.Companion.getDataFromFirebase
 import com.example.demoapp.firebase.ProfileOperationsFirebase.Companion.uploadImageToFirebase
@@ -56,6 +57,10 @@ class ProfileFragment : Fragment() {
 
         binding.changeUserImage.setOnClickListener {
             setBottomSheetDialog()
+        }
+
+        binding.userLocation.setOnClickListener {
+            startActivity(Intent(context,MapsActivity::class.java))
         }
         return binding.root
     }
@@ -137,7 +142,7 @@ class ProfileFragment : Fragment() {
         var imageUri: Uri? = null
         context?.contentResolver?.also { resolver ->
             val contentValues = ContentValues().apply {
-                put(MediaStore.MediaColumns.MIME_TYPE, "image/jpg")
+                put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
             }
             println(MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
