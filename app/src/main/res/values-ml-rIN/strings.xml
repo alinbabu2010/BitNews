@@ -41,4 +41,11 @@
     <string name="remove_photo">ഫോട്ടോ നീക്കംചെയ്യുക</string>
     <string name="camera">ക്യാമറ</string>
     <string name="gallery">ഗാലറി</string>
+    <string name="storage_option">സംഭരണ ​​ഓപ്‌ഷനുകളിലൊന്ന് തിരഞ്ഞെടുത്ത് ശരി ക്ലിക്കുചെയ്യുക</string>
+    <string name="permission_denied">അനുമതി നിഷേധിച്ചു</string>
+    <string name="download_article_image">ലേഖന ചിത്രം ഡൗൺലോഡുചെയ്യുന്നു</string>
+    <string name="download_image_success">ചിത്രം വിജയകരമായി ഡൗൺലോഡുചെയ്‌തു</string>
+    <string name="ok_string">ശരി</string>
+    <string name="location_permission">അപ്ലിക്കേഷൻ ക്രമീകരണങ്ങളിൽ ലൊക്കേഷൻ അനുമതി പ്രാപ്തമാക്കുക</string>
+    <string name="storage_camera_permission">അപ്ലിക്കേഷൻ ക്രമീകരണങ്ങളിൽ സംഭരണവും ക്യാമറ അനുമതിയും പ്രാപ്തമാക്കുക</string>
 </resources>

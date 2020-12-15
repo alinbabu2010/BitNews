@@ -23,6 +23,7 @@ import com.bumptech.glide.Glide
 import com.example.demoapp.R
 import com.example.demoapp.models.Articles
 import com.example.demoapp.utils.Const.Companion.ARTICLE
+import com.example.demoapp.utils.Utils.Companion.requestPermissionRationale
 import com.example.demoapp.utils.Utils.Companion.showAlert
 import java.io.File
 
@@ -35,7 +36,8 @@ class ImageDetailActivity : AppCompatActivity() {
     private var url =  String()
     private var directory : File? = null
     private var downloadId : Long = 0
-    private var fileName =  String()
+    private var fileName =  "news_image"
+    private val storageOptions  = arrayOf("Internal", "External", "Private")
 
     /**
      * This method creates the options menu
@@ -56,7 +58,7 @@ class ImageDetailActivity : AppCompatActivity() {
         progressBar = findViewById(R.id.progressBar_download)
         progressBar?.visibility = View.INVISIBLE
         url = article?.imageUrl.toString()
-        fileName = article?.source?.name ?: "news_image"
+        fileName = article?.source?.name.toString()
         Glide.with(applicationContext).load(url).override(800).into(newsImage)
         findViewById<Button>(R.id.button_download).setOnClickListener {
             showStorageOptions()
@@ -73,7 +75,7 @@ class ImageDetailActivity : AppCompatActivity() {
                     cursor.moveToFirst()
                     if (cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)) == DownloadManager.STATUS_SUCCESSFUL) {
                         progressBar?.visibility = View.INVISIBLE
-                        Toast.makeText(context, "Image downloaded successfully", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, R.string.download_image_success, Toast.LENGTH_SHORT).show()
                     }
                     cursor.close()
                 }
@@ -89,14 +91,13 @@ class ImageDetailActivity : AppCompatActivity() {
      */
     private fun showStorageOptions() {
         val builder = AlertDialog.Builder(this, R.style.DialogBoxTheme)
-        builder.setTitle("Please select one of the storage option and click OK")
+        builder.setTitle(R.string.storage_option)
         builder.setIcon(android.R.drawable.ic_menu_save)
-        val storageOptions  = arrayOf("Internal", "External", "Private")
         var storageType = String()
         builder.setSingleChoiceItems(storageOptions, -1) { _: DialogInterface, index: Int ->
             storageType = storageOptions[index]
         }
-        builder.setPositiveButton("OK"){ _: DialogInterface, _: Int ->
+        builder.setPositiveButton(R.string.ok_string){ _: DialogInterface, _: Int ->
             progressBar?.visibility = View.VISIBLE
             setDirectory(storageType)
         }
@@ -110,15 +111,15 @@ class ImageDetailActivity : AppCompatActivity() {
      */
     private fun setDirectory(storageType: String) {
         when (storageType) {
-            "Internal" -> {
+            storageOptions[0] -> {
                 directory = filesDir
                 downloadImage(url)
             }
-            "External" -> {
+            storageOptions[1] -> {
                 directory = File(Environment.DIRECTORY_PICTURES)
                 checkAppPermissions()
             }
-            "Private" -> {
+            storageOptions[2] -> {
                 directory = cacheDir
                 downloadImage(url)
             }
@@ -154,7 +155,8 @@ class ImageDetailActivity : AppCompatActivity() {
             if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                 downloadImage(url)
             } else {
-                Toast.makeText(baseContext, "Permission Denied", Toast.LENGTH_SHORT).show()
+                Toast.makeText(baseContext, R.string.permission_denied, Toast.LENGTH_SHORT).show()
+                requestPermissionRationale(applicationContext,this, R.string.storage_camera_permission)
             }
         }
         else {
@@ -172,7 +174,7 @@ class ImageDetailActivity : AppCompatActivity() {
             setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
             setAllowedOverRoaming(false)
             setTitle(url?.substring(url.lastIndexOf("/") + 1))
-            setDescription("Downloading article image")
+            setDescription(getString(R.string.download_article_image))
             setMimeType("*/*")
             setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
             setDestinationInExternalFilesDir(applicationContext, directory.toString(),"$fileName.jpg")

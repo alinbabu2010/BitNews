@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.example.demoapp.R
@@ -95,7 +96,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     setUpMap()
                 } else {
-                    requestPermissionRationale(applicationContext, this, "location")
+                    Toast.makeText(baseContext, R.string.permission_denied, Toast.LENGTH_SHORT).show()
+                    requestPermissionRationale(applicationContext, this,R.string.location_permission)
                 }
             }
         }

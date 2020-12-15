@@ -41,4 +41,11 @@
     <string name="remove_photo">إزالة الصورة</string>
     <string name="camera">الة تصوير</string>
     <string name="gallery">صالة عرض</string>
+    <string name="storage_option">الرجاء تحديد أحد خيارات التخزين والنقر فوق \"موافق\"</string>
+    <string name="permission_denied">طلب الاذن مرفوض</string>
+    <string name="download_article_image">تحميل صورة المادة</string>
+    <string name="download_image_success">تم تنزيل الصورة بنجاح</string>
+    <string name="ok_string">حسنا</string>
+    <string name="location_permission">يرجى تمكين إذن الموقع في إعدادات التطبيق</string>
+    <string name="storage_camera_permission">يرجى تمكين التخزين وأذونات الكاميرا في إعدادات التطبيق</string>
 </resources>

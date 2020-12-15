@@ -168,7 +168,8 @@ class ProfileFragment : Fragment() {
                         Manifest.permission.WRITE_EXTERNAL_STORAGE
                     )
                 ) {
-                    requestPermissionRationale(context, activity?.parent, "camera and storage")
+                    Toast.makeText(context, R.string.permission_denied, Toast.LENGTH_SHORT).show()
+                    requestPermissionRationale(context, activity?.parent,R.string.storage_camera_permission)
                 }
             }
         } else {

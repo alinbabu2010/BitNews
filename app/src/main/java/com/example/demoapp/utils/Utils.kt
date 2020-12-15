@@ -138,11 +138,11 @@ class Utils {
         fun requestPermissionRationale(
             context: Context?,
             activity: Activity?,
-            requestingType: String
+            requestingMessageId: Int
         ) {
             val builder = context?.let { AlertDialog.Builder(it, R.style.DialogBoxTheme) }
             builder?.setTitle("Permission Needed")
-            builder?.setMessage("Please enable $requestingType permission in app settings")
+            builder?.setMessage(requestingMessageId)
             builder?.setIcon(android.R.drawable.ic_dialog_alert)
             builder?.setPositiveButton("OK") { _, _ ->
                 val intent = Intent(
