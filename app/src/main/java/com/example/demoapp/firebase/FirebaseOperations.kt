@@ -29,6 +29,7 @@ class FirebaseOperations {
          * Method to retrieve the favourite articles of particular user
          */
         fun retrieveDataFromFirebase(favouriteArticles: (MutableSet<Articles>?) -> Unit) {
+            firebaseError = null
             val getCurrentUser = FirebaseAuth.getInstance().currentUser?.uid
             val user = FirebaseDatabase.getInstance().getReference(FAVOURITES)
             val favourites = user.orderByKey().equalTo(getCurrentUser.toString())
@@ -39,7 +40,6 @@ class FirebaseOperations {
                     for (snapshot in dataSnapshot.children){
                         articles = snapshot.getValue(t)?.toMutableSet()
                     }
-                    firebaseError = null
                     favouriteArticles(articles)
                 }
 
