@@ -17,10 +17,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 
 /**
  * An activity that displays a map showing the place at the device's current location.
@@ -67,6 +64,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         map.mapType = GoogleMap.MAP_TYPE_TERRAIN
         map.setOnMarkerClickListener(this)
         setUpMap()
+        setMapLongClick(map)
     }
 
     override fun onMarkerClick(p0: Marker?) = false
@@ -79,7 +77,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         markerOptions.icon(
             BitmapDescriptorFactory.fromBitmap(
             BitmapFactory.decodeResource(resources, R.drawable.ic_user_location)))
+            .draggable(true)
         map.addMarker(markerOptions)
+    }
+
+    /**
+     * Method to add marker on clicking map
+     */
+    private fun setMapLongClick(map: GoogleMap) {
+        map.setOnMapLongClickListener { latLng ->
+            placeMarkerOnMap(latLng)
+        }
     }
 
     /**
