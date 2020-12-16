@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import com.example.demoapp.R
 import com.example.demoapp.utils.Utils.Companion.requestPermissionRationale
 import com.google.android.gms.common.api.ResolvableApiException
@@ -91,15 +90,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         permissions: Array<String>,
         grantResults: IntArray
     ) {
-        when (requestCode) {
-            LOCATION_PERMISSION_REQUEST_CODE -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    setUpMap()
-                } else {
-                    Toast.makeText(baseContext, R.string.permission_denied, Toast.LENGTH_SHORT).show()
-                    requestPermissionRationale(applicationContext, this,R.string.location_permission)
-                }
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                setUpMap()
+            } else {
+                Toast.makeText(baseContext, R.string.permission_denied, Toast.LENGTH_SHORT).show()
+                requestPermissionRationale(applicationContext, this,R.string.location_permission)
             }
+        }
+        else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         }
     }
 
@@ -109,7 +109,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
      * Else it will request location permissions
      */
     private fun setUpMap() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        val permission = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+        if (permission != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
         } else {
             map.isMyLocationEnabled = true

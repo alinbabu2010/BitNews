@@ -61,7 +61,12 @@ class ProfileFragment : Fragment() {
         }
 
         binding.userLocation.setOnClickListener {
-            startActivity(Intent(context, MapsActivity::class.java))
+            val permission = context?.let { it1 -> checkSelfPermission(it1,Manifest.permission.ACCESS_FINE_LOCATION) }
+            if (permission != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
+            } else {
+                startActivity(Intent(context, MapsActivity::class.java))
+            }
         }
         return binding.root
     }
@@ -186,6 +191,12 @@ class ProfileFragment : Fragment() {
                     requestPermissionRationale(context, activity?.parent,R.string.storage_camera_permission)
                 }
             }
+            if((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)){
+                startActivity(Intent(context, MapsActivity::class.java))
+            } else {
+                Toast.makeText(context, R.string.permission_denied, Toast.LENGTH_SHORT).show()
+                requestPermissionRationale(context,activity,R.string.location_permission)
+            }
         } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         }
@@ -220,6 +231,7 @@ class ProfileFragment : Fragment() {
         private const val REQUEST_CODE = 200
         var firebaseResponseMessage: String? = null
         private const val IMAGE_CAPTURE_CODE = 100
+        private const val LOCATION_PERMISSION_REQUEST_CODE = 300
     }
 
 
