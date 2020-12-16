@@ -22,6 +22,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "String","BASE_URL","\"http://newsapi.org/v2/\""
         buildConfigField "String","API_KEY" , "\"19b71eb781b0404b93feafc1badf4324\""
+        manifestPlaceholders = [google_maps_key:"AIzaSyBCG-QlN584MpiWMrZMe8CpIfl7ml4L5-g"]
     }
 
     buildTypes {
@@ -51,6 +52,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:19.5.1'
     implementation 'com.google.firebase:firebase-storage:19.2.0'
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'com.google.firebase:firebase-auth:20.0.1'
     testImplementation 'junit:junit:4.13.1'
     implementation 'android.arch.lifecycle:extensions:1.1.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
