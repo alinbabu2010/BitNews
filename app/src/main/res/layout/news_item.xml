@@ -84,6 +84,7 @@
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/roboto_condensed_regular"
                 android:lineSpacingMultiplier="0"
+                android:singleLine="true"
                 android:textColor="@color/secondary_dark" />
         </LinearLayout>
 

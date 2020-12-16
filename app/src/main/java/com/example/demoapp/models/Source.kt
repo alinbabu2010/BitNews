@@ -9,6 +9,6 @@ import kotlinx.parcelize.Parcelize
  */
 @Parcelize
 data class Source(
-    @SerializedName("sourceId") var id: String? = null,
-    @SerializedName("sourceName") var name: String? = null
+    @SerializedName("id") val id: String? = "",
+    @SerializedName("name") val name: String? = ""
 ) : Parcelable

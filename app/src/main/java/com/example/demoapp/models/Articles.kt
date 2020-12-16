@@ -9,12 +9,12 @@ import kotlinx.parcelize.Parcelize
  */
 @Parcelize
 data class Articles(
-    @SerializedName("Source") var source: Source? = null,
-    @SerializedName("author") var author: String? = null,
-    @SerializedName("title") var title: String? = null,
-    @SerializedName("description") var description: String? = null,
-    @SerializedName("url") var url: String? = null,
-    @SerializedName("urlToImage") var imageUrl: String? = null,
-    @SerializedName("publishedAt") var publishedDate: String? = null,
-    @SerializedName("content") var content: String? = null
+    @SerializedName("source") val source: Source? = Source(),
+    @SerializedName("author") val author: String? = "",
+    @SerializedName("title") val title: String? = "",
+    @SerializedName("description") val description: String? = "",
+    @SerializedName("url") val url: String? = "",
+    @SerializedName("urlToImage") val imageUrl: String? = "",
+    @SerializedName("publishedAt") val publishedDate: String? = "",
+    @SerializedName("content") val content: String? = ""
 ) : Parcelable

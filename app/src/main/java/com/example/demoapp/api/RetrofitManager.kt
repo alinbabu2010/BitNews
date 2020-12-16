@@ -21,11 +21,15 @@ object RetrofitManager {
     // To provide retrofit service using RetrofitAPI interface
     private val getAPIService: RetrofitAPI = getRetrofit.create(RetrofitAPI::class.java)
 
+    private const val sortBy = "popularity"
+    private const val keyWord = "bitcoin"
+    private const val numberOfResult = 30
+
     /**
      * Method to call retrofit service using [getAPIService] and get APIResponse from [loadData]
      */
     fun getRetrofitService( resource: (APIResponse<News>) -> Unit ){
-        val call = getAPIService.getNews("bitcoin",BuildConfig.API_KEY)
+        val call = getAPIService.getNews(BuildConfig.API_KEY, keyWord,sortBy,numberOfResult)
         loadData(call){
             resource(it)
         }
