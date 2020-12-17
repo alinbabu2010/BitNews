@@ -121,12 +121,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         if (permission != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
         } else {
-            map.isMyLocationEnabled = true
             fusedLocationClient.lastLocation.addOnSuccessListener(this) { location ->
-                // Got last known location. In some rare situations this can be null.
-                if (location != null) {
-                    lastLocation = location
-                    val currentLatLng = LatLng(location.latitude, location.longitude)
+                location?.let {
+                    lastLocation = it
+                    val currentLatLng = LatLng(it.latitude, it.longitude)
                     placeMarkerOnMap(currentLatLng)
                     map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 15f))
                 }

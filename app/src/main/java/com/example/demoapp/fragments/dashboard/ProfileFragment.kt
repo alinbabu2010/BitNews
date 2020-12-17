@@ -63,7 +63,7 @@ class ProfileFragment : Fragment() {
         binding.userLocation.setOnClickListener {
             val permission = context?.let { it1 -> checkSelfPermission(it1,Manifest.permission.ACCESS_FINE_LOCATION) }
             if (permission != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
+                requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_REQUEST_CODE)
             } else {
                 startActivity(Intent(context, MapsActivity::class.java))
             }
@@ -103,7 +103,7 @@ class ProfileFragment : Fragment() {
         bottomSheetView.findViewById<ImageButton>(R.id.button_gallery).setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"
-            startActivityForResult(intent, REQUEST_CODE)
+            startActivityForResult(intent, STORAGE_REQUEST_CODE)
             bottomSheet?.hide()
         }
 
@@ -137,15 +137,15 @@ class ProfileFragment : Fragment() {
             checkSelfPermission(it, Manifest.permission.WRITE_EXTERNAL_STORAGE)
         }
 
-        if (cameraPermission != PackageManager.PERMISSION_GRANTED && storagePermission != PackageManager.PERMISSION_GRANTED) {
+        if (cameraPermission == PackageManager.PERMISSION_GRANTED && storagePermission == PackageManager.PERMISSION_GRANTED) {
+            takePictureIntent()
+        } else {
             requestPermissions(
                 arrayOf(
                     Manifest.permission.CAMERA,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ), REQUEST_CODE
+                ), STORAGE_REQUEST_CODE
             )
-        } else {
-            takePictureIntent()
         }
     }
 
@@ -179,7 +179,7 @@ class ProfileFragment : Fragment() {
         permissions: Array<String>,
         grantResults: IntArray
     ) {
-        if (requestCode == REQUEST_CODE) {
+        if (requestCode == STORAGE_REQUEST_CODE) {
             if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED)) {
                 takePictureIntent()
             } else {
@@ -188,14 +188,20 @@ class ProfileFragment : Fragment() {
                     )
                 ) {
                     Toast.makeText(context, R.string.permission_denied, Toast.LENGTH_SHORT).show()
-                    requestPermissionRationale(context, activity?.parent,R.string.storage_camera_permission)
+                    requestPermissionRationale(
+                        context,
+                        activity?.parent,
+                        R.string.storage_camera_permission
+                    )
                 }
             }
-            if((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)){
+        }
+        else if (requestCode == LOCATION_REQUEST_CODE) {
+            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                 startActivity(Intent(context, MapsActivity::class.java))
             } else {
                 Toast.makeText(context, R.string.permission_denied, Toast.LENGTH_SHORT).show()
-                requestPermissionRationale(context,activity,R.string.location_permission)
+                requestPermissionRationale(context, activity, R.string.location_permission)
             }
         } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -205,7 +211,7 @@ class ProfileFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == REQUEST_CODE) {
+            if (requestCode == STORAGE_REQUEST_CODE) {
                 saveUserImage(data?.data)
             }
             if (requestCode == IMAGE_CAPTURE_CODE) {
@@ -227,11 +233,10 @@ class ProfileFragment : Fragment() {
     }
 
     companion object {
-        private const val TAG = "ProfileFragment"
-        private const val REQUEST_CODE = 200
+        private const val STORAGE_REQUEST_CODE = 200
         var firebaseResponseMessage: String? = null
         private const val IMAGE_CAPTURE_CODE = 100
-        private const val LOCATION_PERMISSION_REQUEST_CODE = 300
+        private const val LOCATION_REQUEST_CODE = 300
     }
 
 
