@@ -123,8 +123,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             }
             if (addressList?.isNullOrEmpty() == true){
                 Toast.makeText(this, "Couldn't find the place", Toast.LENGTH_SHORT).show()
-            } else {
-                val address = addressList[0]
+            } 
+            addressList.let {
+                val address = it[0]
                 val latLng = LatLng(address.latitude, address.longitude)
                 map.animateCamera(CameraUpdateFactory.newLatLng(latLng))
             }
