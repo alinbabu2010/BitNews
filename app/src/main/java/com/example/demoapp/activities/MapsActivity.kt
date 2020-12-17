@@ -4,9 +4,13 @@ import android.Manifest
 import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
+import android.location.Address
+import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.demoapp.R
@@ -18,6 +22,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
+import java.io.IOException
 
 /**
  * An activity that displays a map showing the place at the device's current location.
@@ -56,13 +61,32 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         createLocationRequest()
     }
 
-
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         map.uiSettings.isZoomControlsEnabled = true
+        map.uiSettings.isMapToolbarEnabled = false
         map.mapType = GoogleMap.MAP_TYPE_TERRAIN
         map.setOnMarkerClickListener(this)
+        map.setInfoWindowAdapter(object : GoogleMap.InfoWindowAdapter {
+
+            override fun getInfoWindow(marker: Marker?): View? {
+                return null
+            }
+
+            override fun getInfoContents(marker: Marker?): View? {
+                var view: View? = null
+                try {
+                    view = View.inflate(this@MapsActivity,R.layout.map_info_window,null)
+                    val addressTxt: TextView = view.findViewById(R.id.addressTxt)
+                    addressTxt.text = marker?.title
+                } catch (e: Exception) {
+                    Log.i(TAG, "getInfoContents: ${e.message}")
+                }
+                return view
+            }
+
+        })
         setUpMap()
         setMapLongClick(map)
     }
@@ -70,15 +94,33 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     override fun onMarkerClick(p0: Marker?) = false
 
     /**
+     * Method to get place name from location coordinates
+     */
+    private fun getAddress(latLng: LatLng): String {
+        val geocoder = Geocoder(this)
+        val addresses: List<Address>?
+        var addressText = ""
+        try {
+            addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
+            addressText = addresses[0].getAddressLine(0)
+        } catch (e: IOException) {
+            Log.e(TAG, e.message.toString())
+        }
+        return addressText
+    }
+
+
+    /**
      * Method to place the map marker and defining the marker settings
      */
     private fun placeMarkerOnMap(location: LatLng) {
-        val markerOptions = MarkerOptions().position(location)
-        markerOptions.icon(
-            BitmapDescriptorFactory.fromBitmap(
-            BitmapFactory.decodeResource(resources, R.drawable.ic_user_location)))
+        val address = getAddress(location)
+        map.addMarker(MarkerOptions()
+            .position(location)
+            .title(address)
+            .icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(resources, R.drawable.ic_user_location)))
             .draggable(true)
-        map.addMarker(markerOptions)
+        )
     }
 
     /**
@@ -183,5 +225,4 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             }
         }
     }
-
 }
