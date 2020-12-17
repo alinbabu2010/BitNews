@@ -30,36 +30,18 @@ class ProfileOperationsFirebase {
         fun getDataFromFirebase(data: (Map<String, String>) -> Unit) {
             val getCurrentUser = FirebaseAuth.getInstance().currentUser?.uid
             val user = FirebaseDatabase.getInstance().getReference(USERS)
-            val getUser = user.orderByKey().equalTo(getCurrentUser)
+            val getUser = user.child(getCurrentUser.toString())
             getUser.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     if (dataSnapshot.exists()) {
                         val profileInfo = mutableMapOf<String, String>()
-                        profileInfo[NAME_STRING] = getCurrentUser?.let {
-                            dataSnapshot.child(it).child(
-                                NAME_STRING
-                            ).value
-                        } as String
-                        profileInfo[USERNAME_STRING] = getCurrentUser.let {
-                            dataSnapshot.child(it).child(
-                                USERNAME_STRING
-                            ).value
-                        } as String
-                        profileInfo[EMAIL_STRING] = getCurrentUser.let {
-                            dataSnapshot.child(it).child(
-                                EMAIL_STRING
-                            ).value
-                        } as String
-                        if (getCurrentUser.let {
-                                dataSnapshot.child(it).child(IMAGE_URL).value
-                            } == null) {
+                        profileInfo[NAME_STRING] = dataSnapshot.child(NAME_STRING).value as String
+                        profileInfo[USERNAME_STRING] = dataSnapshot.child(USERNAME_STRING).value as String
+                        profileInfo[EMAIL_STRING] = dataSnapshot.child(EMAIL_STRING).value as String
+                        if (dataSnapshot.child(IMAGE_URL).value == null) {
                             profileInfo[IMAGE_URL] = "NONE"
                         } else {
-                            profileInfo[IMAGE_URL] = getCurrentUser.let {
-                                dataSnapshot.child(it).child(
-                                    IMAGE_URL
-                                ).value
-                            } as String
+                            profileInfo[IMAGE_URL] = dataSnapshot.child(IMAGE_URL).value as String
                         }
                         firebaseResponseMessage = null
                         data(profileInfo)

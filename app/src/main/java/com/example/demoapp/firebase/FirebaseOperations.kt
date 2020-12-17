@@ -25,6 +25,7 @@ class FirebaseOperations {
             }
         }
 
+
         /**
          * Method to retrieve the favourite articles of particular user
          */
@@ -32,14 +33,12 @@ class FirebaseOperations {
             firebaseError = null
             val getCurrentUser = FirebaseAuth.getInstance().currentUser?.uid
             val user = FirebaseDatabase.getInstance().getReference(FAVOURITES)
-            val favourites = user.orderByKey().equalTo(getCurrentUser.toString())
+            val favourites = user.child(getCurrentUser.toString()).orderByKey()
             favourites.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    val t: GenericTypeIndicator<MutableList<Articles>> = object : GenericTypeIndicator<MutableList<Articles>>() {}
-                    var articles : MutableSet<Articles>? = mutableSetOf()
-                    for (snapshot in dataSnapshot.children){
-                        articles = snapshot.getValue(t)?.toMutableSet()
-                    }
+                    val t: GenericTypeIndicator<MutableList<Articles>> =
+                        object : GenericTypeIndicator<MutableList<Articles>>() {}
+                    val articles = dataSnapshot.getValue(t)?.toMutableSet()
                     favouriteArticles(articles)
                 }
 
