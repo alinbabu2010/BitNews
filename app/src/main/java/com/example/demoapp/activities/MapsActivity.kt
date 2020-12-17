@@ -9,10 +9,12 @@ import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import com.example.demoapp.R
 import com.example.demoapp.utils.Utils.Companion.requestPermissionRationale
 import com.google.android.gms.common.api.ResolvableApiException
@@ -23,6 +25,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import java.io.IOException
+
 
 /**
  * An activity that displays a map showing the place at the device's current location.
@@ -46,6 +49,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
@@ -53,7 +57,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(p0: LocationResult) {
                 super.onLocationResult(p0)
-
                 lastLocation = p0.lastLocation
                 placeMarkerOnMap(LatLng(lastLocation.latitude, lastLocation.longitude))
             }
@@ -77,7 +80,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             override fun getInfoContents(marker: Marker?): View? {
                 var view: View? = null
                 try {
-                    view = View.inflate(this@MapsActivity,R.layout.map_info_window,null)
+                    view = View.inflate(this@MapsActivity, R.layout.map_info_window, null)
                     val addressTxt: TextView = view.findViewById(R.id.addressTxt)
                     addressTxt.text = marker?.title
                 } catch (e: Exception) {
@@ -109,18 +112,59 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         return addressText
     }
 
+    private fun searchLocation(query: String?) {
+        var addressList: List<Address>? = null
+        if (query?.isNotEmpty() == true) {
+            val geocoder = Geocoder(this)
+            try {
+                addressList = geocoder.getFromLocationName(query, 1)
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+            if (addressList?.isNullOrEmpty() == true){
+                Toast.makeText(this, "Couldn't find the place", Toast.LENGTH_SHORT).show()
+            } else {
+                val address = addressList[0]
+                val latLng = LatLng(address.latitude, address.longitude)
+                map.animateCamera(CameraUpdateFactory.newLatLng(latLng))
+            }
+
+        }
+    }
 
     /**
      * Method to place the map marker and defining the marker settings
      */
     private fun placeMarkerOnMap(location: LatLng) {
         val address = getAddress(location)
-        map.addMarker(MarkerOptions()
-            .position(location)
-            .title(address)
-            .icon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(resources, R.drawable.ic_user_location)))
-            .draggable(true)
+        map.addMarker(
+            MarkerOptions()
+                .position(location)
+                .title(address)
+                .icon(
+                    BitmapDescriptorFactory.fromBitmap(
+                        BitmapFactory.decodeResource(
+                            resources,
+                            R.drawable.ic_user_location
+                        )
+                    )
+                )
+                .draggable(true)
         )
+        map.setOnMarkerDragListener(object : GoogleMap.OnMarkerDragListener{
+            override fun onMarkerDragStart(marker: Marker?) {
+                marker?.hideInfoWindow()
+            }
+            override fun onMarkerDrag(marker: Marker?) {
+                marker?.hideInfoWindow()
+            }
+            override fun onMarkerDragEnd(marker: Marker?) {
+                marker?.let {
+                    it.title = getAddress(it.position)
+                    it.showInfoWindow()
+                }
+            }
+        })
     }
 
     /**
@@ -145,7 +189,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                 setUpMap()
             } else {
                 Toast.makeText(baseContext, R.string.permission_denied, Toast.LENGTH_SHORT).show()
-                requestPermissionRationale(applicationContext, this,R.string.location_permission)
+                requestPermissionRationale(applicationContext, this, R.string.location_permission)
             }
         }
         else {
@@ -161,16 +205,20 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     private fun setUpMap() {
         val permission = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
         if (permission != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
+            requestPermissions(
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                LOCATION_PERMISSION_REQUEST_CODE
+            )
         } else {
             fusedLocationClient.lastLocation.addOnSuccessListener(this) { location ->
                 location?.let {
                     lastLocation = it
                     val currentLatLng = LatLng(it.latitude, it.longitude)
                     placeMarkerOnMap(currentLatLng)
-                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 15f))
+                    map.animateCamera(CameraUpdateFactory.newLatLng(currentLatLng))
                 }
             }
+            map.isMyLocationEnabled = true
         }
     }
 
@@ -191,7 +239,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
      */
     private fun startLocationUpdates() {
         if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
+            requestPermissions(
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                LOCATION_PERMISSION_REQUEST_CODE
+            )
             return
         }
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null)
@@ -225,4 +276,23 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             }
         }
     }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.search_menu, menu)
+        val searchViewItem = menu.findItem(R.id.search)
+        val searchView: SearchView = searchViewItem.actionView as SearchView
+        searchView.isFocusable = false
+        searchView.queryHint = "Search"
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                searchLocation(query)
+                return false
+            }
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
+        })
+        return true
+    }
+
 }
