@@ -83,7 +83,7 @@ class NewsAdapter(
         val publishDate = "Published on $formattedDate"
         holder.newsDate.text = publishDate
 
-        holder.newsLiked.isChecked = newsViewModel?.isFavouriteNews(item) ?: false
+        holder.newsLiked.isChecked = newsViewModel?.isFavouriteNews(item) == true
 
         holder.newsLiked.setOnClickListener {
             newsViewModel?.addToFavourites(item)
