@@ -48,4 +48,5 @@
     <string name="ok_string">حسنا</string>
     <string name="location_permission">يرجى تمكين إذن الموقع في إعدادات التطبيق</string>
     <string name="storage_camera_permission">يرجى تمكين التخزين وأذونات الكاميرا في إعدادات التطبيق</string>
+    <string name="search_title">بحث</string>
 </resources>

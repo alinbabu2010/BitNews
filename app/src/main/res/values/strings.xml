@@ -56,4 +56,5 @@
     <string name="ok_string">OK</string>
     <string name="location_permission">Please enable location permission in app settings</string>
     <string name="storage_camera_permission">Please enable storage and camera permission in app settings</string>
+    <string name="search_title">Search</string>
 </resources>
