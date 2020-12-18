@@ -16,12 +16,15 @@ class FirebaseOperations {
         /**
          * Method to store favourite articles of user
          */
-        fun storeDataOnFirebase(favouriteArticles: MutableSet<Articles>?, isSuccess : (Boolean) -> Unit){
+        fun storeDataOnFirebase(
+            favouriteArticles: MutableSet<Articles>?,
+            isSuccess: (Boolean) -> Unit
+        ) {
             FirebaseAuth.getInstance().currentUser?.uid?.let {
-                val favourites = FirebaseDatabase.getInstance().getReference(FAVOURITES).child(it).setValue(favouriteArticles?.toList())
-                favourites.addOnSuccessListener {
-                    isSuccess(true)
-                }
+                FirebaseDatabase.getInstance().getReference(FAVOURITES).child(it)
+                    .setValue(favouriteArticles?.toList()).addOnSuccessListener {
+                        isSuccess(true)
+                    }
             }
         }
 
@@ -32,20 +35,19 @@ class FirebaseOperations {
         fun retrieveDataFromFirebase(favouriteArticles: (MutableSet<Articles>?) -> Unit) {
             firebaseError = null
             val getCurrentUser = FirebaseAuth.getInstance().currentUser?.uid
-            val user = FirebaseDatabase.getInstance().getReference(FAVOURITES)
-            val favourites = user.child(getCurrentUser.toString()).orderByKey()
-            favourites.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    val t: GenericTypeIndicator<MutableList<Articles>> =
-                        object : GenericTypeIndicator<MutableList<Articles>>() {}
-                    val articles = dataSnapshot.getValue(t)?.toMutableSet()
-                    favouriteArticles(articles)
-                }
+            FirebaseDatabase.getInstance().getReference(FAVOURITES).child(getCurrentUser.toString())
+                .orderByKey().addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        val t: GenericTypeIndicator<MutableList<Articles>> =
+                            object : GenericTypeIndicator<MutableList<Articles>>() {}
+                        val articles = dataSnapshot.getValue(t)?.toMutableSet()
+                        favouriteArticles(articles)
+                    }
 
-                override fun onCancelled(error: DatabaseError) {
-                    firebaseError = error.message
-                }
-            })
+                    override fun onCancelled(error: DatabaseError) {
+                        firebaseError = error.message
+                    }
+                })
         }
     }
 }
