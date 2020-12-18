@@ -27,7 +27,6 @@ import com.example.demoapp.utils.Const.Companion.IMAGE_URL
 import com.example.demoapp.utils.Const.Companion.NAME_STRING
 import com.example.demoapp.utils.Const.Companion.PROFILE_IMAGE_DELETE
 import com.example.demoapp.utils.Const.Companion.USERNAME_STRING
-import com.example.demoapp.utils.Utils.Companion.checkNetworkConnection
 import com.example.demoapp.utils.Utils.Companion.requestPermissionRationale
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
@@ -49,12 +48,11 @@ class ProfileFragment : Fragment() {
 
         this.container = container
         binding = FragmentProfileBinding.inflate(inflater, container, false)
-        checkNetworkConnection(context) {
-            getDataFromFirebase {
-                userData = it
-                setProfileData(it)
-            }
+        getDataFromFirebase {
+            userData = it
+            setProfileData(it)
         }
+
 
         binding.changeUserImage.setOnClickListener {
             setBottomSheetDialog()

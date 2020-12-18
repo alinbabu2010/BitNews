@@ -113,7 +113,7 @@ class Utils {
         /**
          * Method to check if network is connected or not
          */
-        private fun isNetworkConnected(context: Context?): Boolean {
+        fun isNetworkConnected(context: Context?): Boolean {
 
             val connectivityManager =
                 context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
