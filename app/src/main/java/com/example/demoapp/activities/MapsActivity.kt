@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
@@ -35,7 +36,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
     private lateinit var map: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var lastLocation: Location
+    private var lastLocation: Location? = null
     private lateinit var locationCallback: LocationCallback
     private lateinit var locationRequest: LocationRequest
     private var locationUpdateState = false
@@ -58,7 +59,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             override fun onLocationResult(p0: LocationResult) {
                 super.onLocationResult(p0)
                 lastLocation = p0.lastLocation
-                placeMarkerOnMap(LatLng(lastLocation.latitude, lastLocation.longitude))
+                lastLocation?.let {
+                    placeMarkerOnMap(LatLng(it.latitude, it.longitude))
+                }
             }
         }
         createLocationRequest()
@@ -98,6 +101,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
     /**
      * Method to get place name from location coordinates
+     * Reverse geocode method used
      */
     private fun getAddress(latLng: LatLng): String {
         val geocoder = Geocoder(this)
@@ -105,13 +109,19 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         var addressText = ""
         try {
             addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
-            addressText = addresses[0].getAddressLine(0)
+            addresses?.let {
+                addressText = it[0].getAddressLine(0)
+            }
         } catch (e: IOException) {
             Log.e(TAG, e.message.toString())
         }
         return addressText
     }
 
+    /**
+     * Method to get location coordinates on giving a place name
+     * Geocode method used
+     */
     private fun searchLocation(query: String?) {
         var addressList: List<Address>? = null
         if (query?.isNotEmpty() == true) {
@@ -152,20 +162,42 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                 )
                 .draggable(true)
         )
+        val lastKnownLocation = lastLocation?.let {
+            LatLng(it.latitude,it.longitude)
+        }
+        var polygon = addPolyLine(lastKnownLocation,location)
         map.setOnMarkerDragListener(object : GoogleMap.OnMarkerDragListener{
             override fun onMarkerDragStart(marker: Marker?) {
+                polygon?.remove()
                 marker?.hideInfoWindow()
             }
             override fun onMarkerDrag(marker: Marker?) {
+                polygon?.remove()
                 marker?.hideInfoWindow()
             }
             override fun onMarkerDragEnd(marker: Marker?) {
                 marker?.let {
+                    polygon?.remove()
                     it.title = getAddress(it.position)
                     it.showInfoWindow()
+                    polygon = addPolyLine(lastKnownLocation,it.position)
                 }
             }
         })
+        map.setOnPolygonClickListener {
+            it.remove()
+        }
+    }
+
+    /**
+     * Method to add a polyline on map
+     */
+    private fun addPolyLine(lastKnownLocation: LatLng?, location: LatLng): Polygon? {
+        val polygon = map.addPolygon(PolygonOptions()
+            .clickable(true)
+            .add(lastKnownLocation,location))
+        polygon.strokeColor = Color.RED
+        return polygon
     }
 
     /**
@@ -223,11 +255,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         }
     }
 
+    /**
+     * Overriding [onPause] to remove location updating on activity pause state
+     */
     override fun onPause() {
         super.onPause()
         fusedLocationClient.removeLocationUpdates(locationCallback)
     }
 
+    /**
+     * Overriding [onResume] to check location update state
+     */
     public override fun onResume() {
         super.onResume()
         if (!locationUpdateState) {
@@ -267,6 +305,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             locationUpdateState = true
             startLocationUpdates()
         }
+        // On Failure checks GPS on or off if off ask user to turn on GPS
         task.addOnFailureListener { e ->
             if (e is ResolvableApiException) {
                 try {
@@ -278,6 +317,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         }
     }
 
+    /**
+     * Overriding [onCreateOptionsMenu] to perform search view operations
+     */
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.search_menu, menu)
         val searchViewItem = menu.findItem(R.id.search)
