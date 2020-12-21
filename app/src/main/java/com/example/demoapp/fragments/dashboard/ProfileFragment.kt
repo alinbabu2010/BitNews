@@ -226,7 +226,7 @@ class ProfileFragment : Fragment() {
         binding.progressProfileImage.visibility = View.VISIBLE
         uploadImageToFirebase(data, userData) {
             binding.progressProfileImage.visibility = View.INVISIBLE
-            Toast.makeText(this.activity, it, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
         }
     }
 

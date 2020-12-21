@@ -53,12 +53,6 @@ class DashboardActivity : AppCompatActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        checkConnectivity()
-    }
-
-
     /**
      * Method to add tab layout to the activity
      */
