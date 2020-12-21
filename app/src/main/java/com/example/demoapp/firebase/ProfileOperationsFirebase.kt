@@ -55,6 +55,9 @@ class ProfileOperationsFirebase {
 
         }
 
+        /**
+         * Method to upload image to firebase
+         */
         fun uploadImageToFirebase(
             file: Uri?,
             userData: Map<String, String>,
@@ -88,6 +91,9 @@ class ProfileOperationsFirebase {
             }
         }
 
+        /**
+         * Method to remove user image from firebase
+         */
         fun removeUserImage(){
             val getCurrentUser = FirebaseAuth.getInstance().currentUser?.uid
             val storageRef = mStorageRef.child(getCurrentUser.toString()).child("images/$getCurrentUser.jpg")
