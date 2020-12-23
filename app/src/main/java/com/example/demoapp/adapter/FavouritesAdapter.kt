@@ -59,7 +59,7 @@ class FavouritesAdapter(
      * Replace the contents of a view from news ArrayList (invoked by the layout manager)
      */
     override fun onBindViewHolder(holder: FavouritesViewHolder, position: Int) {
-        val articles = newsViewModel?.getFavourites()
+        val articles = newsViewModel?.favouritesLiveData?.value
         val item = articles?.toMutableList()?.get(position)
         Glide.with(holder.context).load(item?.imageUrl).override(800).into(holder.newsImage)
         holder.newsTitle.text = item?.title.toString()

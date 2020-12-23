@@ -28,13 +28,12 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
     val newsLiveData = MutableLiveData<Resource<News?>>()
 
     var favouritesLiveData = MutableLiveData<MutableSet<Articles>>()
-    private var favouriteArticles: MutableSet<Articles>? = mutableSetOf()
+    var favouriteArticles: MutableSet<Articles>? = mutableSetOf()
 
     init {
         val articlesDAO = ArticlesDatabase.getDatabase(application).articlesDAO()
         repository = ArticleRepository(articlesDAO)
         allArticles = repository.readAllData
-        favouritesLiveData.value = mutableSetOf()
     }
 
     /**
@@ -54,6 +53,7 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
      * Method to add news article to favourites
      */
     fun addToFavourites(article: Articles?) {
+        favouriteArticles = favouritesLiveData.value
         article?.let { favouriteArticles?.add(it) }
         storeOnFirebase()
     }
@@ -62,6 +62,7 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
      * Method to remove news article from favourites
      */
     fun removeFromFavourites(article: Articles?) {
+        favouriteArticles = favouritesLiveData.value
         favouriteArticles?.remove(article)
         storeOnFirebase()
     }
@@ -85,12 +86,11 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
     /**
      * Method to return set of favourites
      */
-    fun getFavourites(): MutableSet<Articles>? {
+    fun getFavourites() {
         retrieveDataFromFirebase {
             favouritesLiveData.postValue(it)
         }
         favouriteArticles = favouritesLiveData.value
-        return favouriteArticles
     }
 
     fun addArticles(article: Articles) {

@@ -76,7 +76,7 @@ class NewsFragment : Fragment() {
         })
 
         newsViewModel?.allArticles?.observe(viewLifecycleOwner,{
-            recyclerView.adapter = NewsAdapter(it as java.util.ArrayList<Articles>, newsViewModel)
+            recyclerView.adapter = NewsAdapter(it as ArrayList<Articles>, newsViewModel)
             recyclerView.setHasFixedSize(true)
         })
 
