@@ -1,6 +1,7 @@
 package com.example.demoapp.models
 
 import android.os.Parcelable
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
@@ -13,7 +14,7 @@ import kotlinx.parcelize.Parcelize
 @Entity(indices = [Index(value = ["title"], unique = true)]) @Parcelize
 data class Articles(
     @PrimaryKey(autoGenerate = true) val id : Int = 0,
-    @SerializedName("source") val source: Source? = Source(),
+    @Embedded @SerializedName("source") val source: Source? = Source(),
     @SerializedName("author") val author: String? = "",
     @SerializedName("title") val title: String? = "",
     @SerializedName("description") val description: String? = "",
