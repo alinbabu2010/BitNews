@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-parcelize'
     id 'com.google.gms.google-services'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -79,5 +80,7 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-auth:6.4.0'
     implementation 'com.mikhaellopez:circularimageview:4.2.0'
     implementation 'com.google.android.libraries.places:places:2.4.0'
+    implementation "androidx.room:room-ktx:2.2.6"
+    kapt("androidx.room:room-compiler:2.2.6")
 
 }
