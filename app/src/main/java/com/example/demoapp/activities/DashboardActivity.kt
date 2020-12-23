@@ -4,9 +4,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.view.View
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
@@ -14,7 +11,6 @@ import com.example.demoapp.R
 import com.example.demoapp.adapter.PageAdapter
 import com.example.demoapp.fragments.dashboard.NewsFragment
 import com.example.demoapp.utils.Utils.Companion.addFragment
-import com.example.demoapp.utils.Utils.Companion.isNetworkConnected
 import com.example.demoapp.utils.Utils.Companion.showAlert
 import com.google.android.material.tabs.TabLayout
 
@@ -38,19 +34,8 @@ class DashboardActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
-        checkConnectivity()
-    }
-
-    private fun checkConnectivity() {
-        if (isNetworkConnected(this)) {
-            findViewById<LinearLayout>(R.id.dashboard_layout).visibility = View.VISIBLE
-            findViewById<TextView>(R.id.error_dashboard).visibility = View.GONE
-            addFragment(NewsFragment(), R.id.dashboard_viewpager, supportFragmentManager)
-            addTabLayout()
-        } else {
-            findViewById<LinearLayout>(R.id.dashboard_layout).visibility = View.GONE
-            findViewById<TextView>(R.id.error_dashboard).visibility = View.VISIBLE
-        }
+        addFragment(NewsFragment(), R.id.dashboard_viewpager, supportFragmentManager)
+        addTabLayout()
     }
 
     /**
