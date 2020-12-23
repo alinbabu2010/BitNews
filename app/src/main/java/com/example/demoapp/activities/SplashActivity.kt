@@ -6,7 +6,9 @@ import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.example.demoapp.R
+import com.example.demoapp.utils.Const.Companion.FAVOURITES
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 
 /**
  * Splash screen  activity of demo app
@@ -15,6 +17,11 @@ class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
+
+        with(FirebaseDatabase.getInstance()){
+            setPersistenceEnabled(true)
+            getReference(FAVOURITES).keepSynced(true)
+        }
 
         // Check a user is logged in or not
         val user = FirebaseAuth.getInstance().currentUser
