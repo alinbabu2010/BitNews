@@ -51,13 +51,14 @@ class NewsFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
         newsViewModel?.getNews()
 
-        newsViewModel?.newsLiveData?.observe(viewLifecycleOwner, {
+        newsViewModel?.newsLiveData?.observe(viewLifecycleOwner, { it ->
             when (it.status) {
                 Resource.Status.SUCCESS -> {
                     binding.progressBarNews.visibility = View.GONE
                     articles = it.data?.articles
-                    recyclerView.adapter = NewsAdapter(articles, newsViewModel)
-                    recyclerView.setHasFixedSize(true)
+                    articles?.forEach { article ->
+                        newsViewModel?.addArticles(article)
+                    }
                 }
                 Resource.Status.ERROR -> {
                     binding.progressBarNews.visibility = View.GONE
@@ -72,6 +73,11 @@ class NewsFragment : Fragment() {
                     binding.swipeRefresh.isRefreshing = false
                 }
             }
+        })
+
+        newsViewModel?.allArticles?.observe(viewLifecycleOwner,{
+            recyclerView.adapter = NewsAdapter(it as java.util.ArrayList<Articles>, newsViewModel)
+            recyclerView.setHasFixedSize(true)
         })
 
         newsViewModel?.favouritesLiveData?.observe(viewLifecycleOwner, {
