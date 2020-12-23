@@ -1,27 +1,39 @@
 package com.example.demoapp.viewmodels
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.example.demoapp.api.APIResponse
 import com.example.demoapp.api.Resource
 import com.example.demoapp.api.RetrofitManager
+import com.example.demoapp.database.ArticleRepository
+import com.example.demoapp.database.ArticlesDatabase
 import com.example.demoapp.firebase.FirebaseOperations.Companion.retrieveDataFromFirebase
 import com.example.demoapp.firebase.FirebaseOperations.Companion.storeDataOnFirebase
 import com.example.demoapp.models.Articles
 import com.example.demoapp.models.News
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 /**
  * This class is used to define view model for favourite news storing
  */
-class NewsViewModel : ViewModel() {
+class NewsViewModel(application: Application) : AndroidViewModel(application) {
 
+    private val repository : ArticleRepository
+    val allArticles : LiveData<List<Articles>>
     val newsLiveData = MutableLiveData<Resource<News?>>()
 
     var favouritesLiveData = MutableLiveData<MutableSet<Articles>>()
     private var favouriteArticles: MutableSet<Articles>? = mutableSetOf()
 
     init {
+        val articlesDAO = ArticlesDatabase.getDatabase(application).articlesDAO()
+        repository = ArticleRepository(articlesDAO)
+        allArticles = repository.readAllData
         favouritesLiveData.value = mutableSetOf()
     }
 
@@ -79,6 +91,12 @@ class NewsViewModel : ViewModel() {
         }
         favouriteArticles = favouritesLiveData.value
         return favouriteArticles
+    }
+
+    fun addArticles(article: Articles) {
+        CoroutineScope(Dispatchers.IO).launch {
+            repository.addArticles(article)
+        }
     }
 
 }
