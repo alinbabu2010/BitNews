@@ -1,76 +1,61 @@
 package com.example.demoapp.viewmodels
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import com.example.demoapp.database.UserDatabase
+import com.example.demoapp.database.UserRepository
+import com.example.demoapp.firebase.AccountRepository
 import com.example.demoapp.models.Users
-import com.example.demoapp.utils.Const
-import com.example.demoapp.utils.Utils.Companion.firebaseError
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 /**
  * ViewModel for handling accounts related operations
  */
-class AccountsViewModel : ViewModel() {
+class AccountsViewModel(application: Application) : AndroidViewModel(application) {
 
     // LiveData for notifying whether a firebase operation executed successfully or not
     val operationExecuted: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>()
     }
 
-    private val getAuthInstance = FirebaseAuth.getInstance()
+    private val userRepository : UserRepository
+    private val accountRepository = AccountRepository()
+
+    init {
+        val usersDAO = UserDatabase.getDatabase(application).usersDAO()
+        userRepository = UserRepository(usersDAO)
+    }
 
     /**
-     * Method to sign in a user
+     * Method to call [AccountRepository.sigInUser]
      */
-    fun sigInUser(userName: String, password: String) {
-        getAuthInstance.signInWithEmailAndPassword(userName, password).addOnCompleteListener {
-            if (it.isSuccessful) {
-                operationExecuted.value = it.isSuccessful
-            } else {
-                operationExecuted.value = false
-            }
+    fun sigInUser(userName: String, password: String){
+        operationExecuted.value = accountRepository.sigInUser(userName,password)
+        CoroutineScope(Dispatchers.IO).launch {
+            accountRepository.user?.let { userRepository.insertUser(it) }
         }
     }
 
     /**
-     * Method to register a user to firebase
+     * Method to call [AccountRepository.createUser]
      */
     fun createUser(email: String, password: String, user: Users) {
-        getAuthInstance.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener {
-                if (it.isSuccessful) {
-                    getAuthInstance.currentUser?.uid?.let { it1 ->
-                        FirebaseDatabase.getInstance().getReference(Const.USERS)
-                            .child(it1).setValue(user).addOnCompleteListener { task ->
-                                if (task.isSuccessful) {
-                                    operationExecuted.value = it.isSuccessful
-                                } else {
-                                    firebaseError = task.exception?.message
-                                    operationExecuted.value = false
-                                }
-                            }
-                    }
-                } else {
-                    firebaseError = it.exception?.message
-                    operationExecuted.value = false
-                }
-            }
+        operationExecuted.value = accountRepository.createUser(email, password, user)
+        user.id = FirebaseAuth.getInstance().currentUser?.uid.toString()
+        CoroutineScope(Dispatchers.IO).launch {
+            userRepository.insertUser(user)
+        }
     }
 
     /**
-     * Method to reset user password
+     * Method to call [AccountRepository.resetPassword]
      */
     fun resetPassword(email: String) {
-        firebaseError = null
-        val validUser = getAuthInstance.sendPasswordResetEmail(email)
-        validUser.addOnCompleteListener { task ->
-            if (task.isSuccessful) operationExecuted.value = task.isSuccessful
-            else {
-                firebaseError = task.exception?.message
-                operationExecuted.value = false
-            }
-        }
+        operationExecuted.value = accountRepository.resetPassword(email)
     }
 
 }
