@@ -72,12 +72,15 @@ class ProfileOperationsFirebase {
                     ?.addOnCompleteListener { taskSnapshot -> // Get a URL to the uploaded content
                         if (taskSnapshot.isSuccessful) {
                             storageRef.downloadUrl.addOnSuccessListener { uri ->
-                                val user = Users(
-                                    userData[USERNAME_STRING],
-                                    userData[NAME_STRING],
-                                    userData[EMAIL_STRING],
-                                    uri.toString()
-                                )
+                                val user = userData[USERNAME_STRING]?.let { it1 ->
+                                    Users(
+                                        getCurrentUser,
+                                        it1,
+                                        userData[NAME_STRING],
+                                        userData[EMAIL_STRING],
+                                        uri.toString()
+                                    )
+                                }
                                 FirebaseDatabase.getInstance().getReference(USERS)
                                     .child(getCurrentUser).setValue(user)
                                     .addOnSuccessListener {
