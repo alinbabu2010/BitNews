@@ -1,6 +1,5 @@
 package com.example.demoapp.database
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.demoapp.models.Users
 
@@ -10,8 +9,8 @@ interface UsersDAO {
     @Insert
     fun insertUser(user: Users)
 
-    @Query("SELECT * FROM Users WHERE id=:uid")
-    fun getUserInfo(uid:String) : LiveData<Users>
+    @Query("SELECT * FROM Users WHERE id=:id")
+    fun getUserInfo(id:String) : Users
 
     @Update
     fun updateUser(user: Users)

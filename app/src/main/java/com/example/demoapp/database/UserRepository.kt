@@ -1,6 +1,5 @@
 package com.example.demoapp.database
 
-import androidx.lifecycle.LiveData
 import com.example.demoapp.models.Users
 
 /**
@@ -8,7 +7,7 @@ import com.example.demoapp.models.Users
  */
 class UserRepository(private  val usersDAO: UsersDAO) {
 
-    fun getCurrentUserInfo(uid:String) : LiveData<Users> = usersDAO.getUserInfo(uid)
+    fun getCurrentUserInfo(id:String) : Users = usersDAO.getUserInfo(id)
 
     fun insertUser(user: Users){
         usersDAO.insertUser(user)
