@@ -1,5 +1,6 @@
 package com.example.demoapp.firebase
 
+import com.example.demoapp.database.UserRepository
 import com.example.demoapp.firebase.ProfileOperationsFirebase.Companion.getDataFromFirebase
 import com.example.demoapp.models.Users
 import com.example.demoapp.utils.Const.Companion.EMAIL_STRING
@@ -10,6 +11,9 @@ import com.example.demoapp.utils.Const.Companion.USERS
 import com.example.demoapp.utils.Utils.Companion.firebaseError
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 /**
  * Repository class to perform account related firebase operations
@@ -18,29 +22,29 @@ class AccountRepository {
 
     private val getAuthInstance = FirebaseAuth.getInstance()
     private var isSuccess = false
-    var user : Users? = null
+    var user: Users? = null
 
     /**
      * Method to sign in a user
      */
-    fun sigInUser(userName: String, password: String): Boolean {
+    fun sigInUser(userName: String, password: String, userRepository: UserRepository,isSuccess: (Boolean) -> Unit) {
         getAuthInstance.signInWithEmailAndPassword(userName, password).addOnCompleteListener {
             if (it.isSuccessful) {
-                isSuccess = it.isSuccessful
-                 getDataFromFirebase { data ->
-                     user = Users(
-                         getAuthInstance.currentUser?.uid.toString(),
-                         data[USERNAME_STRING],
-                         data[NAME_STRING],
-                         data[EMAIL_STRING],
-                         data[IMAGE_URL]
-                     )
-                 }
+                getDataFromFirebase { data ->
+                    user = Users(
+                        getAuthInstance.currentUser?.uid.toString(),
+                        data[USERNAME_STRING],
+                        data[NAME_STRING],
+                        data[EMAIL_STRING],
+                        data[IMAGE_URL]
+                    )
+                    CoroutineScope(Dispatchers.IO).launch { user?.let { it1 -> userRepository.insertUser(it1) } }
+                    isSuccess(it.isSuccessful)
+                }
             } else {
-                 isSuccess =false
+                isSuccess(false)
             }
         }
-        return isSuccess
     }
 
     /**

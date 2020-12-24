@@ -15,20 +15,19 @@ import android.widget.ImageButton
 import android.widget.Toast
 import androidx.core.content.PermissionChecker.checkSelfPermission
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.example.demoapp.R
 import com.example.demoapp.activities.MapsActivity
 import com.example.demoapp.databinding.FragmentProfileBinding
-import com.example.demoapp.firebase.ProfileOperationsFirebase.Companion.getDataFromFirebase
 import com.example.demoapp.firebase.ProfileOperationsFirebase.Companion.removeUserImage
 import com.example.demoapp.firebase.ProfileOperationsFirebase.Companion.uploadImageToFirebase
-import com.example.demoapp.utils.Const.Companion.EMAIL_STRING
-import com.example.demoapp.utils.Const.Companion.IMAGE_URL
-import com.example.demoapp.utils.Const.Companion.NAME_STRING
+import com.example.demoapp.models.Users
 import com.example.demoapp.utils.Const.Companion.PROFILE_IMAGE_DELETE
-import com.example.demoapp.utils.Const.Companion.USERNAME_STRING
 import com.example.demoapp.utils.Utils.Companion.requestPermissionRationale
+import com.example.demoapp.viewmodels.AccountsViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.auth.FirebaseAuth
 
 
 /**
@@ -48,11 +47,11 @@ class ProfileFragment : Fragment() {
 
         this.container = container
         binding = FragmentProfileBinding.inflate(inflater, container, false)
-        getDataFromFirebase {
-            userData = it
+        val accountsViewModel = ViewModelProviders.of(this).get(AccountsViewModel::class.java)
+        accountsViewModel.getUserInfo(FirebaseAuth.getInstance().currentUser?.uid.toString())
+        accountsViewModel.userData.observe(viewLifecycleOwner,{
             setProfileData(it)
-        }
-
+        })
 
         binding.changeUserImage.setOnClickListener {
             setBottomSheetDialog()
@@ -72,13 +71,13 @@ class ProfileFragment : Fragment() {
     /**
      * Method to set the profile data in fragment layout
      */
-    private fun setProfileData(data: Map<String, String>) {
+    private fun setProfileData(data: Users?) {
         binding.progressBarProfile.visibility = View.INVISIBLE
-        binding.nameDisplay.setText(data[NAME_STRING])
-        binding.usernameDisplay.setText(data[USERNAME_STRING])
-        binding.emailDisplay.setText(data[EMAIL_STRING])
-        if (!data[IMAGE_URL].equals("NONE"))
-            context?.let { Glide.with(it).load(data[IMAGE_URL]).into(binding.userImage) }
+        binding.nameDisplay.setText(data?.name)
+        binding.usernameDisplay.setText(data?.username)
+        binding.emailDisplay.setText(data?.email)
+        if (!data?.userImageUrl.equals("NONE"))
+            context?.let { Glide.with(it).load(data?.userImageUrl).into(binding.userImage) }
         if (firebaseResponseMessage?.isNotEmpty() == true) {
             Toast.makeText(context, firebaseResponseMessage, Toast.LENGTH_SHORT).show()
         }

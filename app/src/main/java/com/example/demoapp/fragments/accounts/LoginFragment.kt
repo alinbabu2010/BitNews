@@ -98,7 +98,7 @@ class LoginFragment : Fragment() {
      */
     private fun loginUser(userName: String, password: String, progressBar: ProgressBar) {
         viewModel = activity?.let { ViewModelProviders.of(it).get(AccountsViewModel::class.java) }
-        viewModel?.sigInUser(userName,password)
+        viewModel?.signInUser(userName,password)
         viewModel?.operationExecuted?.observe(viewLifecycleOwner, {
             if(it){
                 startActivity(Intent(context, DashboardActivity::class.java))
