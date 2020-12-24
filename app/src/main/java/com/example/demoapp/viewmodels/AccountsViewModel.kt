@@ -22,6 +22,7 @@ class AccountsViewModel(application: Application) : AndroidViewModel(application
         MutableLiveData<Boolean>()
     }
 
+    var userData = MutableLiveData<Users>()
     private val userRepository : UserRepository
     private val accountRepository = AccountRepository()
 
@@ -33,10 +34,9 @@ class AccountsViewModel(application: Application) : AndroidViewModel(application
     /**
      * Method to call [AccountRepository.sigInUser]
      */
-    fun sigInUser(userName: String, password: String){
-        operationExecuted.value = accountRepository.sigInUser(userName,password)
-        CoroutineScope(Dispatchers.IO).launch {
-            accountRepository.user?.let { userRepository.insertUser(it) }
+    fun signInUser(userName: String, password: String){
+        accountRepository.sigInUser(userName,password,userRepository){
+            operationExecuted.postValue(it)
         }
     }
 
@@ -56,6 +56,13 @@ class AccountsViewModel(application: Application) : AndroidViewModel(application
      */
     fun resetPassword(email: String) {
         operationExecuted.value = accountRepository.resetPassword(email)
+    }
+
+    fun getUserInfo(uid:String){
+        CoroutineScope(Dispatchers.IO).launch {
+            val data = userRepository.getCurrentUserInfo(uid)
+            userData.postValue(data)
+        }
     }
 
 }
