@@ -49,6 +49,7 @@ class NewsFragment : Fragment() {
         newsViewModel = activity?.let { ViewModelProviders.of(it).get(NewsViewModel::class.java) }
         val recyclerView: RecyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(context)
+        newsViewModel?.getFavourites()
         newsViewModel?.getNews()
 
         newsViewModel?.newsLiveData?.observe(viewLifecycleOwner, { it ->

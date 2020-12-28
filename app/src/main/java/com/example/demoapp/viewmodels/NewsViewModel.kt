@@ -27,8 +27,10 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
     val allArticles : LiveData<List<Articles>>
     val newsLiveData = MutableLiveData<Resource<News?>>()
 
-    var favouritesLiveData = MutableLiveData<MutableSet<Articles>>()
-    var favouriteArticles: MutableSet<Articles>? = mutableSetOf()
+    val favouritesLiveData : MutableLiveData<MutableSet<Articles>> by lazy {
+        MutableLiveData<MutableSet<Articles>>()
+    }
+    val favouriteArticles: MutableSet<Articles> = mutableSetOf()
 
     init {
         val articlesDAO = ArticlesDatabase.getDatabase(application).articlesDAO()
@@ -53,24 +55,24 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
      * Method to add news article to favourites
      */
     fun addToFavourites(article: Articles?) {
-        favouriteArticles = favouritesLiveData.value
-        article?.let { favouriteArticles?.add(it) }
-        storeOnFirebase()
+        favouritesLiveData.value?.let { favouriteArticles.addAll(it) }
+        article?.let { favouriteArticles.add(it) }
+        storeOnFirebase(favouriteArticles)
     }
 
     /**
      * Method to remove news article from favourites
      */
     fun removeFromFavourites(article: Articles?) {
-        favouriteArticles = favouritesLiveData.value
-        favouriteArticles?.remove(article)
-        storeOnFirebase()
+        favouritesLiveData.value?.let { favouriteArticles.addAll(it) }
+        favouriteArticles.remove(article)
+        storeOnFirebase(favouriteArticles)
     }
 
     /**
      * Method to save favourites on firebase
      */
-    private fun storeOnFirebase() {
+    private fun storeOnFirebase(favouriteArticles: MutableSet<Articles>?) {
         storeDataOnFirebase(favouriteArticles) {
             if (it) favouritesLiveData.postValue(favouriteArticles)
         }
@@ -79,8 +81,12 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
     /**
      * Method to check news article in favourites set
      */
-    fun isFavouriteNews(article: Articles?): Boolean? {
-        return favouritesLiveData.value?.contains(article)
+    fun isFavouriteNews(article: Articles?): Boolean {
+        var isFavourite = false
+        favouritesLiveData.value?.forEach{
+            if(it.title == article?.title) isFavourite = true
+        }
+        return isFavourite
     }
 
     /**
@@ -90,7 +96,7 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
         retrieveDataFromFirebase {
             favouritesLiveData.postValue(it)
         }
-        favouriteArticles = favouritesLiveData.value
+        favouritesLiveData.value?.let { favouriteArticles.addAll(it) }
     }
 
     fun addArticles(article: Articles) {
