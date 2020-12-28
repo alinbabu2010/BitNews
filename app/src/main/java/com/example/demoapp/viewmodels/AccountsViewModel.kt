@@ -65,4 +65,10 @@ class AccountsViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
+    fun removeUserInfo(uid: String){
+        CoroutineScope(Dispatchers.IO).launch {
+            userRepository.deleteUser(uid)
+        }
+    }
+
 }
