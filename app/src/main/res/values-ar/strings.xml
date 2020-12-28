@@ -49,4 +49,6 @@
     <string name="location_permission">يرجى تمكين إذن الموقع في إعدادات التطبيق</string>
     <string name="storage_camera_permission">يرجى تمكين التخزين وأذونات الكاميرا في إعدادات التطبيق</string>
     <string name="search_title">بحث</string>
+    <string name="enter_name">أدخل أسمك</string>
+    <string name="enter_username" translatable="false">أدخل اسم المستخدم الخاص بك</string>
 </resources>

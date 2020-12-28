@@ -11,6 +11,8 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.core.content.PermissionChecker.checkSelfPermission
@@ -23,7 +25,9 @@ import com.example.demoapp.databinding.FragmentProfileBinding
 import com.example.demoapp.firebase.ProfileOperationsFirebase.Companion.removeUserImage
 import com.example.demoapp.firebase.ProfileOperationsFirebase.Companion.uploadImageToFirebase
 import com.example.demoapp.models.Users
+import com.example.demoapp.utils.Const.Companion.NAME_STRING
 import com.example.demoapp.utils.Const.Companion.PROFILE_IMAGE_DELETE
+import com.example.demoapp.utils.Const.Companion.USERNAME_STRING
 import com.example.demoapp.utils.Utils.Companion.requestPermissionRationale
 import com.example.demoapp.viewmodels.AccountsViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -65,7 +69,45 @@ class ProfileFragment : Fragment() {
                 startActivity(Intent(context, MapsActivity::class.java))
             }
         }
+
+        binding.nameField.setEndIconOnClickListener {
+            setEditBottomSheetDialog(NAME_STRING)
+        }
+
+        binding.usernameField.setEndIconOnClickListener {
+            setEditBottomSheetDialog(USERNAME_STRING)
+        }
+
         return binding.root
+    }
+
+    private fun setEditBottomSheetDialog(field: String) {
+        val bottomSheet = context?.let { BottomSheetDialog(it) }
+        val bottomSheetView: View = layoutInflater.inflate(R.layout.edit_profile, container, false)
+        bottomSheet?.setContentView(bottomSheetView)
+        bottomSheet?.show()
+
+        val textView = bottomSheetView.findViewById<EditText>(R.id.textView_profile)
+        val editText = bottomSheetView.findViewById<EditText>(R.id.profile_editText)
+
+         when (field){
+            NAME_STRING ->  {
+                textView.setText(R.string.enter_name)
+                editText.text = binding.nameDisplay.text
+            }
+            USERNAME_STRING -> {
+                textView.setText(R.string.enter_name)
+                editText.text = binding.usernameDisplay.text
+            }
+        }
+
+        bottomSheetView.findViewById<Button>(R.id.button_save).setOnClickListener {
+
+        }
+
+        bottomSheetView.findViewById<Button>(R.id.button_cancel).setOnClickListener {
+            bottomSheet?.hide()
+        }
     }
 
     /**
@@ -84,10 +126,10 @@ class ProfileFragment : Fragment() {
     }
 
     /**
-     * Method to set radio buttons and datepicker for filter bottom sheet dialog and process the filter clicks
+     * Method to set different image selection type buttons bottom sheet dialog and process the button clicks
      */
     private fun setBottomSheetDialog() {
-        val bottomSheet = context?.let { it1 -> BottomSheetDialog(it1) }
+        val bottomSheet = context?.let { BottomSheetDialog(it) }
         val bottomSheetView: View = layoutInflater.inflate(R.layout.image_options, container, false)
         bottomSheet?.setContentView(bottomSheetView)
         bottomSheet?.show()
