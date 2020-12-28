@@ -85,6 +85,9 @@ class ProfileFragment : Fragment() {
         return binding.root
     }
 
+    /**
+     * Method to set and show edit user info bottom sheet dialog
+     */
     private fun setEditBottomSheetDialog(field: String) {
         val bottomSheet = context?.let { BottomSheetDialog(it) }
         val bottomSheetView: View = layoutInflater.inflate(R.layout.edit_profile, container, false)
@@ -112,10 +115,10 @@ class ProfileFragment : Fragment() {
                 if(isSuccess) {
                     bottomSheet?.hide()
                     accountsViewModel?.userData?.postValue(user)
-                    Toast.makeText(this.activity,"Profile updated",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this.activity,R.string.profile_update,Toast.LENGTH_SHORT).show()
                 }
                 else {
-                    Toast.makeText(this.activity,"Profile update unsuccessful",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this.activity,R.string.profile_unsuccessful,Toast.LENGTH_SHORT).show()
                 }
             } }
         }

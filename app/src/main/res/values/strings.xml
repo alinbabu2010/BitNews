@@ -59,4 +59,6 @@
     <string name="search_title">Search</string>
     <string name="enter_name">Enter your name</string>
     <string name="enter_username">Enter your username</string>
+    <string name="profile_update" >Profile updated successfully</string>
+    <string name="profile_unsuccessful">Profile update unsuccessful</string>
 </resources>

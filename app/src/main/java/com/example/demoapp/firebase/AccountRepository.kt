@@ -27,7 +27,12 @@ class AccountRepository {
     /**
      * Method to sign in a user
      */
-    fun sigInUser(userName: String, password: String, userRepository: UserRepository,isSuccess: (Boolean) -> Unit) {
+    fun sigInUser(
+        userName: String,
+        password: String,
+        userRepository: UserRepository,
+        isSuccess: (Boolean) -> Unit
+    ) {
         getAuthInstance.signInWithEmailAndPassword(userName, password).addOnCompleteListener {
             if (it.isSuccessful) {
                 getDataFromFirebase { data ->
@@ -38,7 +43,13 @@ class AccountRepository {
                         data[EMAIL_STRING],
                         data[IMAGE_URL]
                     )
-                    CoroutineScope(Dispatchers.IO).launch { user?.let { it1 -> userRepository.insertUser(it1) } }
+                    CoroutineScope(Dispatchers.IO).launch {
+                        user?.let { it1 ->
+                            userRepository.insertUser(
+                                it1
+                            )
+                        }
+                    }
                     isSuccess(it.isSuccessful)
                 }
             } else {
@@ -54,7 +65,7 @@ class AccountRepository {
         getAuthInstance.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    updateUser(user){
+                    updateUser(user) {
                         isSuccess = it
                     }
                 } else {
@@ -81,7 +92,10 @@ class AccountRepository {
         return isSuccess
     }
 
-    fun updateUser(user: Users,isSuccess: (Boolean) -> Unit) {
+    /**
+     * Method to update a user info in firebase
+     */
+    fun updateUser(user: Users, isSuccess: (Boolean) -> Unit) {
         getAuthInstance.currentUser?.uid?.let { it1 ->
             FirebaseDatabase.getInstance().getReference(USERS)
                 .child(it1).setValue(user).addOnCompleteListener { task ->

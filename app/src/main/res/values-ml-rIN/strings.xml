@@ -51,4 +51,6 @@
     <string name="search_title">തിരയുക</string>
     <string name="enter_username">നിങ്ങളുടെ ഉപയോക്തൃനാമം നൽകുക</string>
     <string name="enter_name">നിങ്ങളുടെ പേര് നൽകുക</string>
+    <string name="profile_unsuccessful">പ്രൊഫൈൽ അപ്‌ഡേറ്റ് പരാജയപ്പെട്ടു</string>
+    <string name="profile_update">പ്രൊഫൈൽ അപ്‌ഡേറ്റ് വിജയകരമായി</string>
 </resources>

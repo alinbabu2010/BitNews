@@ -99,6 +99,9 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
         favouritesLiveData.value?.let { favouriteArticles.addAll(it) }
     }
 
+    /**
+     * Method to add articles to room database
+     */
     fun addArticles(article: Articles) {
         CoroutineScope(Dispatchers.IO).launch {
             repository.addArticles(article)

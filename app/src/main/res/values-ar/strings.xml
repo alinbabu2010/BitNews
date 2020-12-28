@@ -51,4 +51,6 @@
     <string name="search_title">بحث</string>
     <string name="enter_name">أدخل أسمك</string>
     <string name="enter_username" translatable="false">أدخل اسم المستخدم الخاص بك</string>
+    <string name="profile_update">تم تحديث الملف الشخصي بنجاح</string>
+    <string name="profile_unsuccessful">تحديث الملف الشخصي غير ناجح</string>
 </resources>

@@ -23,7 +23,7 @@ class AccountsViewModel(application: Application) : AndroidViewModel(application
     }
 
     var userData = MutableLiveData<Users>()
-    private val userRepository : UserRepository
+    private val userRepository: UserRepository
     private val accountRepository = AccountRepository()
 
     init {
@@ -34,8 +34,8 @@ class AccountsViewModel(application: Application) : AndroidViewModel(application
     /**
      * Method to call [AccountRepository.sigInUser]
      */
-    fun signInUser(userName: String, password: String){
-        accountRepository.sigInUser(userName,password,userRepository){
+    fun signInUser(userName: String, password: String) {
+        accountRepository.sigInUser(userName, password, userRepository) {
             operationExecuted.postValue(it)
         }
     }
@@ -58,24 +58,33 @@ class AccountsViewModel(application: Application) : AndroidViewModel(application
         operationExecuted.value = accountRepository.resetPassword(email)
     }
 
-    fun getUserInfo(uid:String){
+    /**
+     * Method to call [UserRepository.getCurrentUserInfo]
+     */
+    fun getUserInfo(uid: String) {
         CoroutineScope(Dispatchers.IO).launch {
             val data = userRepository.getCurrentUserInfo(uid)
             userData.postValue(data)
         }
     }
 
-    fun removeUserInfo(uid: String){
+    /**
+     * Method to call [UserRepository.deleteUser]
+     */
+    fun removeUserInfo(uid: String) {
         CoroutineScope(Dispatchers.IO).launch {
             userRepository.deleteUser(uid)
         }
     }
 
-    fun updateUserInfo(user: Users,isSuccess: (Boolean) -> Unit){
+    /**
+     * Method to call [UserRepository.updateUser] and [AccountRepository.updateUser]
+     */
+    fun updateUserInfo(user: Users, isSuccess: (Boolean) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
             userRepository.updateUser(user)
         }
-        accountRepository.updateUser(user){
+        accountRepository.updateUser(user) {
             isSuccess(it)
         }
     }
