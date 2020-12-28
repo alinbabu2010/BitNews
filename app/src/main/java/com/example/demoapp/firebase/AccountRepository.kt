@@ -52,21 +52,13 @@ class AccountRepository {
      */
     fun createUser(email: String, password: String, user: Users): Boolean {
         getAuthInstance.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener {
-                if (it.isSuccessful) {
-                    getAuthInstance.currentUser?.uid?.let { it1 ->
-                        FirebaseDatabase.getInstance().getReference(USERS)
-                            .child(it1).setValue(user).addOnCompleteListener { task ->
-                                if (task.isSuccessful) {
-                                    isSuccess = it.isSuccessful
-                                } else {
-                                    firebaseError = task.exception?.message
-                                    isSuccess = false
-                                }
-                            }
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    updateUser(user){
+                        isSuccess = it
                     }
                 } else {
-                    firebaseError = it.exception?.message
+                    firebaseError = task.exception?.message
                     isSuccess = false
                 }
             }
@@ -87,5 +79,19 @@ class AccountRepository {
             }
         }
         return isSuccess
+    }
+
+    fun updateUser(user: Users,isSuccess: (Boolean) -> Unit) {
+        getAuthInstance.currentUser?.uid?.let { it1 ->
+            FirebaseDatabase.getInstance().getReference(USERS)
+                .child(it1).setValue(user).addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        isSuccess(task.isSuccessful)
+                    } else {
+                        firebaseError = task.exception?.message
+                        isSuccess(false)
+                    }
+                }
+        }
     }
 }
