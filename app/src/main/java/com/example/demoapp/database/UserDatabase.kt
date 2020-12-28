@@ -23,7 +23,7 @@ abstract class UserDatabase : RoomDatabase() {
             }
             synchronized(this){
                 val instance = Room.databaseBuilder(context.applicationContext,
-                    UserDatabase::class.java,"news_database").build()
+                    UserDatabase::class.java,"news_database").fallbackToDestructiveMigration().build()
                 INSTANCE = instance
                 return instance
             }

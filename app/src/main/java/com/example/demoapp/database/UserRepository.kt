@@ -12,4 +12,8 @@ class UserRepository(private  val usersDAO: UsersDAO) {
     fun insertUser(user: Users){
         usersDAO.insertUser(user)
     }
+
+    fun deleteUser(uid:String){
+        usersDAO.deleteUser(uid)
+    }
 }
