@@ -16,4 +16,8 @@ class UserRepository(private  val usersDAO: UsersDAO) {
     fun deleteUser(uid:String){
         usersDAO.deleteUser(uid)
     }
+
+    fun updateUser(user: Users){
+        usersDAO.updateUser(user.id, user.name.toString(), user.username.toString())
+    }
 }

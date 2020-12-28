@@ -12,8 +12,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.PermissionChecker.checkSelfPermission
 import androidx.fragment.app.Fragment
@@ -31,6 +31,7 @@ import com.example.demoapp.utils.Const.Companion.USERNAME_STRING
 import com.example.demoapp.utils.Utils.Companion.requestPermissionRationale
 import com.example.demoapp.viewmodels.AccountsViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 
 
@@ -43,6 +44,8 @@ class ProfileFragment : Fragment() {
     private var container: ViewGroup? = null
     private var userData: Map<String, String> = mapOf()
     private var photoUri: Uri? = null
+    private var user : Users? = null
+    private var accountsViewModel : AccountsViewModel? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,10 +54,11 @@ class ProfileFragment : Fragment() {
 
         this.container = container
         binding = FragmentProfileBinding.inflate(inflater, container, false)
-        val accountsViewModel = ViewModelProviders.of(this).get(AccountsViewModel::class.java)
-        accountsViewModel.getUserInfo(FirebaseAuth.getInstance().currentUser?.uid.toString())
-        accountsViewModel.userData.observe(viewLifecycleOwner,{
+        accountsViewModel = ViewModelProviders.of(this).get(AccountsViewModel::class.java)
+        accountsViewModel?.getUserInfo(FirebaseAuth.getInstance().currentUser?.uid.toString())
+        accountsViewModel?.userData?.observe(viewLifecycleOwner,{
             setProfileData(it)
+            user = it
         })
 
         binding.changeUserImage.setOnClickListener {
@@ -87,22 +91,33 @@ class ProfileFragment : Fragment() {
         bottomSheet?.setContentView(bottomSheetView)
         bottomSheet?.show()
 
-        val textView = bottomSheetView.findViewById<EditText>(R.id.textView_profile)
-        val editText = bottomSheetView.findViewById<EditText>(R.id.profile_editText)
-
-         when (field){
-            NAME_STRING ->  {
+        val inputEditText = bottomSheetView.findViewById<TextInputEditText>(R.id.profile_editText)
+        val textView = bottomSheetView.findViewById<TextView>(R.id.edit_textView)
+         if (field == NAME_STRING) {
                 textView.setText(R.string.enter_name)
-                editText.text = binding.nameDisplay.text
-            }
-            USERNAME_STRING -> {
+                inputEditText.text = binding.nameDisplay.text
+         }
+        if(field == USERNAME_STRING) {
                 textView.setText(R.string.enter_name)
-                editText.text = binding.usernameDisplay.text
-            }
+                inputEditText.text = binding.usernameDisplay.text
         }
 
-        bottomSheetView.findViewById<Button>(R.id.button_save).setOnClickListener {
 
+        bottomSheetView.findViewById<Button>(R.id.button_save).setOnClickListener {
+           when(field) {
+               NAME_STRING -> user?.name = inputEditText.text.toString()
+               USERNAME_STRING -> user?.username = inputEditText.text.toString()
+           }
+            user?.let { accountsViewModel?.updateUserInfo(it){ isSuccess ->
+                if(isSuccess) {
+                    bottomSheet?.hide()
+                    accountsViewModel?.userData?.postValue(user)
+                    Toast.makeText(this.activity,"Profile updated",Toast.LENGTH_SHORT).show()
+                }
+                else {
+                    Toast.makeText(this.activity,"Profile update unsuccessful",Toast.LENGTH_SHORT).show()
+                }
+            } }
         }
 
         bottomSheetView.findViewById<Button>(R.id.button_cancel).setOnClickListener {

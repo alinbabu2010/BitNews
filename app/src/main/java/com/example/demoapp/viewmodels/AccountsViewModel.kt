@@ -71,4 +71,12 @@ class AccountsViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
+    fun updateUserInfo(user: Users,isSuccess: (Boolean) -> Unit){
+        CoroutineScope(Dispatchers.IO).launch {
+            userRepository.updateUser(user)
+        }
+        accountRepository.updateUser(user){
+            isSuccess(it)
+        }
+    }
 }
