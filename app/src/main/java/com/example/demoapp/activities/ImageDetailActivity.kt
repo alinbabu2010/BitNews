@@ -19,12 +19,14 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.example.demoapp.R
 import com.example.demoapp.models.Articles
 import com.example.demoapp.utils.Const.Companion.ARTICLE
 import com.example.demoapp.utils.Utils.Companion.requestPermissionRationale
 import com.example.demoapp.utils.Utils.Companion.showAlert
+import com.example.demoapp.viewmodels.AccountsViewModel
 import java.io.File
 
 /**
@@ -183,7 +185,8 @@ class ImageDetailActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return if (item.itemId == R.id.logout_option) {
-            showAlert(this, this)
+            val accountsViewModel = ViewModelProviders.of(this).get(AccountsViewModel::class.java)
+            showAlert(this, this, accountsViewModel)
             true
         } else {
             false

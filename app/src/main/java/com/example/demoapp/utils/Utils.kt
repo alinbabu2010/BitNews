@@ -22,6 +22,7 @@ import com.example.demoapp.models.Articles
 import com.example.demoapp.utils.Const.Companion.ARTICLE
 import com.example.demoapp.utils.Const.Companion.NO_INTERNET
 import com.example.demoapp.utils.Const.Companion.SHARE_TYPE
+import com.example.demoapp.viewmodels.AccountsViewModel
 import com.google.firebase.auth.FirebaseAuth
 
 /**
@@ -56,13 +57,15 @@ class Utils {
         /*
          * Function to show alert dialog box after button click.
          */
-        fun showAlert(context: Context, activity: Activity) {
+        fun showAlert(context: Context, activity: Activity, accountsViewModel: AccountsViewModel) {
             val builder = AlertDialog.Builder(context, R.style.DialogBoxTheme)
             builder.setTitle(R.string.logout_string)
             builder.setMessage(R.string.alert_dialog_question)
             builder.setIcon(android.R.drawable.ic_dialog_alert)
             builder.setPositiveButton(R.string.yes_string) { _, _ ->
+                val uid = FirebaseAuth.getInstance().currentUser?.uid
                 FirebaseAuth.getInstance().signOut()
+                accountsViewModel.removeUserInfo(uid.toString())
                 activity.startActivity(Intent(context, MainActivity::class.java))
                 activity.finish()
             }
@@ -113,8 +116,7 @@ class Utils {
         /**
          * Method to check if network is connected or not
          */
-        fun isNetworkConnected(context: Context?): Boolean {
-
+        private fun isNetworkConnected(context: Context?): Boolean {
             val connectivityManager =
                 context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             val activeNetwork = connectivityManager.activeNetwork

@@ -12,12 +12,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.example.demoapp.R
 import com.example.demoapp.models.Articles
 import com.example.demoapp.utils.Const.Companion.DATE_FORMAT_DECODE
 import com.example.demoapp.utils.Const.Companion.DATE_FORMAT_ENCODE
 import com.example.demoapp.utils.Utils.Companion.showAlert
+import com.example.demoapp.viewmodels.AccountsViewModel
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import java.text.SimpleDateFormat
 import java.util.*
@@ -89,7 +91,8 @@ class ArticleActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return if (item.itemId == R.id.logout_option) {
-            showAlert(this, this)
+            val accountsViewModel = ViewModelProviders.of(this).get(AccountsViewModel::class.java)
+            showAlert(this, this, accountsViewModel)
             true
         } else {
             false

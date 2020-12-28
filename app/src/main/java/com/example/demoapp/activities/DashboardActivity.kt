@@ -13,6 +13,7 @@ import com.example.demoapp.adapter.PageAdapter
 import com.example.demoapp.fragments.dashboard.NewsFragment
 import com.example.demoapp.utils.Utils.Companion.addFragment
 import com.example.demoapp.utils.Utils.Companion.showAlert
+import com.example.demoapp.viewmodels.AccountsViewModel
 import com.example.demoapp.viewmodels.NewsViewModel
 import com.google.android.material.tabs.TabLayout
 
@@ -68,7 +69,8 @@ class DashboardActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return if (item.itemId == R.id.logout_option) {
-            showAlert(this, this)
+            val accountsViewModel = ViewModelProviders.of(this).get(AccountsViewModel::class.java)
+            showAlert(this, this,accountsViewModel)
             true
         } else {
             false
