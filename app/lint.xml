@@ -4,6 +4,8 @@
         <ignore path="src/main/res/drawable/empty_box.png" />
         <ignore path="src/main/res/drawable/ic_empty_box.png" />
         <ignore path="src/main/res/drawable/logo.png" />
+        <ignore path="src/main/res/drawable/no_wifi.png" />
+        <ignore path="src/main/res/drawable/no_wifi.png" />
     </issue>
     <issue id="IconXmlAndPng">
         <ignore path="src/main/res/drawable-hdpi/ic_calendar.png" />
