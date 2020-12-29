@@ -1,4 +1,4 @@
-package com.example.demoapp.activities
+package com.example.demoapp.ui.activities.dashboard
 
 import android.Manifest
 import android.app.DownloadManager

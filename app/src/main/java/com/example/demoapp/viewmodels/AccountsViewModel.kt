@@ -4,8 +4,8 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.example.demoapp.database.UserDatabase
-import com.example.demoapp.database.UserRepository
-import com.example.demoapp.firebase.AccountRepository
+import com.example.demoapp.repository.UserRepository
+import com.example.demoapp.repository.AccountRepository
 import com.example.demoapp.models.Users
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineScope

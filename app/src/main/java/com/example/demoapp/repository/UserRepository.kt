@@ -1,5 +1,6 @@
-package com.example.demoapp.database
+package com.example.demoapp.repository
 
+import com.example.demoapp.database.UsersDAO
 import com.example.demoapp.models.Users
 
 /**

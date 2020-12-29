@@ -9,7 +9,7 @@ import com.google.firebase.database.*
 /**
  * Singleton class to handle some firebase operations
  */
-class FirebaseOperations {
+class FavoritesFirebase {
 
     companion object {
 

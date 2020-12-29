@@ -1,6 +1,7 @@
-package com.example.demoapp.database
+package com.example.demoapp.repository
 
 import androidx.lifecycle.LiveData
+import com.example.demoapp.database.ArticlesDAO
 import com.example.demoapp.models.Articles
 
 /**

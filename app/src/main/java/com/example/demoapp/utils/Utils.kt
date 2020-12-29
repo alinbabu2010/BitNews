@@ -15,9 +15,9 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.example.demoapp.R
-import com.example.demoapp.activities.ArticleActivity
-import com.example.demoapp.activities.ImageDetailActivity
-import com.example.demoapp.activities.MainActivity
+import com.example.demoapp.ui.activities.dashboard.ArticleActivity
+import com.example.demoapp.ui.activities.dashboard.ImageDetailActivity
+import com.example.demoapp.ui.activities.main.MainActivity
 import com.example.demoapp.models.Articles
 import com.example.demoapp.utils.Const.Companion.ARTICLE
 import com.example.demoapp.utils.Const.Companion.NO_INTERNET

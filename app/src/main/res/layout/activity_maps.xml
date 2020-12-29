@@ -14,4 +14,4 @@
     map:uiScrollGestures="true"
     map:uiTiltGestures="true"
     map:uiZoomGestures="true"
-    tools:context=".activities.MapsActivity" />
+    tools:context=".ui.activities.main.MapsActivity" />

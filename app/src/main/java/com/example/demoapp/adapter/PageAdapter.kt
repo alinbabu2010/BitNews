@@ -3,9 +3,9 @@ package com.example.demoapp.adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
-import com.example.demoapp.fragments.dashboard.FavouritesFragment
-import com.example.demoapp.fragments.dashboard.NewsFragment
-import com.example.demoapp.fragments.dashboard.ProfileFragment
+import com.example.demoapp.ui.activities.fragments.dashboard.FavouritesFragment
+import com.example.demoapp.ui.activities.fragments.dashboard.NewsFragment
+import com.example.demoapp.ui.activities.fragments.dashboard.ProfileFragment
 
 /**
  * Adapter class for ViewPager

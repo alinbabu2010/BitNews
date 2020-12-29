@@ -1,4 +1,4 @@
-package com.example.demoapp.activities
+package com.example.demoapp.ui.activities.main
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,6 +6,7 @@ import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.example.demoapp.R
+import com.example.demoapp.ui.activities.dashboard.DashboardActivity
 import com.example.demoapp.utils.Const.Companion.FAVOURITES
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase

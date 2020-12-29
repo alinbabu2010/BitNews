@@ -1,4 +1,4 @@
-package com.example.demoapp.activities
+package com.example.demoapp.ui.activities.dashboard
 
 import android.os.Bundle
 import android.view.Menu
@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
 import com.example.demoapp.R
 import com.example.demoapp.adapter.PageAdapter
-import com.example.demoapp.fragments.dashboard.NewsFragment
+import com.example.demoapp.ui.activities.fragments.dashboard.NewsFragment
 import com.example.demoapp.utils.Utils.Companion.addFragment
 import com.example.demoapp.utils.Utils.Companion.showAlert
 import com.example.demoapp.viewmodels.AccountsViewModel

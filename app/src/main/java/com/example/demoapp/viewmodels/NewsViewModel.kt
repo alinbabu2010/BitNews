@@ -7,10 +7,10 @@ import androidx.lifecycle.MutableLiveData
 import com.example.demoapp.api.APIResponse
 import com.example.demoapp.api.Resource
 import com.example.demoapp.api.RetrofitManager
-import com.example.demoapp.database.ArticleRepository
+import com.example.demoapp.repository.ArticleRepository
 import com.example.demoapp.database.ArticlesDatabase
-import com.example.demoapp.firebase.FirebaseOperations.Companion.retrieveDataFromFirebase
-import com.example.demoapp.firebase.FirebaseOperations.Companion.storeDataOnFirebase
+import com.example.demoapp.firebase.FavoritesFirebase.Companion.retrieveDataFromFirebase
+import com.example.demoapp.firebase.FavoritesFirebase.Companion.storeDataOnFirebase
 import com.example.demoapp.models.Articles
 import com.example.demoapp.models.News
 import kotlinx.coroutines.CoroutineScope

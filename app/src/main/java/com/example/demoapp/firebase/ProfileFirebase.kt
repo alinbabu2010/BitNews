@@ -1,7 +1,7 @@
 package com.example.demoapp.firebase
 
 import android.net.Uri
-import com.example.demoapp.fragments.dashboard.ProfileFragment.Companion.firebaseResponseMessage
+import com.example.demoapp.ui.activities.fragments.dashboard.ProfileFragment.Companion.firebaseResponseMessage
 import com.example.demoapp.models.Users
 import com.example.demoapp.utils.Const.Companion.EMAIL_STRING
 import com.example.demoapp.utils.Const.Companion.IMAGE_URL
@@ -18,7 +18,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 
 
-class ProfileOperationsFirebase {
+class ProfileFirebase {
 
     companion object {
 

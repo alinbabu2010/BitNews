@@ -1,7 +1,6 @@
-package com.example.demoapp.firebase
+package com.example.demoapp.repository
 
-import com.example.demoapp.database.UserRepository
-import com.example.demoapp.firebase.ProfileOperationsFirebase.Companion.getDataFromFirebase
+import com.example.demoapp.firebase.ProfileFirebase.Companion.getDataFromFirebase
 import com.example.demoapp.models.Users
 import com.example.demoapp.utils.Const.Companion.EMAIL_STRING
 import com.example.demoapp.utils.Const.Companion.IMAGE_URL

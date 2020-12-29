@@ -33,7 +33,7 @@
             android:value="${google_maps_key}" />
 
         <activity
-            android:name=".activities.SplashActivity"
+            android:name="com.example.demoapp.ui.activities.main.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
             <intent-filter>
@@ -43,7 +43,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.MainActivity"
+            android:name="com.example.demoapp.ui.activities.main.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -52,7 +52,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.DashboardActivity"
+            android:name="com.example.demoapp.ui.activities.dashboard.DashboardActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -61,8 +61,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.ArticleActivity"
-            android:parentActivityName=".activities.DashboardActivity"
+            android:name="com.example.demoapp.ui.activities.dashboard.ArticleActivity"
+            android:parentActivityName="com.example.demoapp.ui.activities.dashboard.DashboardActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ArticleTheme">
             <intent-filter>
@@ -72,8 +72,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.ImageDetailActivity"
-            android:parentActivityName=".activities.DashboardActivity"
+            android:name="com.example.demoapp.ui.activities.dashboard.ImageDetailActivity"
+            android:parentActivityName="com.example.demoapp.ui.activities.dashboard.DashboardActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -82,9 +82,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.MapsActivity"
+            android:name="com.example.demoapp.ui.activities.main.MapsActivity"
             android:label="@string/title_activity_maps"
-            android:parentActivityName=".activities.DashboardActivity"
+            android:parentActivityName="com.example.demoapp.ui.activities.dashboard.DashboardActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait">
             <intent-filter>

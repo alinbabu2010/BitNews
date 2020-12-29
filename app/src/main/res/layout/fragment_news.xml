@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/background_color"
     android:orientation="vertical"
-    tools:context=".fragments.dashboard.NewsFragment">
+    tools:context=".ui.activities.fragments.dashboard.NewsFragment">
 
     <TextView
         android:id="@+id/no_matching_textView"
