@@ -1,4 +1,4 @@
-package com.example.demoapp.ui.activities.fragments.accounts
+package com.example.demoapp.ui.fragments.accounts
 
 import android.content.Intent
 import android.os.Bundle
@@ -28,7 +28,7 @@ import com.google.android.material.textfield.TextInputEditText
  */
 class LoginFragment : Fragment() {
 
-    var viewModel : AccountsViewModel? = null
+    private var viewModel : AccountsViewModel? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

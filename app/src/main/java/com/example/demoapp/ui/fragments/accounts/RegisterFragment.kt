@@ -1,4 +1,4 @@
-package com.example.demoapp.ui.activities.fragments.accounts
+package com.example.demoapp.ui.fragments.accounts
 
 import android.content.Intent
 import android.os.Bundle
@@ -28,7 +28,7 @@ import com.example.demoapp.viewmodels.AccountsViewModel
 class RegisterFragment : Fragment() {
 
     private lateinit var binding: FragmentRegisterBinding
-    var viewModel: AccountsViewModel? = null
+    private var viewModel: AccountsViewModel? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

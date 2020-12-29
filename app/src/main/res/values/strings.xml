@@ -58,7 +58,6 @@
     <string name="storage_camera_permission">Please enable storage and camera permission in app settings</string>
     <string name="search_title">Search</string>
     <string name="enter_name">Enter your name</string>
-    <string name="enter_username">Enter your username</string>
     <string name="profile_update" >Profile updated successfully</string>
     <string name="profile_unsuccessful">Profile update unsuccessful</string>
 </resources>

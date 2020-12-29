@@ -1,4 +1,4 @@
-package com.example.demoapp.ui.activities.fragments.dashboard
+package com.example.demoapp.ui.fragments.dashboard
 
 import android.Manifest
 import android.app.Activity
@@ -20,11 +20,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.example.demoapp.R
-import com.example.demoapp.ui.activities.main.MapsActivity
 import com.example.demoapp.databinding.FragmentProfileBinding
 import com.example.demoapp.firebase.ProfileFirebase.Companion.removeUserImage
 import com.example.demoapp.firebase.ProfileFirebase.Companion.uploadImageToFirebase
 import com.example.demoapp.models.Users
+import com.example.demoapp.ui.activities.main.MapsActivity
 import com.example.demoapp.utils.Const.Companion.NAME_STRING
 import com.example.demoapp.utils.Const.Companion.PROFILE_IMAGE_DELETE
 import com.example.demoapp.utils.Const.Companion.USERNAME_STRING

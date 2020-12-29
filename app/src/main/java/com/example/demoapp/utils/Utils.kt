@@ -15,10 +15,10 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.example.demoapp.R
+import com.example.demoapp.models.Articles
 import com.example.demoapp.ui.activities.dashboard.ArticleActivity
 import com.example.demoapp.ui.activities.dashboard.ImageDetailActivity
 import com.example.demoapp.ui.activities.main.MainActivity
-import com.example.demoapp.models.Articles
 import com.example.demoapp.utils.Const.Companion.ARTICLE
 import com.example.demoapp.utils.Const.Companion.NO_INTERNET
 import com.example.demoapp.utils.Const.Companion.SHARE_TYPE
@@ -116,7 +116,7 @@ class Utils {
         /**
          * Method to check if network is connected or not
          */
-        private fun isNetworkConnected(context: Context?): Boolean {
+        fun isNetworkConnected(context: Context?): Boolean {
             val connectivityManager =
                 context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             val activeNetwork = connectivityManager.activeNetwork

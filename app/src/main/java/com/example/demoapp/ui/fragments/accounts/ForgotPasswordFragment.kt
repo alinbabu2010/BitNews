@@ -1,4 +1,4 @@
-package com.example.demoapp.ui.activities.fragments.accounts
+package com.example.demoapp.ui.fragments.accounts
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -20,7 +20,7 @@ import com.google.android.material.textfield.TextInputEditText
  */
 class ForgotPasswordFragment : Fragment() {
 
-    var viewModel: AccountsViewModel? = null
+    private var viewModel: AccountsViewModel? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

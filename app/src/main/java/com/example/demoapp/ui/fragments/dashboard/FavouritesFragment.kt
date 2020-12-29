@@ -1,4 +1,4 @@
-package com.example.demoapp.ui.activities.fragments.dashboard
+package com.example.demoapp.ui.fragments.dashboard
 
 import android.graphics.Color
 import android.os.Bundle

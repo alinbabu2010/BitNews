@@ -1,8 +1,8 @@
 package com.example.demoapp.firebase
 
 import android.net.Uri
-import com.example.demoapp.ui.activities.fragments.dashboard.ProfileFragment.Companion.firebaseResponseMessage
 import com.example.demoapp.models.Users
+import com.example.demoapp.ui.fragments.dashboard.ProfileFragment.Companion.firebaseResponseMessage
 import com.example.demoapp.utils.Const.Companion.EMAIL_STRING
 import com.example.demoapp.utils.Const.Companion.IMAGE_URL
 import com.example.demoapp.utils.Const.Companion.NAME_STRING
