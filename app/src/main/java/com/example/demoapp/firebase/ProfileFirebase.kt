@@ -6,7 +6,6 @@ import com.example.demoapp.ui.fragments.dashboard.ProfileFragment.Companion.fire
 import com.example.demoapp.utils.Const.Companion.EMAIL_STRING
 import com.example.demoapp.utils.Const.Companion.IMAGE_URL
 import com.example.demoapp.utils.Const.Companion.NAME_STRING
-import com.example.demoapp.utils.Const.Companion.PROFILE_IMAGE_DELETE
 import com.example.demoapp.utils.Const.Companion.PROFILE_IMAGE_UPDATE
 import com.example.demoapp.utils.Const.Companion.USERNAME_STRING
 import com.example.demoapp.utils.Const.Companion.USERS
@@ -39,9 +38,13 @@ class ProfileFirebase {
                         } else {
                             dataSnapshot.child(IMAGE_URL).value as String
                         }
-                        val user = Users(getCurrentUser.toString(),dataSnapshot.child(USERNAME_STRING).value as String,
-                        dataSnapshot.child(NAME_STRING).value as String, dataSnapshot.child(EMAIL_STRING).value as String,
-                        imageUrl)
+                        val user = Users(
+                            getCurrentUser.toString(),
+                            dataSnapshot.child(USERNAME_STRING).value as String,
+                            dataSnapshot.child(NAME_STRING).value as String,
+                            dataSnapshot.child(EMAIL_STRING).value as String,
+                            imageUrl
+                        )
                         firebaseResponseMessage = null
                         data(user)
                     }
@@ -59,7 +62,6 @@ class ProfileFirebase {
          */
         fun uploadImageToFirebase(
             file: Uri?,
-            userData: Map<String, String>,
             message: (String) -> Unit
         ) {
 
@@ -71,17 +73,9 @@ class ProfileFirebase {
                     ?.addOnCompleteListener { taskSnapshot -> // Get a URL to the uploaded content
                         if (taskSnapshot.isSuccessful) {
                             storageRef.downloadUrl.addOnSuccessListener { uri ->
-                                val user = userData[USERNAME_STRING]?.let { it1 ->
-                                    Users(
-                                        getCurrentUser,
-                                        it1,
-                                        userData[NAME_STRING],
-                                        userData[EMAIL_STRING],
-                                        uri.toString()
-                                    )
-                                }
                                 FirebaseDatabase.getInstance().getReference(USERS)
-                                    .child(getCurrentUser).setValue(user)
+                                    .child(getCurrentUser).child("userImageUrl")
+                                    .setValue(uri.toString())
                                     .addOnSuccessListener {
                                         message(PROFILE_IMAGE_UPDATE)
                                     }
@@ -96,16 +90,14 @@ class ProfileFirebase {
         /**
          * Method to remove user image from firebase
          */
-        fun removeUserImage(){
+        fun removeUserImage() {
             val getCurrentUser = FirebaseAuth.getInstance().currentUser?.uid
-            val storageRef = mStorageRef.child(getCurrentUser.toString()).child("images/$getCurrentUser.jpg")
+            val storageRef =
+                mStorageRef.child(getCurrentUser.toString()).child("images/$getCurrentUser.jpg")
             storageRef.delete().addOnSuccessListener {
-                FirebaseDatabase.getInstance().getReference(USERS).child(getCurrentUser.toString()).child("userImageUrl").removeValue()
-                    .addOnSuccessListener {
-                        firebaseResponseMessage = PROFILE_IMAGE_DELETE
-                    }
+                FirebaseDatabase.getInstance().getReference(USERS).child(getCurrentUser.toString())
+                    .child("userImageUrl").removeValue()
             }
-
         }
     }
 }
