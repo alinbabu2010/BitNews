@@ -8,6 +8,8 @@ import com.example.demoapp.api.RetrofitManager
 import com.example.demoapp.database.ArticlesDAO
 import com.example.demoapp.models.Articles
 import com.example.demoapp.models.News
+import com.example.demoapp.ui.fragments.dashboard.NewsFragment
+import com.example.demoapp.utils.Utils.Companion.checkNetworkConnection
 
 /**
  * Repository class for handling news articles
@@ -15,22 +17,20 @@ import com.example.demoapp.models.News
 class ArticleRepository(private val  articlesDAO: ArticlesDAO) {
 
     val newsLiveData = MutableLiveData<Resource<News?>>()
-    val articleLiveData = MutableLiveData<List<Articles>>()
-
     val readAllArticles : LiveData<List<Articles>> = articlesDAO.getAllArticles()
 
     fun getArticles() {
-        val articles = articlesDAO.getAllArticles()
+        val articles = readAllArticles
         if (articles.value == null) {
-            RetrofitManager.getRetrofitService {
-                when (it) {
-                    is APIResponse.Success -> newsLiveData.postValue(Resource.success(it.data))
-                    is APIResponse.Error -> newsLiveData.postValue(Resource.error(it.error))
-                    is APIResponse.Failure -> newsLiveData.postValue(Resource.failure(it.exception))
+            checkNetworkConnection(NewsFragment.context) {
+                RetrofitManager.getRetrofitService {
+                    when (it) {
+                        is APIResponse.Success -> newsLiveData.postValue(Resource.success(it.data))
+                        is APIResponse.Error -> newsLiveData.postValue(Resource.error(it.error))
+                        is APIResponse.Failure -> newsLiveData.postValue(Resource.failure(it.exception))
+                    }
                 }
             }
-        } else {
-            articleLiveData.postValue(articles.value)
         }
     }
 
