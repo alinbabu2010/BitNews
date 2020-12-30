@@ -4,15 +4,13 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.demoapp.api.APIResponse
 import com.example.demoapp.api.Resource
-import com.example.demoapp.api.RetrofitManager
-import com.example.demoapp.repository.ArticleRepository
 import com.example.demoapp.database.ArticlesDatabase
 import com.example.demoapp.firebase.FavoritesFirebase.Companion.retrieveDataFromFirebase
 import com.example.demoapp.firebase.FavoritesFirebase.Companion.storeDataOnFirebase
 import com.example.demoapp.models.Articles
 import com.example.demoapp.models.News
+import com.example.demoapp.repository.ArticleRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,8 +22,8 @@ import kotlinx.coroutines.launch
 class NewsViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository : ArticleRepository
-    val allArticles : LiveData<List<Articles>>
-    val newsLiveData = MutableLiveData<Resource<News?>>()
+    var articles : LiveData<List<Articles>>
+    var newsLiveData = MutableLiveData<Resource<News?>>()
 
     val favouritesLiveData : MutableLiveData<MutableSet<Articles>> by lazy {
         MutableLiveData<MutableSet<Articles>>()
@@ -35,19 +33,16 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
     init {
         val articlesDAO = ArticlesDatabase.getDatabase(application).articlesDAO()
         repository = ArticleRepository(articlesDAO)
-        allArticles = repository.readAllData
+        articles = repository.readAllArticles
     }
 
     /**
      * Method to get the news from API url
      */
     fun getNews() {
-        RetrofitManager.getRetrofitService {
-            when (it) {
-                is APIResponse.Success -> newsLiveData.postValue(Resource.success(it.data))
-                is APIResponse.Error -> newsLiveData.postValue(Resource.error(it.error))
-                is APIResponse.Failure -> newsLiveData.postValue(Resource.failure(it.exception))
-            }
+        CoroutineScope(Dispatchers.IO).launch {
+            repository.getArticles()
+            newsLiveData = repository.newsLiveData
         }
     }
 

@@ -17,7 +17,6 @@ import com.example.demoapp.adapter.NewsAdapter
 import com.example.demoapp.api.Resource
 import com.example.demoapp.databinding.FragmentNewsBinding
 import com.example.demoapp.models.Articles
-import com.example.demoapp.utils.Utils.Companion.isNetworkConnected
 import com.example.demoapp.viewmodels.NewsViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
@@ -51,9 +50,7 @@ class NewsFragment : Fragment() {
         val recyclerView: RecyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(context)
         newsViewModel?.getFavourites()
-        if (isNetworkConnected(context)) {
-            newsViewModel?.getNews()
-        }
+        newsViewModel?.getNews()
 
         newsViewModel?.newsLiveData?.observe(viewLifecycleOwner, { it ->
             when (it.status) {
@@ -79,7 +76,7 @@ class NewsFragment : Fragment() {
             }
         })
 
-        newsViewModel?.allArticles?.observe(viewLifecycleOwner, {
+        newsViewModel?.articles?.observe(viewLifecycleOwner, {
             recyclerView.adapter = NewsAdapter(it as ArrayList<Articles>, newsViewModel)
             recyclerView.setHasFixedSize(true)
         })
