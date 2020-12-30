@@ -13,7 +13,7 @@ interface UsersDAO {
     fun insertUser(user: Users)
 
     @Query("SELECT * FROM Users WHERE id=:id")
-    fun getUserInfo(id:String) : Users
+    fun getUserInfo(id:String) : Users?
 
     @Query("UPDATE Users SET name=:name,username=:username WHERE id=:id ")
     fun updateUser(id:String,name : String,username : String)

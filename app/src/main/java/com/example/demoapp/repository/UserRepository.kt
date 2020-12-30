@@ -1,6 +1,7 @@
 package com.example.demoapp.repository
 
 import com.example.demoapp.database.UsersDAO
+import com.example.demoapp.firebase.ProfileFirebase.Companion.getDataFromFirebase
 import com.example.demoapp.models.Users
 
 /**
@@ -8,7 +9,14 @@ import com.example.demoapp.models.Users
  */
 class UserRepository(private  val usersDAO: UsersDAO) {
 
-    fun getCurrentUserInfo(id:String) : Users = usersDAO.getUserInfo(id)
+    fun getCurrentUserInfo(id:String,data : (Users) -> Unit) {
+        val user = usersDAO.getUserInfo(id)
+        if (user == null) {
+            getDataFromFirebase {
+                data(it)
+            }
+        } else data(user)
+    }
 
     fun insertUser(user: Users){
         usersDAO.insertUser(user)
