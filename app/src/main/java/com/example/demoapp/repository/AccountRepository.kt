@@ -2,10 +2,6 @@ package com.example.demoapp.repository
 
 import com.example.demoapp.firebase.ProfileFirebase.Companion.getDataFromFirebase
 import com.example.demoapp.models.Users
-import com.example.demoapp.utils.Const.Companion.EMAIL_STRING
-import com.example.demoapp.utils.Const.Companion.IMAGE_URL
-import com.example.demoapp.utils.Const.Companion.NAME_STRING
-import com.example.demoapp.utils.Const.Companion.USERNAME_STRING
 import com.example.demoapp.utils.Const.Companion.USERS
 import com.example.demoapp.utils.Utils.Companion.firebaseError
 import com.google.firebase.auth.FirebaseAuth
@@ -34,23 +30,12 @@ class AccountRepository {
     ) {
         getAuthInstance.signInWithEmailAndPassword(userName, password).addOnCompleteListener {
             if (it.isSuccessful) {
-                getDataFromFirebase { data ->
-                    user = Users(
-                        getAuthInstance.currentUser?.uid.toString(),
-                        data[USERNAME_STRING],
-                        data[NAME_STRING],
-                        data[EMAIL_STRING],
-                        data[IMAGE_URL]
-                    )
+                getDataFromFirebase { user ->
                     CoroutineScope(Dispatchers.IO).launch {
-                        user?.let { it1 ->
-                            userRepository.insertUser(
-                                it1
-                            )
-                        }
+                        userRepository.insertUser(user)
                     }
-                    isSuccess(it.isSuccessful)
                 }
+                isSuccess(it.isSuccessful)
             } else {
                 isSuccess(false)
             }
@@ -60,19 +45,19 @@ class AccountRepository {
     /**
      * Method to register a user to firebase
      */
-    fun createUser(email: String, password: String, user: Users): Boolean {
+    fun createUser(email: String, password: String, user: Users,isSuccess: (Boolean) -> Unit) {
         getAuthInstance.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
+                    user.id = getAuthInstance.currentUser?.uid.toString()
                     updateUser(user) {
-                        isSuccess = it
+                        isSuccess(it)
                     }
                 } else {
                     firebaseError = task.exception?.message
-                    isSuccess = false
+                    isSuccess(false)
                 }
             }
-        return isSuccess
     }
 
     /**
