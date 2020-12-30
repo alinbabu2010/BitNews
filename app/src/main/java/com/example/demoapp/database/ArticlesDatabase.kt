@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.example.demoapp.models.Articles
 
 
-@Database(entities = [Articles::class], version = 1, exportSchema = false)
+@Database(entities = [Articles::class], version = 1)
 abstract class ArticlesDatabase : RoomDatabase() {
 
     abstract fun articlesDAO() : ArticlesDAO
@@ -26,7 +26,7 @@ abstract class ArticlesDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     ArticlesDatabase::class.java, "news_database"
-                ).build()
+                ).fallbackToDestructiveMigration().build()
                 INSTANCE = instance
                 return instance
             }
