@@ -295,8 +295,9 @@ class ProfileFragment : Fragment() {
     private fun saveUserImage(data: Uri?) {
         context?.let { Glide.with(it).load(data).into(binding.userImage) }
         binding.progressProfileImage.visibility = View.VISIBLE
-        uploadImageToFirebase(data, userData) {
+        uploadImageToFirebase(data) {
             binding.progressProfileImage.visibility = View.INVISIBLE
+            onResume()
             Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
         }
     }
