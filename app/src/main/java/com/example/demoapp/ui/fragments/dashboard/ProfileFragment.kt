@@ -85,6 +85,14 @@ class ProfileFragment : Fragment() {
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        accountsViewModel?.userData?.observe(viewLifecycleOwner,{
+            setProfileData(it)
+            user = it
+        })
+    }
+
     /**
      * Method to set and show edit user info bottom sheet dialog
      */
@@ -136,8 +144,12 @@ class ProfileFragment : Fragment() {
         binding.nameDisplay.setText(data?.name)
         binding.usernameDisplay.setText(data?.username)
         binding.emailDisplay.setText(data?.email)
-        if (!data?.userImageUrl.equals("NONE"))
+        if (!data?.userImageUrl.equals("NONE")) {
             context?.let { Glide.with(it).load(data?.userImageUrl).into(binding.userImage) }
+        }
+        else {
+            context?.let { binding.userImage.setImageResource(R.drawable.avatar_anonymous_48dp) }
+        }
         if (firebaseResponseMessage?.isNotEmpty() == true) {
             Toast.makeText(context, firebaseResponseMessage, Toast.LENGTH_SHORT).show()
         }
