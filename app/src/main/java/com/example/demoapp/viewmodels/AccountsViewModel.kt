@@ -22,7 +22,7 @@ class AccountsViewModel(application: Application) : AndroidViewModel(application
         MutableLiveData<Boolean>()
     }
 
-    var userData = MutableLiveData<Users>()
+    var userData = MutableLiveData<Users?>()
     private val userRepository: UserRepository
     private val accountRepository = AccountRepository()
 
@@ -44,10 +44,13 @@ class AccountsViewModel(application: Application) : AndroidViewModel(application
      * Method to call [AccountRepository.createUser]
      */
     fun createUser(email: String, password: String, user: Users) {
-        operationExecuted.value = accountRepository.createUser(email, password, user)
-        user.id = FirebaseAuth.getInstance().currentUser?.uid.toString()
-        CoroutineScope(Dispatchers.IO).launch {
-            userRepository.insertUser(user)
+        accountRepository.createUser(email, password, user){
+            user.id = FirebaseAuth.getInstance().currentUser?.uid.toString()
+            user.userImageUrl = "NONE"
+            CoroutineScope(Dispatchers.IO).launch {
+                userRepository.insertUser(user)
+            }
+            operationExecuted.postValue(it)
         }
     }
 
@@ -63,8 +66,12 @@ class AccountsViewModel(application: Application) : AndroidViewModel(application
      */
     fun getUserInfo(uid: String) {
         CoroutineScope(Dispatchers.IO).launch {
-            val data = userRepository.getCurrentUserInfo(uid)
-            userData.postValue(data)
+            var user : Users? = null
+            userRepository.getCurrentUserInfo(uid) {
+                user = it
+                userData.postValue(it)
+            }
+            user?.let { userRepository.insertUser(it) }
         }
     }
 

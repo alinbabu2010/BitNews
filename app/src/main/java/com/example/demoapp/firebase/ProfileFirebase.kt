@@ -27,24 +27,23 @@ class ProfileFirebase {
         /**
          * Method to get user details from firebase.
          */
-        fun getDataFromFirebase(data: (Map<String, String>) -> Unit) {
+        fun getDataFromFirebase(data: (Users) -> Unit) {
             val getCurrentUser = FirebaseAuth.getInstance().currentUser?.uid
-            val user = FirebaseDatabase.getInstance().getReference(USERS)
-            val getUser = user.child(getCurrentUser.toString())
+            val userRef = FirebaseDatabase.getInstance().getReference(USERS)
+            val getUser = userRef.child(getCurrentUser.toString())
             getUser.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     if (dataSnapshot.exists()) {
-                        val profileInfo = mutableMapOf<String, String>()
-                        profileInfo[NAME_STRING] = dataSnapshot.child(NAME_STRING).value as String
-                        profileInfo[USERNAME_STRING] = dataSnapshot.child(USERNAME_STRING).value as String
-                        profileInfo[EMAIL_STRING] = dataSnapshot.child(EMAIL_STRING).value as String
-                        if (dataSnapshot.child(IMAGE_URL).value == null) {
-                            profileInfo[IMAGE_URL] = "NONE"
+                        val imageUrl = if (dataSnapshot.child(IMAGE_URL).value == null) {
+                            "NONE"
                         } else {
-                            profileInfo[IMAGE_URL] = dataSnapshot.child(IMAGE_URL).value as String
+                            dataSnapshot.child(IMAGE_URL).value as String
                         }
+                        val user = Users(getCurrentUser.toString(),dataSnapshot.child(USERNAME_STRING).value as String,
+                        dataSnapshot.child(NAME_STRING).value as String, dataSnapshot.child(EMAIL_STRING).value as String,
+                        imageUrl)
                         firebaseResponseMessage = null
-                        data(profileInfo)
+                        data(user)
                     }
                 }
 

@@ -14,9 +14,9 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.demoapp.R
-import com.example.demoapp.ui.activities.dashboard.DashboardActivity
 import com.example.demoapp.databinding.FragmentRegisterBinding
 import com.example.demoapp.models.Users
+import com.example.demoapp.ui.activities.dashboard.DashboardActivity
 import com.example.demoapp.utils.Utils.Companion.checkNetworkConnection
 import com.example.demoapp.utils.Utils.Companion.firebaseError
 import com.example.demoapp.utils.Utils.Companion.replaceFragment
@@ -150,7 +150,9 @@ class RegisterFragment : Fragment() {
                 activity?.finish()
             } else {
                 binding.registerProgressBar.visibility = View.INVISIBLE
-                Toast.makeText(context, firebaseError, Toast.LENGTH_SHORT).show()
+                if (firebaseError != null) {
+                    Toast.makeText(context, firebaseError, Toast.LENGTH_SHORT).show()
+                }
             }
         })
     }
