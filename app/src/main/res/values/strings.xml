@@ -60,4 +60,8 @@
     <string name="enter_name">Enter your name</string>
     <string name="profile_update" >Profile updated successfully</string>
     <string name="profile_unsuccessful">Profile update unsuccessful</string>
+    <string name="channel_name">News Notification</string>
+    <string name="channel_description">Notify users after news update</string>
+    <string name="channel_text">Updated with latest fetch from NewsApi.org</string>
+    <string name="channel_title">News update</string>
 </resources>

@@ -52,4 +52,8 @@
     <string name="enter_name">നിങ്ങളുടെ പേര് നൽകുക</string>
     <string name="profile_unsuccessful">പ്രൊഫൈൽ അപ്‌ഡേറ്റ് പരാജയപ്പെട്ടു</string>
     <string name="profile_update">പ്രൊഫൈൽ അപ്‌ഡേറ്റ് വിജയകരമായി</string>
+    <string name="channel_text">NewsApi.org- ൽ നിന്നുള്ള ഏറ്റവും പുതിയ ലഭ്യമാക്കൽ ഉപയോഗിച്ച് അപ്‌ഡേറ്റുചെയ്‌തു</string>
+    <string name="channel_description">വാർത്താ അപ്‌ഡേറ്റിന് ശേഷം ഉപയോക്താക്കളെ അറിയിക്കുക</string>
+    <string name="channel_name">വാർത്താ അറിയിപ്പ്</string>
+    <string name="channel_title">വാർത്താ അപ്‌ഡേറ്റ്</string>
 </resources>

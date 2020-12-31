@@ -52,4 +52,8 @@
     <string name="enter_name">أدخل أسمك</string>
     <string name="profile_update">تم تحديث الملف الشخصي بنجاح</string>
     <string name="profile_unsuccessful">تحديث الملف الشخصي غير ناجح</string>
+    <string name="channel_name">إعلام الأخبار</string>
+    <string name="channel_description">أبلغ المستخدمين بعد تحديث الأخبار</string>
+    <string name="channel_text">تم التحديث بأحدث عملية جلب من NewsApi.org</string>
+    <string name="channel_title">تحديث الأخبار</string>
 </resources>
