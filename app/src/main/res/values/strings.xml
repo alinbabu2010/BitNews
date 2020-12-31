@@ -64,4 +64,6 @@
     <string name="channel_description">Notify users after news update</string>
     <string name="channel_text">Updated with latest fetch from NewsApi.org</string>
     <string name="channel_title">News update</string>
+    <string name="push_notification_channel_id">Firebase Push Notification</string>
+    <string name="push_notification_channel_description">Push notification from firebase operations</string>
 </resources>

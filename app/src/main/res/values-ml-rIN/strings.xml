@@ -56,4 +56,6 @@
     <string name="channel_description">വാർത്താ അപ്‌ഡേറ്റിന് ശേഷം ഉപയോക്താക്കളെ അറിയിക്കുക</string>
     <string name="channel_name">വാർത്താ അറിയിപ്പ്</string>
     <string name="channel_title">വാർത്താ അപ്‌ഡേറ്റ്</string>
+    <string name="push_notification_channel_id">Firebase Push Notification</string>
+    <string name="push_notification_channel_description">Push notification from firebase operations</string>
 </resources>

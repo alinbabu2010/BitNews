@@ -56,4 +56,6 @@
     <string name="channel_description">أبلغ المستخدمين بعد تحديث الأخبار</string>
     <string name="channel_text">تم التحديث بأحدث عملية جلب من NewsApi.org</string>
     <string name="channel_title">تحديث الأخبار</string>
+    <string name="push_notification_channel_id">Firebase Push Notification</string>
+    <string name="push_notification_channel_description">Push notification from firebase operations</string>
 </resources>
