@@ -9,7 +9,6 @@ import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -20,7 +19,6 @@ import com.example.demoapp.ui.activities.dashboard.ArticleActivity
 import com.example.demoapp.ui.activities.dashboard.ImageDetailActivity
 import com.example.demoapp.ui.activities.main.MainActivity
 import com.example.demoapp.utils.Const.Companion.ARTICLE
-import com.example.demoapp.utils.Const.Companion.NO_INTERNET
 import com.example.demoapp.utils.Const.Companion.SHARE_TYPE
 import com.example.demoapp.viewmodels.AccountsViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -95,22 +93,6 @@ class Utils {
             }
             val shareIntent = Intent.createChooser(sendIntent, null)
             ContextCompat.startActivity(context, shareIntent, Bundle.EMPTY)
-        }
-
-        /**
-         * Method that check network connection before calling the request function
-         */
-        fun checkNetworkConnection(context: Context?, function: () -> Unit) {
-            if (isNetworkConnected(context)) {
-                function()
-            } else {
-                Toast.makeText(
-                    context,
-                    NO_INTERNET,
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-
         }
 
         /**

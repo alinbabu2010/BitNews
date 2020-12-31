@@ -17,8 +17,9 @@ import com.example.demoapp.R
 import com.example.demoapp.databinding.FragmentRegisterBinding
 import com.example.demoapp.models.Users
 import com.example.demoapp.ui.activities.dashboard.DashboardActivity
-import com.example.demoapp.utils.Utils.Companion.checkNetworkConnection
+import com.example.demoapp.utils.Const
 import com.example.demoapp.utils.Utils.Companion.firebaseError
+import com.example.demoapp.utils.Utils.Companion.isNetworkConnected
 import com.example.demoapp.utils.Utils.Companion.replaceFragment
 import com.example.demoapp.viewmodels.AccountsViewModel
 
@@ -45,8 +46,10 @@ class RegisterFragment : Fragment() {
         binding.registerProgressBar.visibility = View.INVISIBLE
         binding.registerButton.setOnClickListener {
             binding.registerProgressBar.visibility = View.VISIBLE
-            checkNetworkConnection(context) {
+            if(isNetworkConnected(context)) {
                 if (validateForm()) registerUser()
+            } else {
+                Toast.makeText(context, Const.NO_INTERNET,Toast.LENGTH_SHORT).show()
             }
 
         }

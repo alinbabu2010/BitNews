@@ -17,7 +17,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.demoapp.R
 import com.example.demoapp.ui.activities.dashboard.DashboardActivity
-import com.example.demoapp.utils.Utils.Companion.checkNetworkConnection
+import com.example.demoapp.utils.Const
+import com.example.demoapp.utils.Utils.Companion.isNetworkConnected
 import com.example.demoapp.utils.Utils.Companion.replaceFragment
 import com.example.demoapp.viewmodels.AccountsViewModel
 import com.google.android.material.textfield.TextInputEditText
@@ -59,8 +60,10 @@ class LoginFragment : Fragment() {
                 Toast.makeText(context, R.string.field_empty_text, Toast.LENGTH_SHORT).show()
             } else {
                 progressBar.visibility = View.VISIBLE
-                checkNetworkConnection(context) {
+                if(isNetworkConnected(context)) {
                    loginUser(userName, password,progressBar)
+                } else {
+                    Toast.makeText(context, Const.NO_INTERNET,Toast.LENGTH_SHORT).show()
                 }
             }
         }
