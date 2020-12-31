@@ -33,7 +33,7 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
     init {
         val articlesDAO = ArticlesDatabase.getDatabase(application).articlesDAO()
         repository = ArticleRepository(articlesDAO)
-        articles = repository.readAllArticles
+        articles = repository.readArticles()
     }
 
     /**

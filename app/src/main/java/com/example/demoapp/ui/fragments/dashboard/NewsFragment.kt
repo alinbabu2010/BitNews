@@ -70,6 +70,7 @@ class NewsFragment : Fragment() {
                     recyclerView.visibility = View.GONE
                 }
                 Resource.Status.REFRESHING -> {
+                    newsViewModel?.getNews()
                     recyclerView.adapter?.notifyDataSetChanged()
                     binding.swipeRefresh.isRefreshing = false
                 }
