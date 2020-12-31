@@ -50,7 +50,6 @@ class NewsFragment : Fragment() {
         val recyclerView: RecyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(context)
         newsViewModel?.getFavourites()
-        newsViewModel?.getNews()
 
         newsViewModel?.newsLiveData?.observe(viewLifecycleOwner, { it ->
             when (it.status) {
@@ -60,6 +59,7 @@ class NewsFragment : Fragment() {
                     articles?.forEach { article ->
                         newsViewModel?.addArticles(article)
                     }
+                    newsViewModel?.articles
                 }
                 Resource.Status.ERROR -> {
                     binding.progressBarNews.visibility = View.GONE
@@ -78,8 +78,12 @@ class NewsFragment : Fragment() {
         })
 
         newsViewModel?.articles?.observe(viewLifecycleOwner, {
-            recyclerView.adapter = NewsAdapter(it as ArrayList<Articles>, newsViewModel)
-            recyclerView.setHasFixedSize(true)
+            if(it==null) newsViewModel?.getNews()
+            else {
+                recyclerView.adapter = NewsAdapter(it as ArrayList<Articles>, newsViewModel)
+                recyclerView.setHasFixedSize(true)
+                binding.progressBarNews.visibility = View.GONE
+            }
         })
 
         newsViewModel?.favouritesLiveData?.observe(viewLifecycleOwner, {
