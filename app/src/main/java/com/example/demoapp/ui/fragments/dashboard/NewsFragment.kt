@@ -1,13 +1,20 @@
 package com.example.demoapp.ui.fragments.dashboard
 
 import android.app.DatePickerDialog
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.graphics.Color
 import android.icu.util.Calendar
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,6 +24,7 @@ import com.example.demoapp.adapter.NewsAdapter
 import com.example.demoapp.api.Resource
 import com.example.demoapp.databinding.FragmentNewsBinding
 import com.example.demoapp.models.Articles
+import com.example.demoapp.utils.Const.Companion.EVENT_CHANNEL_ID
 import com.example.demoapp.viewmodels.NewsViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
@@ -32,6 +40,7 @@ class NewsFragment : Fragment() {
     private var publishedDate: String? = null
     private var articles: ArrayList<Articles>? = arrayListOf()
     private lateinit var binding: FragmentNewsBinding
+    private lateinit var channel : NotificationChannel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,7 +51,6 @@ class NewsFragment : Fragment() {
         binding = FragmentNewsBinding.inflate(inflater, container, false)
         return binding.root
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -60,7 +68,8 @@ class NewsFragment : Fragment() {
                         newsViewModel?.addArticles(article)
                     }
                     newsViewModel?.articles
-                }
+                    notifyUser()
+                    }
                 Resource.Status.ERROR -> {
                     binding.progressBarNews.visibility = View.GONE
                     Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
@@ -227,6 +236,36 @@ class NewsFragment : Fragment() {
             }
 
         }
+    }
+
+    /**
+     * Method to notify user about news update
+     */
+    private  fun notifyUser(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createChannel()
+        }
+        val notificationBuilder = context?.let { NotificationCompat.Builder(it, EVENT_CHANNEL_ID) }
+            ?.setSmallIcon(R.drawable.ic_stat_notification)
+            ?.setContentTitle(getString(R.string.channel_title))
+            ?.setContentText(getString(R.string.channel_text))
+        val notification = notificationBuilder?.build()
+        val notificationManagerCompat = context?.let { NotificationManagerCompat.from(it) }
+        notification?.let { notificationManagerCompat?.notify(1, it) }
+    }
+
+    /**
+     * Method to create notification channel
+     */
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun createChannel() {
+        val channelName = getString(R.string.channel_name)
+        channel = NotificationChannel(EVENT_CHANNEL_ID,channelName,NotificationManager.IMPORTANCE_DEFAULT)
+        channel.description = getString(R.string.channel_description)
+        channel.lightColor = Color.YELLOW
+        channel.shouldShowLights()
+        val notificationManager = context?.let { getSystemService(it,NotificationManager::class.java) }
+        notificationManager?.createNotificationChannel(channel)
     }
 
 }
