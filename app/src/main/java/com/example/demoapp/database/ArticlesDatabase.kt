@@ -18,10 +18,8 @@ abstract class ArticlesDatabase : RoomDatabase() {
 
         private val migration1to2: Migration = object : Migration(1, 2) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("DROP TABLE `Articles`")
-                database.execSQL("CREATE TABLE `Articles` (`author` TEXT NOT NULL, `title` TEXT NOT NULL, `description` TEXT, `url` TEXT, `imageUrl` TEXT, `publishedDate` TEXT, `content` TEXT, `source_id` TEXT, `source_name` TEXT, PRIMARY KEY(`title`, `author`))")
+                database.execSQL("CREATE TABLE IF NOT EXISTS `Articles`  (`author` TEXT NOT NULL, `title` TEXT NOT NULL, `description` TEXT, `url` TEXT, `imageUrl` TEXT, `publishedDate` TEXT, `content` TEXT, `source_id` TEXT, `source_name` TEXT, PRIMARY KEY(`title`, `author`))")
             }
-
         }
 
         @Volatile
