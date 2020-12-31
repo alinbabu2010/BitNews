@@ -16,18 +16,27 @@ class ArticleRepository(private val articlesDAO: ArticlesDAO) {
 
     val newsLiveData = MutableLiveData<Resource<News?>>()
 
+    /**
+     * Method to read articles from database
+     */
     fun readArticles(): LiveData<List<Articles>> = articlesDAO.getAllArticles()
 
+    /**
+     * Method to get articles from NewsAPI.org
+     */
     fun getArticles() {
         RetrofitManager.getRetrofitService {
-                when (it) {
-                    is APIResponse.Success -> newsLiveData.postValue(Resource.success(it.data))
-                    is APIResponse.Error -> newsLiveData.postValue(Resource.error(it.error))
-                    is APIResponse.Failure -> newsLiveData.postValue(Resource.failure(it.exception))
-                }
+            when (it) {
+                is APIResponse.Success -> newsLiveData.postValue(Resource.success(it.data))
+                is APIResponse.Error -> newsLiveData.postValue(Resource.error(it.error))
+                is APIResponse.Failure -> newsLiveData.postValue(Resource.failure(it.exception))
+            }
         }
     }
 
+    /**
+     * Method to add articles to database
+     */
     suspend fun addArticles(articles: Articles) {
         articlesDAO.addArticle(articles)
     }
