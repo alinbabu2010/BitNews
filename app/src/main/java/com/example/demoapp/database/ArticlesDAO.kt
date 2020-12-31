@@ -10,7 +10,7 @@ import com.example.demoapp.models.Articles
 @Dao
 interface ArticlesDAO {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addArticle(articles: Articles)
 
     @Query("SELECT * FROM Articles")
