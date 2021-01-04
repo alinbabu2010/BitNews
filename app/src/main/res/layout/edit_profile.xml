@@ -29,6 +29,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#00FFFFFF"
+            android:inputType="textPersonName"
+            android:singleLine="true"
             android:textColor="@color/secondary_dark" />
     </com.google.android.material.textfield.TextInputLayout>
 

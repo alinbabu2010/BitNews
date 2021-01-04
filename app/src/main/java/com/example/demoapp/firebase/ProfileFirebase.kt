@@ -27,6 +27,7 @@ class ProfileFirebase {
          * Method to get user details from firebase.
          */
         fun getDataFromFirebase(data: (Users) -> Unit) {
+            firebaseResponseMessage = null
             val getCurrentUser = FirebaseAuth.getInstance().currentUser?.uid
             val userRef = FirebaseDatabase.getInstance().getReference(USERS)
             val getUser = userRef.child(getCurrentUser.toString())

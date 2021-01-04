@@ -42,7 +42,6 @@ class ProfileFragment : Fragment() {
 
     private lateinit var binding: FragmentProfileBinding
     private var container: ViewGroup? = null
-    private var userData: Map<String, String> = mapOf()
     private var photoUri: Uri? = null
     private var user : Users? = null
     private var accountsViewModel : AccountsViewModel? = null
@@ -140,7 +139,9 @@ class ProfileFragment : Fragment() {
             context?.let { Glide.with(it).load(data?.userImageUrl).into(binding.userImage) }
         }
         else {
+            binding.progressProfileImage.visibility = View.VISIBLE
             context?.let { binding.userImage.setImageResource(R.drawable.avatar_anonymous_48dp) }
+            binding.progressProfileImage.visibility = View.INVISIBLE
         }
         if (firebaseResponseMessage?.isNotEmpty() == true) {
             Toast.makeText(context, firebaseResponseMessage, Toast.LENGTH_SHORT).show()
