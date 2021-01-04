@@ -29,8 +29,6 @@ class FirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(p0: RemoteMessage) {
         super.onMessageReceived(p0)
         p0.let { message ->
-            Log.i(TAG, message.data["message"].toString())
-
             notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
             //Setting up Notification channels for android O and above

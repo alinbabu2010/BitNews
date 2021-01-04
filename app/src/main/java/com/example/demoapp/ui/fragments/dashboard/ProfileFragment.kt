@@ -85,14 +85,6 @@ class ProfileFragment : Fragment() {
         return binding.root
     }
 
-    override fun onResume() {
-        super.onResume()
-        accountsViewModel?.userData?.observe(viewLifecycleOwner,{
-            setProfileData(it)
-            user = it
-        })
-    }
-
     /**
      * Method to set and show edit user info bottom sheet dialog
      */
@@ -297,7 +289,6 @@ class ProfileFragment : Fragment() {
         binding.progressProfileImage.visibility = View.VISIBLE
         uploadImageToFirebase(data) {
             binding.progressProfileImage.visibility = View.INVISIBLE
-            onResume()
             Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
         }
     }
