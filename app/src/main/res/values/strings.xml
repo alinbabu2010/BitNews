@@ -66,4 +66,8 @@
     <string name="channel_title">News update</string>
     <string name="push_notification_channel_id">Firebase Push Notification</string>
     <string name="push_notification_channel_description">Push notification from firebase operations</string>
+    <string name="profile_channel_title">Profile Update</string>
+    <string name="profile_channel_text">Profile updated successfully</string>
+    <string name="profile_channel_name">Profile Notifications</string>
+    <string name="profile_channel_description">Notification about user profile update</string>
 </resources>

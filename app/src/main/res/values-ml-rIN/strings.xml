@@ -56,6 +56,10 @@
     <string name="channel_description">വാർത്താ അപ്‌ഡേറ്റിന് ശേഷം ഉപയോക്താക്കളെ അറിയിക്കുക</string>
     <string name="channel_name">വാർത്താ അറിയിപ്പ്</string>
     <string name="channel_title">വാർത്താ അപ്‌ഡേറ്റ്</string>
-    <string name="push_notification_channel_id">Firebase Push Notification</string>
-    <string name="push_notification_channel_description">Push notification from firebase operations</string>
+    <string name="push_notification_channel_id">ഫയർബേസ്  അറിയിപ്പുകൾ</string>
+    <string name="push_notification_channel_description">ഫയർബേസ് പ്രവർത്തനങ്ങളിൽ നിന്നുള്ള അറിയിപ്പ്</string>
+    <string name="profile_channel_title">പ്രൊഫൈൽ അപ്‌ഡേറ്റ്</string>
+    <string name="profile_channel_text">പ്രൊഫൈൽ വിജയകരമായി അപ്‌ഡേറ്റുചെയ്‌തു</string>
+    <string name="profile_channel_name">പ്രൊഫൈൽ അറിയിപ്പുകൾ</string>
+    <string name="profile_channel_description">ഉപയോക്തൃ പ്രൊഫൈൽ അപ്‌ഡേറ്റിനെക്കുറിച്ചുള്ള അറിയിപ്പ്</string>
 </resources>

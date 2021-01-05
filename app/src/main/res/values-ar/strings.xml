@@ -56,6 +56,10 @@
     <string name="channel_description">أبلغ المستخدمين بعد تحديث الأخبار</string>
     <string name="channel_text">تم التحديث بأحدث عملية جلب من NewsApi.org</string>
     <string name="channel_title">تحديث الأخبار</string>
-    <string name="push_notification_channel_id">Firebase Push Notification</string>
-    <string name="push_notification_channel_description">Push notification from firebase operations</string>
+    <string name="push_notification_channel_id">إشعار Firebase Push</string>
+    <string name="push_notification_channel_description">دفع الإخطار من عمليات Firebase</string>
+    <string name="profile_channel_description">إعلام حول تحديث ملف تعريف المستخدم</string>
+    <string name="profile_channel_name">إخطارات الملف الشخصي</string>
+    <string name="profile_channel_text">تم تحديث الملف الشخصي بنجاح</string>
+    <string name="profile_channel_title">تحديث الملف الشخصي</string>
 </resources>
