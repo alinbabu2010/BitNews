@@ -1,11 +1,13 @@
 package com.example.demoapp.ui.fragments.dashboard
 
 import android.Manifest
-import android.app.Activity
+import android.app.*
 import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
@@ -15,6 +17,10 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker.checkSelfPermission
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
@@ -24,8 +30,12 @@ import com.example.demoapp.databinding.FragmentProfileBinding
 import com.example.demoapp.firebase.ProfileFirebase.Companion.removeUserImage
 import com.example.demoapp.firebase.ProfileFirebase.Companion.uploadImageToFirebase
 import com.example.demoapp.models.Users
+import com.example.demoapp.services.NotificationReceiver
+import com.example.demoapp.ui.activities.dashboard.DashboardActivity
 import com.example.demoapp.ui.activities.main.MapsActivity
+import com.example.demoapp.utils.Const.Companion.GROUP_KEY
 import com.example.demoapp.utils.Const.Companion.NAME_STRING
+import com.example.demoapp.utils.Const.Companion.NOTIFICATION_ID
 import com.example.demoapp.utils.Const.Companion.PROFILE_IMAGE_DELETE
 import com.example.demoapp.utils.Const.Companion.USERNAME_STRING
 import com.example.demoapp.utils.Utils.Companion.requestPermissionRationale
@@ -119,6 +129,7 @@ class ProfileFragment : Fragment() {
                 else {
                     Toast.makeText(this.activity,R.string.profile_unsuccessful,Toast.LENGTH_SHORT).show()
                 }
+                notifyUser()
             } }
         }
 
@@ -184,6 +195,7 @@ class ProfileFragment : Fragment() {
         removeUserImage()
         binding.progressProfileImage.visibility = View.INVISIBLE
         Toast.makeText(context, PROFILE_IMAGE_DELETE, Toast.LENGTH_SHORT).show()
+        notifyUser()
     }
 
     /**
@@ -290,8 +302,63 @@ class ProfileFragment : Fragment() {
         binding.progressProfileImage.visibility = View.VISIBLE
         uploadImageToFirebase(data) {
             binding.progressProfileImage.visibility = View.INVISIBLE
+            notifyUser()
             Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
         }
+    }
+
+    /**
+     * Method to notify user about news update
+     */
+    private  fun notifyUser(){
+        var pendingIntent: PendingIntent? = null
+        var clearPendingIntent: PendingIntent? = null
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createChannel()
+            val intent = Intent(this.activity, DashboardActivity::class.java).apply {
+                action = Intent.ACTION_DELETE
+                putExtra(Notification.EXTRA_NOTIFICATION_ID, 0)
+            }
+            pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+            val clearIntent = Intent(context, NotificationReceiver::class.java).apply {
+                action = Intent.ACTION_DELETE
+                putExtra("notificationId", NOTIFICATION_ID)
+            }
+            clearPendingIntent = PendingIntent.getBroadcast(context, 0,clearIntent,PendingIntent.FLAG_UPDATE_CURRENT)
+        }
+
+        val notification = context?.let { NotificationCompat.Builder(it, PROFILE_CHANNEL_ID) }
+            ?.setSmallIcon(R.drawable.ic_stat_notification)
+            ?.setContentTitle(getString(R.string.profile_channel_title))
+            ?.setContentText(getString(R.string.profile_channel_text))
+            ?.setColor(Color.YELLOW)
+            ?.setContentIntent(pendingIntent)
+            ?.setOnlyAlertOnce(true)
+            ?.setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            ?.setCategory(NotificationCompat.CATEGORY_MESSAGE)
+            ?.setGroup(GROUP_KEY)
+            ?.addAction(R.drawable.quantum_ic_clear_grey600_24, getString(R.string.clear), clearPendingIntent)
+            ?.build()
+        val notificationManagerCompat = activity?.let { NotificationManagerCompat.from(it) }
+        notification?.let { notificationManagerCompat?.notify(2, it) }
+    }
+
+    /**
+     * Method to create notification channel
+     */
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun createChannel() {
+        val channelName = getString(R.string.profile_channel_name)
+        val channel = NotificationChannel(PROFILE_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_DEFAULT)
+        channel.description = getString(R.string.profile_channel_description)
+        channel.shouldShowLights()
+        val notificationManager = context?.let {
+            ContextCompat.getSystemService(
+                it,
+                NotificationManager::class.java
+            )
+        }
+        notificationManager?.createNotificationChannel(channel)
     }
 
     companion object {
@@ -299,6 +366,7 @@ class ProfileFragment : Fragment() {
         var firebaseResponseMessage: String? = null
         private const val IMAGE_CAPTURE_CODE = 100
         private const val LOCATION_REQUEST_CODE = 300
+        private const val  PROFILE_CHANNEL_ID = "PROFILE_CHANNEL_ID"
     }
 
 
