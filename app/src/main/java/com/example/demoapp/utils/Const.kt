@@ -23,6 +23,7 @@ class Const {
         const val NO_INTERNET = "No Internet Connection"
         const val PROFILE_IMAGE_UPDATE = "Profile picture updated"
         const val PROFILE_IMAGE_DELETE = "Profile picture removed"
-        const val EVENT_CHANNEL_ID = "EVENT_CHANNEL_ID"
+        const val GROUP_KEY = "com.example.demoapp.dev"
+        const val NOTIFICATION_ID = 100
     }
 }
