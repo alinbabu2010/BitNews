@@ -24,10 +24,16 @@ class ArticleRepository(private val articlesDAO: ArticlesDAO) {
     /**
      * Method to get articles from NewsAPI.org
      */
-    fun getArticles() {
-        RetrofitManager.getRetrofitService {
+    fun getArticles(page:Int) {
+        RetrofitManager.getRetrofitService(page) {
             when (it) {
-                is APIResponse.Success -> newsLiveData.postValue(Resource.success(it.data))
+                is APIResponse.Success -> {
+                    if(page > 1) {
+                        newsLiveData.postValue(Resource.loadMore(it.data))
+                    } else {
+                        newsLiveData.postValue(Resource.success(it.data))
+                    }
+                }
                 is APIResponse.Error -> newsLiveData.postValue(Resource.error(it.error))
                 is APIResponse.Failure -> newsLiveData.postValue(Resource.failure(it.exception))
             }
