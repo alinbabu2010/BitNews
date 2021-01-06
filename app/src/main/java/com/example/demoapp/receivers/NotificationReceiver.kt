@@ -1,4 +1,4 @@
-package com.example.demoapp.services
+package com.example.demoapp.receivers
 
 import android.content.BroadcastReceiver
 import android.content.Context
