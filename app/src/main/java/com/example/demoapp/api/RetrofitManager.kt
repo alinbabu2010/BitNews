@@ -23,13 +23,13 @@ object RetrofitManager {
 
     private const val sortBy = "popularity"
     private const val keyWord = "bitcoin"
-    private const val numberOfResult = 30
+    private const val numberOfResult = 10
 
     /**
      * Method to call retrofit service using [getAPIService] and get APIResponse from [loadData]
      */
-    fun getRetrofitService( resource: (APIResponse<News>) -> Unit ){
-        val call = getAPIService.getNews(BuildConfig.API_KEY, keyWord,sortBy,numberOfResult)
+    fun getRetrofitService( page : Int ,resource: (APIResponse<News>) -> Unit ){
+        val call = getAPIService.getNews(BuildConfig.API_KEY, keyWord,sortBy,page,numberOfResult)
         loadData(call){
             resource(it)
         }

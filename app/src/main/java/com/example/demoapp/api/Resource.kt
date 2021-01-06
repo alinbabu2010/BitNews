@@ -36,6 +36,8 @@ data class Resource<out T>(
 
         fun <T> loading(data: T?): Resource<T> = Resource<T>(Status.LOADING,data,null,null)
 
+        fun <T> loadMore(data: T?): Resource<T> = Resource<T>(Status.LOAD_MORE,data,null,null)
+
         fun <T> refreshing(): Resource<T> = Resource<T>(Status.REFRESHING,null,null,null)
     }
 
@@ -43,6 +45,7 @@ data class Resource<out T>(
         SUCCESS,
         ERROR,
         LOADING,
-        REFRESHING
+        REFRESHING,
+        LOAD_MORE
     }
 }

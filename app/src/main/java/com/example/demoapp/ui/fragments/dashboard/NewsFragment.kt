@@ -32,6 +32,7 @@ import com.example.demoapp.utils.Const.Companion.GROUP_KEY
 import com.example.demoapp.utils.Const.Companion.NOTIFICATION_ID
 import com.example.demoapp.viewmodels.NewsViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.snackbar.Snackbar
 
 
 /**
@@ -39,12 +40,17 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
  */
 class NewsFragment : Fragment() {
 
+    private lateinit var binding: FragmentNewsBinding
     private var newsViewModel: NewsViewModel? = null
     private var container: ViewGroup? = null
     private var checkedRadio: RadioButton? = null
     private var publishedDate: String? = null
     private var articles: ArrayList<Articles>? = arrayListOf()
-    private lateinit var binding: FragmentNewsBinding
+    private var page = 1
+    private var isLoading = false
+    private var lastVisibleItem = 0
+    private var totalItemCount = 0
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,6 +59,7 @@ class NewsFragment : Fragment() {
 
         this.container = container
         binding = FragmentNewsBinding.inflate(inflater, container, false)
+        binding.loadMoreProgressBar.visibility = View.GONE
         return binding.root
     }
 
@@ -60,7 +67,8 @@ class NewsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         newsViewModel = activity?.let { ViewModelProviders.of(it).get(NewsViewModel::class.java) }
         val recyclerView: RecyclerView = binding.recyclerView
-        recyclerView.layoutManager = LinearLayoutManager(context)
+        val layoutManager = LinearLayoutManager(context)
+        recyclerView.layoutManager = layoutManager
         newsViewModel?.getFavourites()
 
         newsViewModel?.newsLiveData?.observe(viewLifecycleOwner, { it ->
@@ -83,17 +91,25 @@ class NewsFragment : Fragment() {
                     recyclerView.visibility = View.GONE
                 }
                 Resource.Status.REFRESHING -> {
-                    newsViewModel?.getNews()
+                    newsViewModel?.getNews(1)
                     recyclerView.adapter?.notifyDataSetChanged()
                     binding.swipeRefresh.isRefreshing = false
+                }
+                Resource.Status.LOAD_MORE -> {
+                    binding.loadMoreProgressBar.visibility = View.GONE
+                    it.data?.articles?.let { it1 -> articles?.addAll(it1) }
+                    recyclerView.adapter?.notifyDataSetChanged()
+                    isLoading = false
+
                 }
             }
         })
 
         newsViewModel?.articles?.observe(viewLifecycleOwner, {
-            if (it == null) newsViewModel?.getNews()
+            if (it == null) newsViewModel?.getNews(1)
             else {
-                recyclerView.adapter = NewsAdapter(it as ArrayList<Articles>, newsViewModel)
+                articles = it as ArrayList<Articles>
+                recyclerView.adapter = NewsAdapter(articles, newsViewModel)
                 recyclerView.setHasFixedSize(true)
                 binding.progressBarNews.visibility = View.GONE
             }
@@ -117,6 +133,26 @@ class NewsFragment : Fragment() {
         binding.filterButton.setOnClickListener {
             setBottomSheetDialog(articles)
         }
+
+        // Setting up to load more news on last news item
+        binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+               if(dy>0) {
+                   totalItemCount = layoutManager.itemCount
+                   lastVisibleItem = layoutManager.findLastCompletelyVisibleItemPosition()
+                   if (!isLoading && lastVisibleItem == totalItemCount - 1) {
+                       page++
+                       if (page == 11) {
+                           Snackbar.make(binding.recyclerView, "No more news", Snackbar.LENGTH_SHORT).show()
+                       } else {
+                           binding.loadMoreProgressBar.visibility = View.VISIBLE
+                           isLoading = true
+                           newsViewModel?.getNews(page)
+                       }
+                   }
+               }
+            }
+        })
     }
 
     /**

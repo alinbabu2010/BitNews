@@ -39,9 +39,9 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
     /**
      * Method to get the news from API url
      */
-    fun getNews() {
+    fun getNews(page : Int) {
         CoroutineScope(Dispatchers.IO).launch {
-            repository.getArticles()
+            repository.getArticles(page)
             newsLiveData = repository.newsLiveData
         }
     }
