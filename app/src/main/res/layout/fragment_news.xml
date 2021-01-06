@@ -10,14 +10,14 @@
 
     <TextView
         android:id="@+id/no_matching_textView"
+        style="@style/failure_view_styles"
         android:text="@string/no_matching"
         android:visibility="invisible"
         app:drawableTopCompat="@drawable/ic_empty_box"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        style="@style/failure_view_styles" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ProgressBar
         android:id="@+id/progressBar_news"
@@ -42,10 +42,11 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -55,12 +56,14 @@
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefresh"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="true"
                 android:padding="4dp"
                 android:scrollbarThumbHorizontal="@color/secondary_light"
                 android:scrollbarThumbVertical="@color/secondary_light"
@@ -70,6 +73,12 @@
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+        <ProgressBar
+            android:id="@+id/loadMore_progressBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
     </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
