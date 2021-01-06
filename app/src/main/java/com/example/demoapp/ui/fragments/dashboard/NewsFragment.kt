@@ -26,7 +26,7 @@ import com.example.demoapp.adapter.NewsAdapter
 import com.example.demoapp.api.Resource
 import com.example.demoapp.databinding.FragmentNewsBinding
 import com.example.demoapp.models.Articles
-import com.example.demoapp.services.NotificationReceiver
+import com.example.demoapp.receivers.NotificationReceiver
 import com.example.demoapp.ui.activities.dashboard.DashboardActivity
 import com.example.demoapp.utils.Const.Companion.GROUP_KEY
 import com.example.demoapp.utils.Const.Companion.NOTIFICATION_ID
