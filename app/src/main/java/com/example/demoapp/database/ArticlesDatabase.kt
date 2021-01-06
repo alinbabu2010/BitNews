@@ -9,16 +9,16 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.demoapp.models.Articles
 
 
-@Database(entities = [Articles::class], version = 2)
+@Database(entities = [Articles::class], version = 1)
 abstract class ArticlesDatabase : RoomDatabase() {
 
     abstract fun articlesDAO(): ArticlesDAO
 
     companion object {
 
-        private val migration1to2: Migration = object : Migration(1, 2) {
+        private val migration2to1: Migration = object : Migration(2, 1) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("CREATE TABLE IF NOT EXISTS `Articles`  (`author` TEXT NOT NULL, `title` TEXT NOT NULL, `description` TEXT, `url` TEXT, `imageUrl` TEXT, `publishedDate` TEXT, `content` TEXT, `source_id` TEXT, `source_name` TEXT, PRIMARY KEY(`title`, `author`))")
+                database.execSQL("CREATE TABLE IF NOT EXISTS `Articles` (`author` TEXT, `title` TEXT NOT NULL, `description` TEXT, `url` TEXT, `imageUrl` TEXT, `publishedDate` TEXT, `content` TEXT, `source_id` TEXT, `source_name` TEXT, PRIMARY KEY(`title`))")
             }
         }
 
@@ -34,7 +34,7 @@ abstract class ArticlesDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     ArticlesDatabase::class.java, "news_database"
-                ).addMigrations(migration1to2).build()
+                ).addMigrations(migration2to1).build()
                 INSTANCE = instance
                 return instance
             }

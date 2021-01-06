@@ -13,7 +13,7 @@ interface ArticlesDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addArticle(articles: Articles)
 
-    @Query("SELECT * FROM Articles")
+    @Query("SELECT * FROM `Articles`")
     fun getAllArticles() : LiveData<List<Articles>>
 
 }
