@@ -30,26 +30,21 @@ class FirebaseMessagingService : FirebaseMessagingService() {
         super.onMessageReceived(p0)
         p0.let { message ->
             notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
             //Setting up Notification channels for android O and above
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 setupNotificationChannels()
             }
             val notificationId = Random.nextInt(60000)
-
             val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
             val notificationBuilder = NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_stat_notification)  //a resource for your custom small icon
-                .setContentTitle(message.data["title"]) //the "title" value you sent in your notification
-                .setContentText(message.data["message"]) //ditto
-                .setAutoCancel(true)  //dismisses the notification on click
+                .setSmallIcon(R.drawable.ic_stat_notification)
+                .setContentTitle(message.data["title"])
+                .setContentText(message.data["message"])
+                .setAutoCancel(true)
                 .setSound(defaultSoundUri)
-
             val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.notify(notificationId /* ID of notification */, notificationBuilder.build())
-
+            notificationManager.notify(notificationId, notificationBuilder.build())
         }
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
