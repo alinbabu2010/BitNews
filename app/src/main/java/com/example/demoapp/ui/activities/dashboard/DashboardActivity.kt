@@ -1,6 +1,7 @@
 package com.example.demoapp.ui.activities.dashboard
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -14,7 +15,9 @@ import com.example.demoapp.ui.fragments.dashboard.NewsFragment
 import com.example.demoapp.utils.Utils.Companion.addFragment
 import com.example.demoapp.utils.Utils.Companion.showAlert
 import com.example.demoapp.viewmodels.AccountsViewModel
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.tabs.TabLayout
+import com.google.firebase.messaging.FirebaseMessaging
 
 
 /**
@@ -38,6 +41,22 @@ class DashboardActivity : AppCompatActivity() {
         setContentView(R.layout.activity_dashboard)
         addFragment(NewsFragment(), R.id.dashboard_viewpager, supportFragmentManager)
         addTabLayout()
+        getFirebaseToken()
+    }
+
+    /**
+     * Method to get firebase messaging token
+     */
+    private fun getFirebaseToken() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.i(TAG, "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+            // Get new FCM registration token
+            val token = task.result
+            Log.d(TAG,token)
+        })
     }
 
     /**
@@ -55,7 +74,7 @@ class DashboardActivity : AppCompatActivity() {
         )
 
         // Set the adapter for each tab item
-        val pageAdapter = PageAdapter(supportFragmentManager, tabLayout.tabCount,tabTitles)
+        val pageAdapter = PageAdapter(supportFragmentManager, tabLayout.tabCount, tabTitles)
         viewPager.adapter = pageAdapter
         tabLayout.TabView(this)
         tabLayout.setupWithViewPager(viewPager)
@@ -67,11 +86,15 @@ class DashboardActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return if (item.itemId == R.id.logout_option) {
             val accountsViewModel = ViewModelProviders.of(this).get(AccountsViewModel::class.java)
-            showAlert(this, this,accountsViewModel)
+            showAlert(this, this, accountsViewModel)
             true
         } else {
             false
         }
     }
 
+    companion object
+    {
+        private const val TAG = "DashboardActivity"
+    }
 }
