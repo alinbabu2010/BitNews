@@ -28,7 +28,7 @@ object RetrofitManager {
     /**
      * Method to call retrofit service using [getAPIService] and get APIResponse from [loadData]
      */
-    fun getRetrofitService( page : Int ,resource: (APIResponse<News>) -> Unit ){
+    fun getNewsData( page : Int ,resource: (APIResponse<News>) -> Unit ){
         val call = getAPIService.getNews(BuildConfig.API_KEY, keyWord,sortBy,page,numberOfResult)
         loadData(call){
             resource(it)

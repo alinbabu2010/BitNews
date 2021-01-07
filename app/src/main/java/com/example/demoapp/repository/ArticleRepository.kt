@@ -25,7 +25,7 @@ class ArticleRepository(private val articlesDAO: ArticlesDAO) {
      * Method to get articles from NewsAPI.org
      */
     fun getArticles(page:Int) {
-        RetrofitManager.getRetrofitService(page) {
+        RetrofitManager.getNewsData(page) {
             when (it) {
                 is APIResponse.Success -> {
                     if(page > 1) {
