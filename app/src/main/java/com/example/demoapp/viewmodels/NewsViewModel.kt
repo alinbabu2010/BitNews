@@ -21,6 +21,9 @@ import kotlinx.coroutines.launch
  */
 class NewsViewModel(application: Application) : AndroidViewModel(application) {
 
+    var page = 1
+    var isLoading = false
+    val maxPageLimit = 10
     private val repository : ArticleRepository
     var articles : LiveData<List<Articles>>
     var newsLiveData = MutableLiveData<Resource<News?>>()

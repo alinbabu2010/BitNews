@@ -46,10 +46,6 @@ class NewsFragment : Fragment() {
     private var checkedRadio: RadioButton? = null
     private var publishedDate: String? = null
     private var articles: ArrayList<Articles>? = arrayListOf()
-    private var page = 1
-    private var isLoading = false
-    private var lastVisibleItem = 0
-    private var totalItemCount = 0
 
 
     override fun onCreateView(
@@ -99,7 +95,7 @@ class NewsFragment : Fragment() {
                     binding.loadMoreProgressBar.visibility = View.GONE
                     it.data?.articles?.let { it1 -> articles?.addAll(it1) }
                     recyclerView.adapter?.notifyDataSetChanged()
-                    isLoading = false
+                    newsViewModel?.isLoading = false
 
                 }
             }
@@ -138,21 +134,30 @@ class NewsFragment : Fragment() {
         binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                if(dy>0) {
-                   totalItemCount = layoutManager.itemCount
-                   lastVisibleItem = layoutManager.findLastCompletelyVisibleItemPosition()
-                   if (!isLoading && lastVisibleItem == totalItemCount - 1) {
-                       page++
-                       if (page == 11) {
-                           Snackbar.make(binding.recyclerView, "No more news", Snackbar.LENGTH_SHORT).show()
-                       } else {
-                           binding.loadMoreProgressBar.visibility = View.VISIBLE
-                           isLoading = true
-                           newsViewModel?.getNews(page)
-                       }
-                   }
+                   loadMoreNews(layoutManager)
                }
             }
         })
+    }
+
+    /**
+     * Method to load more news om recycler view item end
+     * @param layoutManager is used to access recycler view layout manager
+     */
+    private fun loadMoreNews(layoutManager: LinearLayoutManager) {
+        val totalItemCount = layoutManager.itemCount
+        val lastVisibleItem = layoutManager.findLastCompletelyVisibleItemPosition()
+        if (newsViewModel?.isLoading != true && lastVisibleItem == totalItemCount - 1) {
+            newsViewModel?.page?.plus(1)
+            val limit = newsViewModel?.maxPageLimit?.let { newsViewModel?.page?.compareTo(it) } as Int
+            if (limit <= 0) {
+                Snackbar.make(binding.recyclerView, "No more news", Snackbar.LENGTH_SHORT).show()
+            } else {
+                binding.loadMoreProgressBar.visibility = View.VISIBLE
+                newsViewModel?.isLoading = true
+                newsViewModel?.page?.let { newsViewModel?.getNews(it) }
+            }
+        }
     }
 
     /**
