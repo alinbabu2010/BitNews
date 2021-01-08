@@ -13,6 +13,11 @@ import java.io.IOException
  */
 class  ErrorUtils {
 
+    /**
+     * Method to parse error response
+     * @param response An instance of class [Response]
+     * @return An object of class [APIError]
+     */
     fun parseError(response: Response<*>): APIError? {
         val converter: Converter<ResponseBody, APIError> = RetrofitManager.getRetrofit
             .responseBodyConverter(APIError::class.java, arrayOfNulls<Annotation>(0))

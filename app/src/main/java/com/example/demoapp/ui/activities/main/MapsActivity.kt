@@ -102,6 +102,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     /**
      * Method to get place name from location coordinates
      * Reverse geocode method used
+     * @param latLng An instance of [LatLng] containing latitude and longitude
      */
     private fun getAddress(latLng: LatLng): String {
         val geocoder = Geocoder(this)
@@ -121,6 +122,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     /**
      * Method to get location coordinates on giving a place name
      * Geocode method used
+     * @param query String value containing location to be searched
      */
     private fun searchLocation(query: String?) {
         var addressList: List<Address>? = null
@@ -145,6 +147,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
     /**
      * Method to place the map marker and defining the marker settings
+     * @param location An instance of [LatLng] containing latitude and longitude of location
      */
     private fun placeMarkerOnMap(location: LatLng) {
         val address = getAddress(location)
@@ -191,6 +194,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
     /**
      * Method to add a polyline on map
+     * @param lastKnownLocation An instance of [LatLng] containing latitude and longitude of last known location
+     * @param location An instance of [LatLng] containing latitude and longitude of location
+     * @return An instance of [Polygon]
      */
     private fun addPolyLine(lastKnownLocation: LatLng?, location: LatLng): Polygon? {
         val polygon = map.addPolygon(PolygonOptions()
@@ -202,6 +208,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
     /**
      * Method to add marker on clicking map
+     * @param map An object of class [GoogleMap]
      */
     private fun setMapLongClick(map: GoogleMap) {
         map.setOnMapLongClickListener { latLng ->

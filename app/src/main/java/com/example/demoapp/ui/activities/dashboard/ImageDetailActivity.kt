@@ -41,9 +41,6 @@ class ImageDetailActivity : AppCompatActivity() {
     private var fileName =  "news_image"
     private val storageOptions  = arrayOf("Internal", "External", "Private")
 
-    /**
-     * This method creates the options menu
-     */
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)
         val inflater: MenuInflater = menuInflater
@@ -110,6 +107,7 @@ class ImageDetailActivity : AppCompatActivity() {
 
     /**
      * Method to set the directory of the storage type selected
+     * @param storageType String value that specifies the storage type
      */
     private fun setDirectory(storageType: String) {
         when (storageType) {
@@ -126,7 +124,6 @@ class ImageDetailActivity : AppCompatActivity() {
                 downloadImage(url)
             }
         }
-        println(directory)
     }
 
     /**
@@ -137,7 +134,6 @@ class ImageDetailActivity : AppCompatActivity() {
             this,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
         )
-
         if (permission != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(
                 arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
@@ -167,6 +163,7 @@ class ImageDetailActivity : AppCompatActivity() {
 
     /**
      * Method to download image from url using download manager
+     * @param url A string value that specifies the downloaded image url
      */
     private fun downloadImage(url: String?) {
         val downloadManager = this.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager

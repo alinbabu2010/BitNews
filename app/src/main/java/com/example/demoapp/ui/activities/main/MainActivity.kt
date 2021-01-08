@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
 
     /**
      * This method is called when the back button in actionbar  is pressed.
+     * @return true if Up navigation completed successfully and this Activity was finished, false otherwise.
      */
     override fun onSupportNavigateUp(): Boolean {
         supportFragmentManager.popBackStack()

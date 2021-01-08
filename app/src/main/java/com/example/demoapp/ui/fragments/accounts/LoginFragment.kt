@@ -72,6 +72,10 @@ class LoginFragment : Fragment() {
 
     /**
      * Method to set the [TextView] as clickable span and replace the fragment on click.
+     * @param view An instance to access [TextView] in [LoginFragment]
+     * @param start Start position of text to be clickable
+     * @param end End position of text to be clickable
+     * @param fragment An instance of [Fragment] class
      */
     private fun clickableText(view: TextView?,start :Int,end:Int,fragment: Fragment?) {
 
@@ -98,6 +102,9 @@ class LoginFragment : Fragment() {
 
     /**
      * Method to check user provided login credentials and move to [DashboardActivity] if it is true
+     * @param userName String value instance for username
+     * @param password String value instance for user password
+     * @param progressBar A variable to access fragment [ProgressBar]
      */
     private fun loginUser(userName: String, password: String, progressBar: ProgressBar) {
         viewModel = activity?.let { ViewModelProviders.of(it).get(AccountsViewModel::class.java) }

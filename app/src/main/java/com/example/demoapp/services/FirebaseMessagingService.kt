@@ -63,6 +63,9 @@ class FirebaseMessagingService : FirebaseMessagingService() {
         }
     }
 
+    /**
+     * Method to setup notification channel for firebase push notification
+     */
     @RequiresApi(api = Build.VERSION_CODES.O)
     private fun setupNotificationChannels() {
         val adminChannelName = getString(R.string.push_notification_channel_id)

@@ -15,6 +15,8 @@ class FavoritesFirebase {
 
         /**
          * Method to store favourite articles of user
+         * @param favouriteArticles A mutable set of [Articles]
+         * @param isSuccess A callback function to notify action is success or not
          */
         fun storeDataOnFirebase(
             favouriteArticles: MutableSet<Articles>?,
@@ -31,6 +33,7 @@ class FavoritesFirebase {
 
         /**
          * Method to retrieve the favourite articles of particular user
+         * @param favouriteArticles A callback function to pass [MutableSet] of [Articles]
          */
         fun retrieveDataFromFirebase(favouriteArticles: (MutableSet<Articles>?) -> Unit) {
             firebaseError = null

@@ -31,7 +31,7 @@ import java.util.*
 class ArticleActivity : AppCompatActivity() {
 
     /**
-     * This method creates the options menu
+     * Overriding [onCreateOptionsMenu] to create the options menu
      */
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)

@@ -48,6 +48,8 @@ class ForgotPasswordFragment : Fragment() {
 
     /**
      * Method to check email and send the password reset link
+     * @param email String value instance for user email address
+     * @param resetProgressBar A variable to access fragment [ProgressBar]
      */
     private fun resetPassword(email: String, resetProgressBar: ProgressBar) {
         if (email.matches(EMAIL_PATTERN.toRegex())) {

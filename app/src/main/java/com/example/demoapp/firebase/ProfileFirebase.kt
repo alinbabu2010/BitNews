@@ -25,6 +25,7 @@ class ProfileFirebase {
 
         /**
          * Method to get user details from firebase.
+         * @param data A callback function to pass [Users] object.
          */
         fun getDataFromFirebase(data: (Users) -> Unit) {
             firebaseResponseMessage = null
@@ -60,6 +61,8 @@ class ProfileFirebase {
 
         /**
          * Method to upload image to firebase
+         * @param file An instance of [Uri] that contains Uri of image to upload
+         * @param message A callback function that passes a response message
          */
         fun uploadImageToFirebase(
             file: Uri?,

@@ -58,10 +58,10 @@ class RegisterFragment : Fragment() {
     }
 
     /**
-     *
+     * Method to validate form submitted
+     * @return Return true if form is valid else false
      */
     private fun validateForm(): Boolean {
-
         val username = binding.usernameInputSignUp.text.toString()
         val name = binding.nameInputSignUp.text.toString()
         val email = binding.emailInputSignUp.text.toString()
@@ -110,6 +110,7 @@ class RegisterFragment : Fragment() {
 
     /**
      * Method to make clickable text view and redirect to login on click
+     * @param loginTextView A instance of login [TextView]
      */
     private fun redirectToLogin(loginTextView: TextView) {
         val spannableTextView = SpannableString(loginTextView.text.toString())
@@ -132,7 +133,6 @@ class RegisterFragment : Fragment() {
         )
         loginTextView.text = spannableTextView
         loginTextView.movementMethod = LinkMovementMethod.getInstance()
-
     }
 
     /**
