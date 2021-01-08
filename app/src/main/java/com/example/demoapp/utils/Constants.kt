@@ -3,7 +3,7 @@ package com.example.demoapp.utils
 /**
  * Class for holding constant values
  */
-class Const {
+class Constants {
 
     companion object {
         const val ARTICLE = "article"
@@ -25,5 +25,7 @@ class Const {
         const val PROFILE_IMAGE_DELETE = "Profile picture removed"
         const val GROUP_KEY = "com.example.demoapp.dev"
         const val NOTIFICATION_ID = 100
+        const val FAIL_MSG = "Fetching FCM registration token failed"
+        const val MAX_RESULTS = 100
     }
 }

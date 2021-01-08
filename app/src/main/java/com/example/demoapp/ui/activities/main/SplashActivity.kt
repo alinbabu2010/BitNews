@@ -7,7 +7,7 @@ import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.example.demoapp.R
 import com.example.demoapp.ui.activities.dashboard.DashboardActivity
-import com.example.demoapp.utils.Const.Companion.FAVOURITES
+import com.example.demoapp.utils.Constants.Companion.FAVOURITES
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 

@@ -23,7 +23,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.example.demoapp.R
 import com.example.demoapp.models.Articles
-import com.example.demoapp.utils.Const.Companion.ARTICLE
+import com.example.demoapp.utils.Constants.Companion.ARTICLE
 import com.example.demoapp.utils.Utils.Companion.requestPermissionRationale
 import com.example.demoapp.utils.Utils.Companion.showAlert
 import com.example.demoapp.viewmodels.AccountsViewModel

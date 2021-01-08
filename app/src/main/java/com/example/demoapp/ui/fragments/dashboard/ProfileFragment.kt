@@ -33,11 +33,11 @@ import com.example.demoapp.models.Users
 import com.example.demoapp.receivers.NotificationReceiver
 import com.example.demoapp.ui.activities.dashboard.DashboardActivity
 import com.example.demoapp.ui.activities.main.MapsActivity
-import com.example.demoapp.utils.Const.Companion.GROUP_KEY
-import com.example.demoapp.utils.Const.Companion.NAME_STRING
-import com.example.demoapp.utils.Const.Companion.NOTIFICATION_ID
-import com.example.demoapp.utils.Const.Companion.PROFILE_IMAGE_DELETE
-import com.example.demoapp.utils.Const.Companion.USERNAME_STRING
+import com.example.demoapp.utils.Constants.Companion.GROUP_KEY
+import com.example.demoapp.utils.Constants.Companion.NAME_STRING
+import com.example.demoapp.utils.Constants.Companion.NOTIFICATION_ID
+import com.example.demoapp.utils.Constants.Companion.PROFILE_IMAGE_DELETE
+import com.example.demoapp.utils.Constants.Companion.USERNAME_STRING
 import com.example.demoapp.utils.Utils.Companion.requestPermissionRationale
 import com.example.demoapp.viewmodels.AccountsViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog

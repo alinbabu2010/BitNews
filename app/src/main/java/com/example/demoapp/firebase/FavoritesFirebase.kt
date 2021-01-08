@@ -1,7 +1,7 @@
 package com.example.demoapp.firebase
 
 import com.example.demoapp.models.Articles
-import com.example.demoapp.utils.Const.Companion.FAVOURITES
+import com.example.demoapp.utils.Constants.Companion.FAVOURITES
 import com.example.demoapp.utils.Utils.Companion.firebaseError
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*

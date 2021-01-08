@@ -1,9 +1,9 @@
 package com.example.demoapp.api
 
 import com.example.demoapp.models.APIError
-import com.example.demoapp.utils.Const.Companion.NETWORK_FAILURE
-import com.example.demoapp.utils.Const.Companion.NOT_FOUND
-import com.example.demoapp.utils.Const.Companion.SERVER_ERROR
+import com.example.demoapp.utils.Constants.Companion.NETWORK_FAILURE
+import com.example.demoapp.utils.Constants.Companion.NOT_FOUND
+import com.example.demoapp.utils.Constants.Companion.SERVER_ERROR
 import java.io.IOException
 
 /**

@@ -10,7 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.demoapp.R
-import com.example.demoapp.utils.Const.Companion.EMAIL_PATTERN
+import com.example.demoapp.utils.Constants.Companion.EMAIL_PATTERN
 import com.example.demoapp.utils.Utils.Companion.firebaseError
 import com.example.demoapp.viewmodels.AccountsViewModel
 import com.google.android.material.textfield.TextInputEditText

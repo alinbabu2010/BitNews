@@ -18,8 +18,8 @@ import com.example.demoapp.models.Articles
 import com.example.demoapp.ui.activities.dashboard.ArticleActivity
 import com.example.demoapp.ui.activities.dashboard.ImageDetailActivity
 import com.example.demoapp.ui.activities.main.MainActivity
-import com.example.demoapp.utils.Const.Companion.ARTICLE
-import com.example.demoapp.utils.Const.Companion.SHARE_TYPE
+import com.example.demoapp.utils.Constants.Companion.ARTICLE
+import com.example.demoapp.utils.Constants.Companion.SHARE_TYPE
 import com.example.demoapp.viewmodels.AccountsViewModel
 import com.google.firebase.auth.FirebaseAuth
 

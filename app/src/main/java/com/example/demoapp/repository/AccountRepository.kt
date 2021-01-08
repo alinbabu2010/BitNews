@@ -2,7 +2,7 @@ package com.example.demoapp.repository
 
 import com.example.demoapp.firebase.ProfileFirebase.Companion.getDataFromFirebase
 import com.example.demoapp.models.Users
-import com.example.demoapp.utils.Const.Companion.USERS
+import com.example.demoapp.utils.Constants.Companion.USERS
 import com.example.demoapp.utils.Utils.Companion.firebaseError
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase

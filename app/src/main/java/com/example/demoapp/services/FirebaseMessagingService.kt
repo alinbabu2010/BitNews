@@ -13,7 +13,7 @@ import androidx.core.app.NotificationCompat
 import com.example.demoapp.R
 import com.example.demoapp.models.Articles
 import com.example.demoapp.ui.activities.dashboard.ArticleActivity
-import com.example.demoapp.utils.Const.Companion.ARTICLE
+import com.example.demoapp.utils.Constants.Companion.ARTICLE
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.GsonBuilder
