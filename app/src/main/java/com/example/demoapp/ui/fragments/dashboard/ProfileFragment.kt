@@ -96,6 +96,7 @@ class ProfileFragment : Fragment() {
 
     /**
      * Method to set and show edit user info bottom sheet dialog
+     * @param field A string value to denote whether the field is for editing name or username.
      */
     private fun setEditBottomSheetDialog(field: String) {
         val bottomSheet = context?.let { BottomSheetDialog(it) }
@@ -140,6 +141,7 @@ class ProfileFragment : Fragment() {
 
     /**
      * Method to set the profile data in fragment layout
+     * @param data Parameter containing user data which is object of [Users]
      */
     private fun setProfileData(data: Users?) {
         binding.progressBarProfile.visibility = View.INVISIBLE
@@ -225,6 +227,7 @@ class ProfileFragment : Fragment() {
 
     /**
      * Method to create a image file in external storage for saving user profile image
+     * @return Returns the Uri of the image file
      */
     private fun createImageFile(): Uri? {
         var imageUri: Uri? = null
@@ -296,6 +299,7 @@ class ProfileFragment : Fragment() {
 
     /**
      * Method to save user image by calling [uploadImageToFirebase]
+     * @param data An Uri of image to be saved
      */
     private fun saveUserImage(data: Uri?) {
         context?.let { Glide.with(it).load(data).into(binding.userImage) }

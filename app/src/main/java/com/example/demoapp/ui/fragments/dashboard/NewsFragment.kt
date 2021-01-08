@@ -162,6 +162,7 @@ class NewsFragment : Fragment() {
 
     /**
      * Method to set radio buttons and datepicker for filter bottom sheet dialog and process the filter clicks
+     * @param article An [ArrayList] of [Articles] instance.
      */
     private fun setBottomSheetDialog(article: ArrayList<Articles>?) {
 
@@ -240,6 +241,10 @@ class NewsFragment : Fragment() {
 
     /**
      * Method to filter the news according to source or published date
+     * @param bottomSheet An instance of [BottomSheetDialog] class
+     * @param dateView An instance to access [TextView] for date display.
+     * @param sourceRadioGroup An instance of [RadioGroup]
+     * @param article An [ArrayList] of [Articles] instance.
      */
     private fun filterNews(
         bottomSheet: BottomSheetDialog?,

@@ -33,6 +33,8 @@ class AccountsViewModel(application: Application) : AndroidViewModel(application
 
     /**
      * Method to call [AccountRepository.sigInUser]
+     * @param userName String value instance for username
+     * @param password String value instance for user password
      */
     fun signInUser(userName: String, password: String) {
         accountRepository.sigInUser(userName, password, userRepository) {
@@ -42,6 +44,9 @@ class AccountsViewModel(application: Application) : AndroidViewModel(application
 
     /**
      * Method to call [AccountRepository.createUser]
+     * @param email String value instance for user email address
+     * @param password String value instance for user password
+     * @param user An object of class [Users]
      */
     fun createUser(email: String, password: String, user: Users) {
         accountRepository.createUser(email, password, user){
@@ -56,6 +61,7 @@ class AccountsViewModel(application: Application) : AndroidViewModel(application
 
     /**
      * Method to call [AccountRepository.resetPassword]
+     * @param email String value instance for user email address
      */
     fun resetPassword(email: String) {
         operationExecuted.value = accountRepository.resetPassword(email)
@@ -63,6 +69,7 @@ class AccountsViewModel(application: Application) : AndroidViewModel(application
 
     /**
      * Method to call [UserRepository.getCurrentUserInfo]
+     * @param uid String value instance for user id
      */
     fun getUserInfo(uid: String) {
         CoroutineScope(Dispatchers.IO).launch {
@@ -77,6 +84,7 @@ class AccountsViewModel(application: Application) : AndroidViewModel(application
 
     /**
      * Method to call [UserRepository.deleteUser]
+     * @param uid String value instance for user id
      */
     fun removeUserInfo(uid: String) {
         CoroutineScope(Dispatchers.IO).launch {
@@ -86,6 +94,8 @@ class AccountsViewModel(application: Application) : AndroidViewModel(application
 
     /**
      * Method to call [UserRepository.updateUser] and [AccountRepository.updateUser]
+     * @param user An object of class [Users]
+     * @param isSuccess Boolean callback function for user info update success or not
      */
     fun updateUserInfo(user: Users, isSuccess: (Boolean) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {

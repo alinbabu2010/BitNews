@@ -27,6 +27,8 @@ object RetrofitManager {
 
     /**
      * Method to call retrofit service using [getAPIService] and get APIResponse from [loadData]
+     * @param page To denote the API page count
+     * @param resource Callback to function call by passing APIResponse object
      */
     fun getNewsData( page : Int ,resource: (APIResponse<News>) -> Unit ){
         val call = getAPIService.getNews(BuildConfig.API_KEY, keyWord,sortBy,page,numberOfResult)
@@ -37,6 +39,8 @@ object RetrofitManager {
 
     /**
      * Method to fetch news from API
+     * @param call An invocation of a Retrofit method that sends a request to a web server.
+     * @param apiResponse Callback to function call by passing APIResponse object
      */
     private fun <T : Any> loadData(call: Call<T>, apiResponse: (APIResponse<T>) -> Unit) {
         call.enqueue(object : Callback<T> {

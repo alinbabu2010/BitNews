@@ -34,6 +34,9 @@ class Utils {
 
         /**
          * Function to add a new fragment to the layout
+         * @param fragment An instance of [Fragment]
+         * @param id Integer to provider container view id
+         * @param fragmentManager An instance of [FragmentManager]
          */
         fun addFragment(fragment: Fragment, id: Int, fragmentManager: FragmentManager) {
             val fragmentTransaction = fragmentManager.beginTransaction()
@@ -43,6 +46,9 @@ class Utils {
 
         /**
          * Function to replace a fragment by another
+         * @param fragment An instance of [Fragment]
+         * @param id Integer to provider container view identity
+         * @param fragmentManager An instance of [FragmentManager]
          */
         fun replaceFragment(fragment: Fragment, id: Int, fragmentManager: FragmentManager?) {
             val fragmentTransaction = fragmentManager?.beginTransaction()
@@ -52,8 +58,11 @@ class Utils {
         }
 
 
-        /*
-         * Function to show alert dialog box after button click.
+        /**
+         * Function to show alert dialog box after button click
+         * @param context  Access to the [Context] the calling function fragment is currently associated with.
+         * @param activity Access to [Activity] referenced
+         * @param accountsViewModel An instance of [AccountsViewModel]
          */
         fun showAlert(context: Context, activity: Activity, accountsViewModel: AccountsViewModel) {
             val builder = AlertDialog.Builder(context, R.style.DialogBoxTheme)
@@ -75,6 +84,8 @@ class Utils {
 
         /**
          * Function to start news detail activity
+         * @param context  Access to the [Context] the calling function fragment is currently associated with.
+         * @param article An object of class [Articles]
          */
         fun openArticle(context: Context, article: Articles?) {
             val intent = Intent(context, ArticleActivity::class.java)
@@ -84,6 +95,8 @@ class Utils {
 
         /**
          * Function to share news to others
+         * @param context  Access to the [Context] the calling function fragment is currently associated with.
+         * @param url Url of news [Articles] to be shared
          */
         fun shareNews(context: Context, url: String?) {
             val sendIntent: Intent = Intent().apply {
@@ -97,6 +110,7 @@ class Utils {
 
         /**
          * Method to check if network is connected or not
+         * @param context  Access to the [Context] the calling function has access.
          */
         fun isNetworkConnected(context: Context?): Boolean {
             val connectivityManager =
@@ -109,6 +123,8 @@ class Utils {
 
         /**
          * Function to start dummy activity
+         * @param context  Access to the [Context] the calling function fragment is currently associated with.
+         * @param article An object of class [Articles]
          */
         fun openDummyActivity(context: Context, article: Articles?) {
             val intent = Intent(context, ImageDetailActivity::class.java)
@@ -118,6 +134,9 @@ class Utils {
 
         /**
          * Method to show dialog about permission request
+         * @param context Access to the [Context] the calling function fragment is currently associated with.
+         * @param activity Access to [Activity] referenced
+         * @param requestingMessageId String resource id for requesting message
          */
         fun requestPermissionRationale(
             context: Context?,

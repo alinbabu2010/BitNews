@@ -18,6 +18,7 @@ import kotlinx.coroutines.launch
 
 /**
  * This class is used to define view model for favourite news storing
+ * @param application Parameter to use as application base context
  */
 class NewsViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -41,6 +42,7 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
 
     /**
      * Method to get the news from API url
+     * @param page To denote the API page count
      */
     fun getNews(page : Int) {
         CoroutineScope(Dispatchers.IO).launch {
@@ -51,6 +53,7 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
 
     /**
      * Method to add news article to favourites
+     * @param article An object of class [Articles]
      */
     fun addToFavourites(article: Articles?) {
         favouritesLiveData.value?.let { favouriteArticles.addAll(it) }
@@ -60,6 +63,7 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
 
     /**
      * Method to remove news article from favourites
+     * @param article An object of class [Articles]
      */
     fun removeFromFavourites(article: Articles?) {
         favouritesLiveData.value?.let { favouriteArticles.addAll(it) }
@@ -69,6 +73,7 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
 
     /**
      * Method to save favourites on firebase
+     * @param favouriteArticles Mutable set of class [Articles]
      */
     private fun storeOnFirebase(favouriteArticles: MutableSet<Articles>?) {
         storeDataOnFirebase(favouriteArticles) {
@@ -78,6 +83,8 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
 
     /**
      * Method to check news article in favourites set
+     * @param article An object of class [Articles]
+     * @return [Boolean] specifying is the given [article] is added to favorites or not
      */
     fun isFavouriteNews(article: Articles?): Boolean {
         var isFavourite = false
@@ -99,6 +106,7 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
 
     /**
      * Method to add articles to room database
+     * @param article An object of class [Articles]
      */
     fun addArticles(article: Articles) {
         CoroutineScope(Dispatchers.IO).launch {

@@ -21,6 +21,10 @@ class AccountRepository {
 
     /**
      * Method to sign in a user
+     * @param userName String instance to hold username
+     * @param password String instance to hold user password
+     * @param userRepository A object of repository class [UserRepository]
+     * @param isSuccess A boolean callback function notify action is success or not
      */
     fun sigInUser(
         userName: String,
@@ -44,6 +48,10 @@ class AccountRepository {
 
     /**
      * Method to register a user to firebase
+     * @param email A string value instance to hold user email address
+     * @param password String instance to hold user password
+     * @param user An object of [Users] holding user info
+     * @param isSuccess A boolean callback function notify action is success or not
      */
     fun createUser(email: String, password: String, user: Users,isSuccess: (Boolean) -> Unit) {
         getAuthInstance.createUserWithEmailAndPassword(email, password)
@@ -62,6 +70,8 @@ class AccountRepository {
 
     /**
      * Method to reset user password
+     * @param email A string value instance to hold user email address
+     * @return Returns a boolean denoting the operation is success or not
      */
     fun resetPassword(email: String): Boolean {
         firebaseError = null
@@ -78,6 +88,8 @@ class AccountRepository {
 
     /**
      * Method to update a user info in firebase
+     * @param user An object of [Users] holding user info
+     * @param isSuccess A boolean callback function notify action is success or not
      */
     fun updateUser(user: Users, isSuccess: (Boolean) -> Unit) {
         getAuthInstance.currentUser?.uid?.let { it1 ->

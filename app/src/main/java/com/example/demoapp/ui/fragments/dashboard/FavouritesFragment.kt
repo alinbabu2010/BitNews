@@ -67,6 +67,8 @@ class FavouritesFragment : Fragment() {
 
     /**
      * Method to invoke layoutManager and recyclerViewAdapter
+     * @param recyclerView An instance of [RecyclerView]
+     * @param newsViewModel An instance of viewModel [NewsViewModel]
      */
     private fun loadRecyclerView(recyclerView: RecyclerView, newsViewModel: NewsViewModel?) {
         with(recyclerView) {
