@@ -26,10 +26,12 @@ import com.example.demoapp.adapter.NewsAdapter
 import com.example.demoapp.api.Resource
 import com.example.demoapp.databinding.FragmentNewsBinding
 import com.example.demoapp.models.Articles
+import com.example.demoapp.models.News
 import com.example.demoapp.receivers.NotificationReceiver
 import com.example.demoapp.ui.activities.dashboard.DashboardActivity
-import com.example.demoapp.utils.Const.Companion.GROUP_KEY
-import com.example.demoapp.utils.Const.Companion.NOTIFICATION_ID
+import com.example.demoapp.utils.Constants.Companion.GROUP_KEY
+import com.example.demoapp.utils.Constants.Companion.MAX_RESULTS
+import com.example.demoapp.utils.Constants.Companion.NOTIFICATION_ID
 import com.example.demoapp.viewmodels.NewsViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
@@ -70,6 +72,10 @@ class NewsFragment : Fragment() {
         newsViewModel?.newsLiveData?.observe(viewLifecycleOwner, { it ->
             when (it.status) {
                 Resource.Status.SUCCESS -> {
+                    newsViewModel?.isLoading = false
+                    if (binding.swipeRefresh.isRefreshing) {
+                        binding.swipeRefresh.isRefreshing = false
+                    }
                     binding.progressBarNews.visibility = View.GONE
                     articles = it.data?.articles
                     articles?.forEach { article ->
@@ -87,9 +93,8 @@ class NewsFragment : Fragment() {
                     recyclerView.visibility = View.GONE
                 }
                 Resource.Status.REFRESHING -> {
-                    newsViewModel?.getNews(1)
-                    recyclerView.adapter?.notifyDataSetChanged()
-                    binding.swipeRefresh.isRefreshing = false
+                    newsViewModel?.pageCount?.let { it1 -> newsViewModel?.getNews(it1) }
+                    newsViewModel?.isLoading = true
                 }
                 Resource.Status.LOAD_MORE -> {
                     binding.loadMoreProgressBar.visibility = View.GONE
@@ -102,13 +107,7 @@ class NewsFragment : Fragment() {
         })
 
         newsViewModel?.articles?.observe(viewLifecycleOwner, {
-            if (it == null) newsViewModel?.getNews(1)
-            else {
-                articles = it as ArrayList<Articles>
-                recyclerView.adapter = NewsAdapter(articles, newsViewModel)
-                recyclerView.setHasFixedSize(true)
-                binding.progressBarNews.visibility = View.GONE
-            }
+            setNewsData(it,recyclerView)
         })
 
         newsViewModel?.favouritesLiveData?.observe(viewLifecycleOwner, {
@@ -116,13 +115,14 @@ class NewsFragment : Fragment() {
             onCreate(savedInstanceState)
         })
 
-        // Refresh on swipe by calling recycler view
         with(binding.swipeRefresh) {
             setProgressBackgroundColorSchemeColor(Color.YELLOW)
             setColorSchemeResources(R.color.secondary_dark)
-            setOnRefreshListener {
-                newsViewModel?.newsLiveData?.postValue(Resource.refreshing())
-            }
+        }
+
+        // Refresh on swipe by calling recycler view
+        binding.swipeRefresh.setOnRefreshListener {
+            setRefreshState()
         }
 
         // Inflate bottom sheet dialog on floating action button click
@@ -141,6 +141,41 @@ class NewsFragment : Fragment() {
     }
 
     /**
+     * Method to set data in news fragment
+     * @param articleList List of [Articles] to be loaded
+     * @param recyclerView [RecyclerView] to be set
+     */
+    private fun setNewsData(articleList: List<Articles>?, recyclerView: RecyclerView) {
+        if (articleList == null) {
+            val count = newsViewModel?.pageCount as Int
+            newsViewModel?.getNews(count)
+        }
+        else {
+            articles = articleList as ArrayList<Articles>
+            setRecyclerView(recyclerView)
+        }
+    }
+
+    /**
+     * Method to set the refresh state on swipe to refresh
+     */
+    private fun setRefreshState() {
+        newsViewModel?.pageCount = 1
+        val state = Resource.refreshing<News>()
+        newsViewModel?.newsLiveData?.postValue(state)
+    }
+
+    /**
+     * Method to set data in recyclerview
+     * @param recyclerView An instance of [RecyclerView]
+     */
+    private fun setRecyclerView(recyclerView: RecyclerView) {
+        recyclerView.adapter = NewsAdapter(articles, newsViewModel)
+        recyclerView.setHasFixedSize(true)
+        binding.progressBarNews.visibility = View.GONE
+    }
+
+    /**
      * Method to load more news om recycler view item end
      * @param layoutManager is used to access recycler view layout manager
      */
@@ -148,14 +183,13 @@ class NewsFragment : Fragment() {
         val totalItemCount = layoutManager.itemCount
         val lastVisibleItem = layoutManager.findLastCompletelyVisibleItemPosition()
         if (newsViewModel?.isLoading != true && lastVisibleItem == totalItemCount - 1) {
-            newsViewModel?.page?.plus(1)
-            val limit = newsViewModel?.maxPageLimit?.let { newsViewModel?.page?.compareTo(it) } as Int
-            if (limit <= 0) {
+            newsViewModel?.pageCount?.plus(1)
+            if (totalItemCount >= MAX_RESULTS) {
                 Snackbar.make(binding.recyclerView, "No more news", Snackbar.LENGTH_SHORT).show()
             } else {
                 binding.loadMoreProgressBar.visibility = View.VISIBLE
                 newsViewModel?.isLoading = true
-                newsViewModel?.page?.let { newsViewModel?.getNews(it) }
+                newsViewModel?.pageCount?.let { newsViewModel?.getNews(it) }
             }
         }
     }
