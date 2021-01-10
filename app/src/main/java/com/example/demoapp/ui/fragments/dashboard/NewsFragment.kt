@@ -72,10 +72,6 @@ class NewsFragment : Fragment() {
         newsViewModel?.newsLiveData?.observe(viewLifecycleOwner, { it ->
             when (it.status) {
                 Resource.Status.SUCCESS -> {
-                    newsViewModel?.isLoading = false
-                    if (binding.swipeRefresh.isRefreshing) {
-                        binding.swipeRefresh.isRefreshing = false
-                    }
                     binding.progressBarNews.visibility = View.GONE
                     articles = it.data?.articles
                     articles?.forEach { article ->
@@ -83,6 +79,7 @@ class NewsFragment : Fragment() {
                     }
                     newsViewModel?.articles
                     notifyUser()
+                    newsViewModel?.newsLiveData?.postValue(Resource.finished())
                 }
                 Resource.Status.ERROR -> {
                     binding.progressBarNews.visibility = View.GONE
@@ -101,7 +98,12 @@ class NewsFragment : Fragment() {
                     it.data?.articles?.let { it1 -> articles?.addAll(it1) }
                     recyclerView.adapter?.notifyDataSetChanged()
                     newsViewModel?.isLoading = false
-
+                }
+                Resource.Status.FINISHED -> {
+                    newsViewModel?.isLoading = false
+                    if (binding.swipeRefresh.isRefreshing) {
+                        binding.swipeRefresh.isRefreshing = false
+                    }
                 }
             }
         })

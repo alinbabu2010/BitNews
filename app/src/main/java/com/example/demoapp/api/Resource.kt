@@ -39,6 +39,8 @@ data class Resource<out T>(
         fun <T> loadMore(data: T?): Resource<T> = Resource<T>(Status.LOAD_MORE,data,null,null)
 
         fun <T> refreshing(): Resource<T> = Resource<T>(Status.REFRESHING,null,null,null)
+
+        fun <T> finished() : Resource<T> = Resource<T>(Status.FINISHED,null,null,null)
     }
 
     enum class Status {
@@ -46,6 +48,7 @@ data class Resource<out T>(
         ERROR,
         LOADING,
         REFRESHING,
-        LOAD_MORE
+        LOAD_MORE,
+        FINISHED
     }
 }
