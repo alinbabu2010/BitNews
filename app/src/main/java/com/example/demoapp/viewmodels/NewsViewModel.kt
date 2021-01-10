@@ -22,17 +22,15 @@ import kotlinx.coroutines.launch
  */
 class NewsViewModel(application: Application) : AndroidViewModel(application) {
 
-    var page = 1
+    var pageCount = 1
     var isLoading = false
-    val maxPageLimit = 10
     private val repository : ArticleRepository
     var articles : LiveData<List<Articles>>
-    var newsLiveData = MutableLiveData<Resource<News?>>()
-
+    val newsLiveData = MutableLiveData<Resource<News?>>()
+    val favouriteArticles: MutableSet<Articles> = mutableSetOf()
     val favouritesLiveData : MutableLiveData<MutableSet<Articles>> by lazy {
         MutableLiveData<MutableSet<Articles>>()
     }
-    val favouriteArticles: MutableSet<Articles> = mutableSetOf()
 
     init {
         val articlesDAO = ArticlesDatabase.getDatabase(application).articlesDAO()
@@ -45,9 +43,8 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
      * @param page To denote the API page count
      */
     fun getNews(page : Int) {
-        CoroutineScope(Dispatchers.IO).launch {
-            repository.getArticles(page)
-            newsLiveData = repository.newsLiveData
+        repository.getArticles(page){
+            newsLiveData.postValue(it)
         }
     }
 
