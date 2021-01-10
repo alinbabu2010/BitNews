@@ -1,28 +1,15 @@
 package com.example.demoapp.models
 
+import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
+
 /**
  * Data class for news
  */
-data class News(val articles: ArrayList<Articles>)
-
-/**
- * Data class for each news article
- */
-data class Articles(
-    var source: Source,
-    var author: String,
-    var title: String,
-    var description: String,
-    var url: String,
-    var urlToImage: String,
-    var publishedAt: String,
-    var content: String
-)
-
-/**
- * Data class for source of news
- */
-data class Source(
-    var id: Int,
-    var name: String
-)
+@Parcelize
+data class News(
+    @SerializedName("status") val status: String? = null,
+    @SerializedName("totalResults") val totalResults: Int = 20,
+    @SerializedName("articles") val articles: ArrayList<Articles>
+) : Parcelable

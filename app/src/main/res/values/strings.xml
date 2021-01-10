@@ -1,21 +1,73 @@
 <resources>
     <string name="app_name">Demo App</string>
-    <string name="username_text">Username</string>
+    <string name="email_string">Email</string>
     <string name="login_string">Login</string>
     <string name="password_text">Password</string>
     <string name="forgot_password_text">Forgot your password. Click here to reset</string>
     <string name="profile_text">Profile</string>
-    <string name="email_dashboard">Email:</string>
-    <string name="name_dashboard">Name:</string>
-    <string name="username_dashboard">Username:</string>
     <string name="logout_string">Logout</string>
     <string name="reset_password_string">Reset Password</string>
     <string name="email_text">Enter your email</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="news_image">News Image</string>
-    <string name="like_button">like_button_image</string>
-    <string name="share_button">share_button_image</string>
-    <string name="favourites">Favourites</string>
-    <string name="news">News</string>
-    <string name="page_under_construction">Page under construction</string>
+    <string name="news_image" translatable="false">News Image</string>
+    <string name="share_button" translatable="false">share_button_image</string>
+    <string name="description">Description</string>
+    <string name="article">Article</string>
+    <string name="filter_icon" translatable="false">Filter floating action button</string>
+    <string name="empty_favourites_string">No Favourites added</string>
+    <string name="source">Filter by source</string>
+    <string name="published_date">Filter by published date</string>
+    <string name="apply">Apply</string>
+    <string name="clear">Clear</string>
+    <string name="select_date">Click to select a published date</string>
+    <string name="no_matching">No matching found</string>
+    <string name="browser_btn_string">Open in browser.</string>
+    <string name="register_string">Register</string>
+    <string name="name_string">Name</string>
+    <string name="username_string">Username</string>
+    <string name="password_string">Password</string>
+    <string name="login_redirect_string">Already have an account. Click here</string>
+    <string name="confirm_password_string">Confirm Password</string>
+    <string name="register_text">New to our app! Register here</string>
+    <string name="field_empty_text">Fields cannot be empty</string>
+    <string name="wrong_credentials_text">Incorrect credentials entered</string>
+    <string name="empty_filter_text">Select at least one filter</string>
+    <string name="password_reset">Password reset link send to email</string>
+    <string name="invalid_message">Invalid email address entered</string>
+    <string name="alert_dialog_question">Do you really want to logout?</string>
+    <string name="yes_string">Yes</string>
+    <string name="no_string">No</string>
+    <string name="password_matching_error">Password not matching</string>
+    <string name="news_title">News</string>
+    <string name="favourite_title">Favourites</string>
+    <string name="download_string" translatable="false">Download</string>
+    <string name="user_image" translatable="false">user_image</string>
+    <string name="profile_photo">Profile Photo</string>
+    <string name="remove_photo">Remove Photo</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="camera_image" translatable="false">camera_image</string>
+    <string name="gallery_icon" translatable="false">gallery_icon</string>
+    <string name="delete_icon" translatable="false">delete_icon</string>
+    <string name="title_activity_maps" translatable="false">Map</string>
+    <string name="storage_option">Please select one of the storage option and click OK</string>
+    <string name="permission_denied">"Permission Denied</string>
+    <string name="download_article_image">"Downloading article image</string>
+    <string name="download_image_success">Image downloaded successfully</string>
+    <string name="ok_string">OK</string>
+    <string name="location_permission">Please enable location permission in app settings</string>
+    <string name="storage_camera_permission">Please enable storage and camera permission in app settings</string>
+    <string name="search_title">Search</string>
+    <string name="enter_name">Enter your name</string>
+    <string name="profile_update" >Profile updated successfully</string>
+    <string name="profile_unsuccessful">Profile update unsuccessful</string>
+    <string name="channel_name">News Notification</string>
+    <string name="channel_description">Notify users after news update</string>
+    <string name="channel_text">Updated with latest fetch from NewsApi.org</string>
+    <string name="channel_title">News update</string>
+    <string name="push_notification_channel_id">Firebase Push Notification</string>
+    <string name="push_notification_channel_description">Push notification from firebase operations</string>
+    <string name="profile_channel_title">Profile Update</string>
+    <string name="profile_channel_text">Profile updated successfully</string>
+    <string name="profile_channel_name">Profile Notifications</string>
+    <string name="profile_channel_description">Notification about user profile update</string>
 </resources>

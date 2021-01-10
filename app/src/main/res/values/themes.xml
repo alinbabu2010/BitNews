@@ -25,4 +25,11 @@
         <item name="android:colorForeground">@color/secondary_dark</item>
         <item name="android:colorBackground">@color/secondary_light</item>
     </style>
+
+    <style name="ArticleTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorControlNormal">@color/black</item>
+    </style>
+
 </resources>

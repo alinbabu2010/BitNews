@@ -18,9 +18,19 @@
         <item name="android:typeface">monospace</item>
     </style>
 
-    <style name="dashboard_layout_style">
-        <item name="android:layout_width">300dp</item>
-        <item name="android:layout_height">41dp</item>
-        <item name="android:orientation">horizontal</item>
+    <style name="tablayout_style">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/secondary_dark</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:typeface">monospace</item>
+    </style>
+
+    <style name="failure_view_styles">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/roboto_condensed_regular</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textColor">@color/secondary_dark</item>
+        <item name="android:textSize">24sp</item>
     </style>
 </resources>

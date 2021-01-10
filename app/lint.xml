@@ -1,22 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
     <issue id="IconLocation">
+        <ignore path="src/main/res/drawable/empty_box.png" />
+        <ignore path="src/main/res/drawable/ic_empty_box.png" />
         <ignore path="src/main/res/drawable/logo.png" />
+        <ignore path="src/main/res/drawable/no_wifi.png" />
+        <ignore path="src/main/res/drawable/no_wifi.png" />
     </issue>
     <issue id="IconXmlAndPng">
+        <ignore path="src/main/res/drawable-hdpi/ic_calendar.png" />
+        <ignore path="src/main/res/drawable-hdpi/ic_favourite_filled.png" />
+        <ignore path="src/main/res/drawable-hdpi/ic_favourite_outlined.png" />
+        <ignore path="src/main/res/drawable-hdpi/ic_filter.png" />
         <ignore path="src/main/res/drawable-hdpi/ic_like.png" />
         <ignore path="src/main/res/drawable-hdpi/ic_like.png" />
         <ignore path="src/main/res/drawable-hdpi/ic_news.png" />
         <ignore path="src/main/res/drawable-hdpi/ic_password.png" />
         <ignore path="src/main/res/drawable-hdpi/ic_user.png" />
+        <ignore path="src/main/res/drawable-mdpi/ic_calendar.png" />
+        <ignore path="src/main/res/drawable-mdpi/ic_favourite_filled.png" />
+        <ignore path="src/main/res/drawable-mdpi/ic_favourite_outlined.png" />
+        <ignore path="src/main/res/drawable-mdpi/ic_filter.png" />
         <ignore path="src/main/res/drawable-mdpi/ic_like.png" />
         <ignore path="src/main/res/drawable-mdpi/ic_news.png" />
         <ignore path="src/main/res/drawable-mdpi/ic_password.png" />
         <ignore path="src/main/res/drawable-mdpi/ic_user.png" />
+        <ignore path="src/main/res/drawable-xhdpi/ic_calendar.png" />
+        <ignore path="src/main/res/drawable-xhdpi/ic_favourite_filled.png" />
+        <ignore path="src/main/res/drawable-xhdpi/ic_favourite_outlined.png" />
+        <ignore path="src/main/res/drawable-xhdpi/ic_filter.png" />
         <ignore path="src/main/res/drawable-xhdpi/ic_like.png" />
         <ignore path="src/main/res/drawable-xhdpi/ic_news.png" />
         <ignore path="src/main/res/drawable-xhdpi/ic_password.png" />
         <ignore path="src/main/res/drawable-xhdpi/ic_user.png" />
+        <ignore path="src/main/res/drawable-xxhdpi/ic_calendar.png" />
+        <ignore path="src/main/res/drawable-xxhdpi/ic_favourite_filled.png" />
+        <ignore path="src/main/res/drawable-xxhdpi/ic_favourite_outlined.png" />
+        <ignore path="src/main/res/drawable-xxhdpi/ic_filter.png" />
         <ignore path="src/main/res/drawable-xxhdpi/ic_like.png" />
         <ignore path="src/main/res/drawable-xxhdpi/ic_news.png" />
         <ignore path="src/main/res/drawable-xxhdpi/ic_password.png" />

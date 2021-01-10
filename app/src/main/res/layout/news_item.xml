@@ -6,90 +6,110 @@
     android:layout_margin="8dp"
     android:background="@color/secondary_light"
     app:cardBackgroundColor="@color/secondary_light"
-    app:cardCornerRadius="4dp">
+    app:cardCornerRadius="4dp"
+    app:cardElevation="1dp"
+    app:strokeColor="@color/primary_dark"
+    app:strokeWidth="1dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="3dp"
-        android:orientation="vertical"
-        android:padding="2dp">
+        android:orientation="vertical">
 
         <ImageView
             android:id="@+id/news_image"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="194dp"
+            android:clickable="true"
             android:contentDescription="@string/news_image"
+            android:focusable="true"
             android:scaleType="fitXY"
             android:visibility="visible" />
 
-        <TextView
-            android:id="@+id/news_title"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="8dp"
-            android:lineSpacingExtra="8sp"
-            android:text="@string/app_name"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:orientation="vertical"
+            android:padding="16dp">
 
-        <TextView
-            android:id="@+id/news_desc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:lineSpacingExtra="8sp"
-            android:lines="2"
-            android:text="@string/app_name"
-            android:textColor="@color/text_grey"
-            android:textSize="14sp"
-            android:textStyle="normal" />
+            <TextView
+                android:id="@+id/news_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:contextClickable="true"
+                android:focusable="true"
+                android:fontFamily="@font/roboto_condensed_regular"
+                android:lineSpacingExtra="8sp"
+                android:text="@string/app_name"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="normal" />
 
-        <TextView
-            android:id="@+id/publish_textview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/secondary_dark" />
+            <TextView
+                android:id="@+id/news_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/roboto_condensed_regular"
+                android:lineSpacingExtra="8sp"
+                android:lines="2"
+                android:text="@string/app_name"
+                android:textColor="@color/text_grey"
+                android:textSize="16sp"
+                android:textStyle="normal" />
 
-        <TextView
-            android:id="@+id/source_textview"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="5dp"
-            android:layout_weight="1"
-            android:textColor="@color/secondary_dark" />
+            <TextView
+                android:id="@+id/publish_textview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
+                android:fontFamily="@font/roboto_condensed_regular"
+                android:lineSpacingExtra="8sp"
+                android:textColor="@color/secondary_dark" />
+
+            <TextView
+                android:id="@+id/source_textview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/roboto_condensed_regular"
+                android:lineSpacingExtra="8sp"
+                android:textColor="@color/secondary_dark" />
+
+            <TextView
+                android:id="@+id/author_textview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/roboto_condensed_regular"
+                android:lineSpacingMultiplier="0"
+                android:singleLine="true"
+                android:textColor="@color/secondary_dark" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="5dp"
-            android:gravity="end"
-            android:orientation="horizontal"
-            android:padding="2dp">
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:fitsSystemWindows="true"
+            android:gravity="center_vertical|end"
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/author_textview"
-                android:layout_width="263dp"
+            <RadioButton
+                android:id="@+id/favourites_button"
+                style="@android:style/Widget.Material.Light.CompoundButton.RadioButton"
+                android:layout_width="41dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:textColor="@color/secondary_dark" />
+                android:button="@drawable/sl_favourite_24dp"
+                app:buttonTint="@color/secondary_dark" />
 
             <ImageButton
-                style="@android:style/Widget.Material.ImageButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="#00FFFFFF"
-                android:contentDescription="@string/like_button"
-                android:tint="@color/secondary_dark"
-                app:srcCompat="@drawable/ic_like" />
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:id="@+id/share_button"
+                android:layout_width="41dp"
+                android:layout_height="match_parent"
                 android:background="#00FFFFFF"
                 android:contentDescription="@string/share_button"
                 android:tint="@color/secondary_dark"
