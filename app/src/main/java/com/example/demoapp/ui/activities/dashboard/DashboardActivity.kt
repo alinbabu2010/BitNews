@@ -12,6 +12,7 @@ import androidx.viewpager.widget.ViewPager
 import com.example.demoapp.R
 import com.example.demoapp.adapter.PageAdapter
 import com.example.demoapp.ui.fragments.dashboard.NewsFragment
+import com.example.demoapp.utils.Constants.Companion.FAIL_MSG
 import com.example.demoapp.utils.Utils.Companion.addFragment
 import com.example.demoapp.utils.Utils.Companion.showAlert
 import com.example.demoapp.viewmodels.AccountsViewModel
@@ -27,7 +28,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 class DashboardActivity : AppCompatActivity() {
 
     /**
-     * This method creates the options menu
+     * Overriding [onCreateOptionsMenu] to create the options menu
      */
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)
@@ -50,7 +51,7 @@ class DashboardActivity : AppCompatActivity() {
     private fun getFirebaseToken() {
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
-                Log.i(TAG, "Fetching FCM registration token failed", task.exception)
+                Log.i(TAG,FAIL_MSG, task.exception)
                 return@OnCompleteListener
             }
             // Get new FCM registration token
