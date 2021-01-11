@@ -93,16 +93,27 @@ class AccountsViewModel(application: Application) : AndroidViewModel(application
     }
 
     /**
-     * Method to call [UserRepository.updateUser] and [AccountRepository.updateUser]
+     * Method to call [UserRepository.updateUser]
      * @param user An object of class [Users]
      * @param isSuccess Boolean callback function for user info update success or not
      */
-    fun updateUserInfo(user: Users, isSuccess: (Boolean) -> Unit) {
+    fun updateUserInfoOnDatabase(user: Users, isSuccess: (Boolean) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
             userRepository.updateUser(user)
         }
+        isSuccess(true)
+    }
+
+    /**
+     * Method to call [AccountRepository.updateUser]
+     * @param user An object of class [Users]
+     * @return Boolean for user info update success or not
+     */
+    fun updateUserInfoOnFirebase(user: Users): Boolean {
+        var isSuccess = true
         accountRepository.updateUser(user) {
-            isSuccess(it)
+            isSuccess = it
         }
+        return isSuccess
     }
 }
