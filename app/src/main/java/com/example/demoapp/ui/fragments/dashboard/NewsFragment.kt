@@ -148,7 +148,7 @@ class NewsFragment : Fragment() {
      * @param recyclerView [RecyclerView] to be set
      */
     private fun setNewsData(articleList: List<Articles>?, recyclerView: RecyclerView) {
-        if (articleList == null) {
+        if (articleList.isNullOrEmpty()) {
             val count = newsViewModel?.pageCount as Int
             newsViewModel?.getNews(count)
         }
