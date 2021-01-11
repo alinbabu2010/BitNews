@@ -45,6 +45,6 @@ class UserRepository(private  val usersDAO: UsersDAO) {
      * @param user An object of [Users] containing modified user data
      */
     fun updateUser(user: Users){
-        usersDAO.updateUser(user.id, user.name.toString(), user.username.toString())
+        usersDAO.updateUser(user)
     }
 }

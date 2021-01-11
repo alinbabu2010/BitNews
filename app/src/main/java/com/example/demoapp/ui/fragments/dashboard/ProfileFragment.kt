@@ -1,11 +1,16 @@
 package com.example.demoapp.ui.fragments.dashboard
 
 import android.Manifest
-import android.app.*
+import android.app.Activity
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.ContentValues
+import android.content.Context.CONNECTIVITY_SERVICE
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.net.ConnectivityManager
+import android.net.Network
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -30,14 +35,12 @@ import com.example.demoapp.databinding.FragmentProfileBinding
 import com.example.demoapp.firebase.ProfileFirebase.Companion.removeUserImage
 import com.example.demoapp.firebase.ProfileFirebase.Companion.uploadImageToFirebase
 import com.example.demoapp.models.Users
-import com.example.demoapp.receivers.NotificationReceiver
-import com.example.demoapp.ui.activities.dashboard.DashboardActivity
 import com.example.demoapp.ui.activities.main.MapsActivity
 import com.example.demoapp.utils.Constants.Companion.GROUP_KEY
 import com.example.demoapp.utils.Constants.Companion.NAME_STRING
-import com.example.demoapp.utils.Constants.Companion.NOTIFICATION_ID
 import com.example.demoapp.utils.Constants.Companion.PROFILE_IMAGE_DELETE
 import com.example.demoapp.utils.Constants.Companion.USERNAME_STRING
+import com.example.demoapp.utils.Utils.Companion.isNetworkConnected
 import com.example.demoapp.utils.Utils.Companion.requestPermissionRationale
 import com.example.demoapp.viewmodels.AccountsViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -53,8 +56,8 @@ class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
     private var container: ViewGroup? = null
     private var photoUri: Uri? = null
-    private var user : Users? = null
-    private var accountsViewModel : AccountsViewModel? = null
+    private var user: Users? = null
+    private var accountsViewModel: AccountsViewModel? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -65,19 +68,31 @@ class ProfileFragment : Fragment() {
         binding = FragmentProfileBinding.inflate(inflater, container, false)
         accountsViewModel = ViewModelProviders.of(this).get(AccountsViewModel::class.java)
         accountsViewModel?.getUserInfo(FirebaseAuth.getInstance().currentUser?.uid.toString())
-        accountsViewModel?.userData?.observe(viewLifecycleOwner,{
+        accountsViewModel?.userData?.observe(viewLifecycleOwner, {
             setProfileData(it)
             user = it
         })
+
+        val connectivityManager =
+            context?.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
+        connectivityManager.registerDefaultNetworkCallback(networkManager)
 
         binding.changeUserImage.setOnClickListener {
             setBottomSheetDialog()
         }
 
         binding.userLocation.setOnClickListener {
-            val permission = context?.let { it1 -> checkSelfPermission(it1,Manifest.permission.ACCESS_FINE_LOCATION) }
+            val permission = context?.let { it1 ->
+                checkSelfPermission(
+                    it1,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                )
+            }
             if (permission != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_REQUEST_CODE)
+                requestPermissions(
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                    LOCATION_REQUEST_CODE
+                )
             } else {
                 startActivity(Intent(context, MapsActivity::class.java))
             }
@@ -95,6 +110,14 @@ class ProfileFragment : Fragment() {
     }
 
     /**
+     * Method to call [AccountsViewModel.updateUserInfoOnFirebase] to update user
+     */
+    private fun updateUserOnFirebase() {
+        if (user?.let { accountsViewModel?.updateUserInfoOnFirebase(it) } == true)
+            notifyUser()
+    }
+
+    /**
      * Method to set and show edit user info bottom sheet dialog
      * @param field A string value to denote whether the field is for editing name or username.
      */
@@ -106,32 +129,38 @@ class ProfileFragment : Fragment() {
 
         val inputEditText = bottomSheetView.findViewById<TextInputEditText>(R.id.profile_editText)
         val textView = bottomSheetView.findViewById<TextView>(R.id.edit_textView)
-         if (field == NAME_STRING) {
-                textView.setText(R.string.enter_name)
-                inputEditText.text = binding.nameDisplay.text
-         }
-        if(field == USERNAME_STRING) {
-                textView.setText(R.string.enter_name)
-                inputEditText.text = binding.usernameDisplay.text
+        if (field == NAME_STRING) {
+            textView.setText(R.string.enter_name)
+            inputEditText.text = binding.nameDisplay.text
+        }
+        if (field == USERNAME_STRING) {
+            textView.setText(R.string.enter_name)
+            inputEditText.text = binding.usernameDisplay.text
         }
 
 
         bottomSheetView.findViewById<Button>(R.id.button_save).setOnClickListener {
-           when(field) {
-               NAME_STRING -> user?.name = inputEditText.text.toString()
-               USERNAME_STRING -> user?.username = inputEditText.text.toString()
-           }
-            user?.let { accountsViewModel?.updateUserInfo(it){ isSuccess ->
-                if(isSuccess) {
-                    bottomSheet?.hide()
-                    accountsViewModel?.userData?.postValue(user)
-                    Toast.makeText(this.activity,R.string.profile_update,Toast.LENGTH_SHORT).show()
+            when (field) {
+                NAME_STRING -> user?.name = inputEditText.text.toString()
+                USERNAME_STRING -> user?.username = inputEditText.text.toString()
+            }
+            user?.let {
+                accountsViewModel?.updateUserInfoOnDatabase(it) { isSuccess ->
+                    if (isSuccess) {
+                        bottomSheet?.hide()
+                        accountsViewModel?.userData?.postValue(user)
+                        if (isNetworkConnected(context)) updateUserOnFirebase()
+                        Toast.makeText(this.activity, R.string.profile_update, Toast.LENGTH_SHORT)
+                            .show()
+                    } else {
+                        Toast.makeText(
+                            this.activity,
+                            R.string.profile_unsuccessful,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
-                else {
-                    Toast.makeText(this.activity,R.string.profile_unsuccessful,Toast.LENGTH_SHORT).show()
-                }
-                notifyUser()
-            } }
+            }
         }
 
         bottomSheetView.findViewById<Button>(R.id.button_cancel).setOnClickListener {
@@ -150,8 +179,7 @@ class ProfileFragment : Fragment() {
         binding.emailDisplay.setText(data?.email)
         if (!data?.userImageUrl.equals("NONE")) {
             context?.let { Glide.with(it).load(data?.userImageUrl).into(binding.userImage) }
-        }
-        else {
+        } else {
             binding.progressProfileImage.visibility = View.VISIBLE
             context?.let { binding.userImage.setImageResource(R.drawable.avatar_anonymous_48dp) }
             binding.progressProfileImage.visibility = View.INVISIBLE
@@ -192,12 +220,17 @@ class ProfileFragment : Fragment() {
     /**
      * Method to remove user image  by calling [removeUserImage]
      */
-    private fun callRemoveUserImage(){
+    private fun callRemoveUserImage() {
         binding.progressProfileImage.visibility = View.VISIBLE
         removeUserImage()
-        binding.progressProfileImage.visibility = View.INVISIBLE
-        Toast.makeText(context, PROFILE_IMAGE_DELETE, Toast.LENGTH_SHORT).show()
-        notifyUser()
+        user?.userImageUrl = "NONE"
+        user?.let {
+            accountsViewModel?.updateUserInfoOnDatabase(it) {
+                if (isNetworkConnected(context)) updateUserOnFirebase()
+                binding.progressProfileImage.visibility = View.INVISIBLE
+                Toast.makeText(context, PROFILE_IMAGE_DELETE, Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     /**
@@ -235,7 +268,6 @@ class ProfileFragment : Fragment() {
             val contentValues = ContentValues().apply {
                 put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
             }
-            println(MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
         }
         return imageUri
@@ -272,8 +304,7 @@ class ProfileFragment : Fragment() {
                     )
                 }
             }
-        }
-        else if (requestCode == LOCATION_REQUEST_CODE) {
+        } else if (requestCode == LOCATION_REQUEST_CODE) {
             if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                 startActivity(Intent(context, MapsActivity::class.java))
             } else {
@@ -297,6 +328,14 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    private val networkManager = object : ConnectivityManager.NetworkCallback() {
+        override fun onAvailable(network: Network) {
+            super.onAvailable(network)
+            updateUserOnFirebase()
+        }
+    }
+
+
     /**
      * Method to save user image by calling [uploadImageToFirebase]
      * @param data An Uri of image to be saved
@@ -304,31 +343,23 @@ class ProfileFragment : Fragment() {
     private fun saveUserImage(data: Uri?) {
         context?.let { Glide.with(it).load(data).into(binding.userImage) }
         binding.progressProfileImage.visibility = View.VISIBLE
-        uploadImageToFirebase(data) {
+        if (isNetworkConnected(context)) {
+            uploadImageToFirebase(data) {
+                binding.progressProfileImage.visibility = View.INVISIBLE
+                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            }
+        } else {
             binding.progressProfileImage.visibility = View.INVISIBLE
-            notifyUser()
-            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, R.string.fui_no_internet, Toast.LENGTH_SHORT).show()
         }
     }
 
     /**
      * Method to notify user about news update
      */
-    private  fun notifyUser(){
-        var pendingIntent: PendingIntent? = null
-        var clearPendingIntent: PendingIntent? = null
+    private fun notifyUser() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createChannel()
-            val intent = Intent(this.activity, DashboardActivity::class.java).apply {
-                action = Intent.ACTION_DELETE
-                putExtra(Notification.EXTRA_NOTIFICATION_ID, 0)
-            }
-            pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-            val clearIntent = Intent(context, NotificationReceiver::class.java).apply {
-                action = Intent.ACTION_DELETE
-                putExtra("notificationId", NOTIFICATION_ID)
-            }
-            clearPendingIntent = PendingIntent.getBroadcast(context, 0,clearIntent,PendingIntent.FLAG_UPDATE_CURRENT)
         }
 
         val notification = context?.let { NotificationCompat.Builder(it, PROFILE_CHANNEL_ID) }
@@ -336,12 +367,11 @@ class ProfileFragment : Fragment() {
             ?.setContentTitle(getString(R.string.profile_channel_title))
             ?.setContentText(getString(R.string.profile_channel_text))
             ?.setColor(Color.YELLOW)
-            ?.setContentIntent(pendingIntent)
+            ?.setAutoCancel(true)
             ?.setOnlyAlertOnce(true)
             ?.setPriority(NotificationCompat.PRIORITY_DEFAULT)
             ?.setCategory(NotificationCompat.CATEGORY_MESSAGE)
             ?.setGroup(GROUP_KEY)
-            ?.addAction(R.drawable.quantum_ic_clear_grey600_24, getString(R.string.clear), clearPendingIntent)
             ?.build()
         val notificationManagerCompat = activity?.let { NotificationManagerCompat.from(it) }
         notification?.let { notificationManagerCompat?.notify(2, it) }
@@ -352,9 +382,13 @@ class ProfileFragment : Fragment() {
      */
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createChannel() {
-        val channelName = getString(R.string.profile_channel_name)
-        val channel = NotificationChannel(PROFILE_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_DEFAULT)
-        channel.description = getString(R.string.profile_channel_description)
+        val channelName = activity?.getString(R.string.profile_channel_name)
+        val channel = NotificationChannel(
+            PROFILE_CHANNEL_ID,
+            channelName,
+            NotificationManager.IMPORTANCE_DEFAULT
+        )
+        channel.description = activity?.getString(R.string.profile_channel_description)
         channel.shouldShowLights()
         val notificationManager = context?.let {
             ContextCompat.getSystemService(
@@ -370,8 +404,7 @@ class ProfileFragment : Fragment() {
         var firebaseResponseMessage: String? = null
         private const val IMAGE_CAPTURE_CODE = 100
         private const val LOCATION_REQUEST_CODE = 300
-        private const val  PROFILE_CHANNEL_ID = "PROFILE_CHANNEL_ID"
+        private const val PROFILE_CHANNEL_ID = "PROFILE_CHANNEL_ID"
     }
-
 
 }
