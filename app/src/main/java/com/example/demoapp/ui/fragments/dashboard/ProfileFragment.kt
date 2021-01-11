@@ -388,7 +388,7 @@ class ProfileFragment : Fragment() {
             channelName,
             NotificationManager.IMPORTANCE_DEFAULT
         )
-        channel.description = getString(R.string.profile_channel_description)
+        channel.description = activity?.getString(R.string.profile_channel_description)
         channel.shouldShowLights()
         val notificationManager = context?.let {
             ContextCompat.getSystemService(
