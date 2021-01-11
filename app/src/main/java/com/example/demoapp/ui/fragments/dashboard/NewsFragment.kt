@@ -69,47 +69,12 @@ class NewsFragment : Fragment() {
         recyclerView.layoutManager = layoutManager
         newsViewModel?.getFavourites()
 
-        newsViewModel?.newsLiveData?.observe(viewLifecycleOwner, { it ->
-            when (it.status) {
-                Resource.Status.SUCCESS -> {
-                    binding.progressBarNews.visibility = View.GONE
-                    articles = it.data?.articles
-                    articles?.forEach { article ->
-                        newsViewModel?.addArticles(article)
-                    }
-                    newsViewModel?.articles
-                    notifyUser()
-                    newsViewModel?.newsLiveData?.postValue(Resource.finished())
-                }
-                Resource.Status.ERROR -> {
-                    binding.progressBarNews.visibility = View.GONE
-                    Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
-                }
-                Resource.Status.LOADING -> {
-                    binding.progressBarNews.visibility = View.VISIBLE
-                    recyclerView.visibility = View.GONE
-                }
-                Resource.Status.REFRESHING -> {
-                    newsViewModel?.pageCount?.let { it1 -> newsViewModel?.getNews(it1) }
-                    newsViewModel?.isLoading = true
-                }
-                Resource.Status.LOAD_MORE -> {
-                    binding.loadMoreProgressBar.visibility = View.GONE
-                    it.data?.articles?.let { it1 -> articles?.addAll(it1) }
-                    recyclerView.adapter?.notifyDataSetChanged()
-                    newsViewModel?.isLoading = false
-                }
-                Resource.Status.FINISHED -> {
-                    newsViewModel?.isLoading = false
-                    if (binding.swipeRefresh.isRefreshing) {
-                        binding.swipeRefresh.isRefreshing = false
-                    }
-                }
-            }
+        newsViewModel?.newsLiveData?.observe(viewLifecycleOwner, {
+            checkNewsStatus(recyclerView, it)
         })
 
         newsViewModel?.articles?.observe(viewLifecycleOwner, {
-            setNewsData(it,recyclerView)
+            setNewsData(it, recyclerView)
         })
 
         newsViewModel?.favouritesLiveData?.observe(viewLifecycleOwner, {
@@ -135,11 +100,55 @@ class NewsFragment : Fragment() {
         // Setting up to load more news on last news item
         binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-               if(dy>0) {
-                   loadMoreNews(layoutManager)
-               }
+                if (dy > 0) {
+                    loadMoreNews(layoutManager)
+                }
             }
         })
+    }
+
+    /**
+     * Method to check news api state and perform operation according to each state
+     * @param recyclerView An instance of [RecyclerView] of the [NewsFragment]
+     * @param resource An instance of [Resource] for news response
+     */
+    private fun checkNewsStatus(recyclerView: RecyclerView, resource: Resource<News?>) {
+        when (resource.status) {
+            Resource.Status.SUCCESS -> {
+                binding.progressBarNews.visibility = View.GONE
+                articles = resource.data?.articles
+                articles?.forEach { article ->
+                    newsViewModel?.addArticles(article)
+                }
+                newsViewModel?.articles
+                newsViewModel?.newsLiveData?.postValue(Resource.finished())
+            }
+            Resource.Status.ERROR -> {
+                binding.progressBarNews.visibility = View.GONE
+                Toast.makeText(activity, resource.message, Toast.LENGTH_LONG).show()
+            }
+            Resource.Status.LOADING -> {
+                binding.progressBarNews.visibility = View.VISIBLE
+                recyclerView.visibility = View.GONE
+            }
+            Resource.Status.REFRESHING -> {
+                newsViewModel?.pageCount?.let { newsViewModel?.getNews(it) }
+                newsViewModel?.isLoading = true
+                notifyUser()
+            }
+            Resource.Status.LOAD_MORE -> {
+                binding.loadMoreProgressBar.visibility = View.GONE
+                resource.data?.articles?.let { articles?.addAll(it) }
+                recyclerView.adapter?.notifyDataSetChanged()
+                newsViewModel?.isLoading = false
+            }
+            Resource.Status.FINISHED -> {
+                newsViewModel?.isLoading = false
+                if (binding.swipeRefresh.isRefreshing) {
+                    binding.swipeRefresh.isRefreshing = false
+                }
+            }
+        }
     }
 
     /**
@@ -151,8 +160,7 @@ class NewsFragment : Fragment() {
         if (articleList.isNullOrEmpty()) {
             val count = newsViewModel?.pageCount as Int
             newsViewModel?.getNews(count)
-        }
-        else {
+        } else {
             articles = articleList as ArrayList<Articles>
             setRecyclerView(recyclerView)
         }
@@ -327,7 +335,7 @@ class NewsFragment : Fragment() {
     /**
      * Method to notify user about news update
      */
-    private  fun notifyUser(){
+    private fun notifyUser() {
         var pendingIntent: PendingIntent? = null
         var clearPendingIntent: PendingIntent? = null
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -343,7 +351,12 @@ class NewsFragment : Fragment() {
                 action = Intent.ACTION_DELETE
                 putExtra("notificationId", NOTIFICATION_ID)
             }
-            clearPendingIntent = PendingIntent.getBroadcast(context, 0,clearIntent,PendingIntent.FLAG_UPDATE_CURRENT)
+            clearPendingIntent = PendingIntent.getBroadcast(
+                context,
+                0,
+                clearIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+            )
         }
         val notificationBuilder = context?.let { NotificationCompat.Builder(it, EVENT_CHANNEL_ID) }
             ?.setSmallIcon(R.drawable.ic_stat_notification)
@@ -377,10 +390,12 @@ class NewsFragment : Fragment() {
         )
         channel.description = getString(R.string.channel_description)
         channel.shouldShowLights()
-        val notificationManager = context?.let { getSystemService(
-            it,
-            NotificationManager::class.java
-        ) }
+        val notificationManager = context?.let {
+            getSystemService(
+                it,
+                NotificationManager::class.java
+            )
+        }
         notificationManager?.createNotificationChannel(channel)
     }
 
