@@ -185,10 +185,10 @@ class NewsFragment : Fragment() {
         val totalItemCount = layoutManager.itemCount
         val lastVisibleItem = layoutManager.findLastCompletelyVisibleItemPosition()
         if (newsViewModel?.isLoading != true && lastVisibleItem == totalItemCount - 1) {
-            newsViewModel?.pageCount?.plus(1)
             if (totalItemCount >= MAX_RESULTS) {
                 Snackbar.make(binding.recyclerView, "No more news", Snackbar.LENGTH_SHORT).show()
             } else {
+                newsViewModel?.pageCount = newsViewModel?.pageCount as Int + 1
                 binding.loadMoreProgressBar.visibility = View.VISIBLE
                 newsViewModel?.isLoading = true
                 newsViewModel?.pageCount?.let { newsViewModel?.getNews(it) }
