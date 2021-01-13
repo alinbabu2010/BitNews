@@ -8,14 +8,18 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.example.demoapp.R
 import com.example.demoapp.models.Articles
+import com.example.demoapp.services.SpeechService
+import com.example.demoapp.utils.Constants.Companion.ARTICLE
 import com.example.demoapp.utils.Constants.Companion.DATE_FORMAT_DECODE
 import com.example.demoapp.utils.Constants.Companion.DATE_FORMAT_ENCODE
 import com.example.demoapp.utils.Utils.Companion.showAlert
@@ -53,10 +57,12 @@ class ArticleActivity : AppCompatActivity() {
         val newsContent: TextView = findViewById(R.id.news_content)
         val toolbar: Toolbar? = findViewById(R.id.toolbar)
         val openNews: Button = findViewById(R.id.open_button)
+        val textToSpeechButton : ImageButton = findViewById(R.id.ttsButton)
 
         Glide.with(applicationContext).load(article?.imageUrl).override(800).into(newsImage)
         newsDesc.text = article?.description.toString()
-        newsContent.text = article?.content.toString()
+        val articleContent = article?.content.toString()
+        newsContent.text = articleContent
 
         val author = "Author: ${article?.author}"
         newsAuthor.text = author
@@ -86,6 +92,12 @@ class ArticleActivity : AppCompatActivity() {
             val intent = Intent(Intent.ACTION_VIEW)
             intent.data = Uri.parse(article?.url.toString())
             startActivity(intent)
+        }
+
+        textToSpeechButton.setOnClickListener {
+            val intent = Intent(this, SpeechService::class.java)
+            intent.putExtra(ARTICLE, articleContent)
+            ContextCompat.startForegroundService(this, intent)
         }
     }
 
