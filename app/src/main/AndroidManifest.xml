@@ -13,6 +13,7 @@
         tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -118,6 +119,8 @@
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
         <receiver android:name=".receivers.NotificationReceiver"/>
+        <receiver android:name=".receivers.SpeechNotificationReceiver"/>
+        <service android:name=".services.SpeechService"/>
     </application>
 
 </manifest>
