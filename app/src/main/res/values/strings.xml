@@ -70,4 +70,5 @@
     <string name="profile_channel_text">Profile updated successfully</string>
     <string name="profile_channel_name">Profile Notifications</string>
     <string name="profile_channel_description">Notification about user profile update</string>
+    <string name="service_channel_tilte">Reading article content</string>
 </resources>
