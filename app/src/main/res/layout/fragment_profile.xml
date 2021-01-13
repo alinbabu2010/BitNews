@@ -28,7 +28,7 @@
             app:civ_shadow="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/avatar_anonymous_48dp">
+            app:srcCompat="@drawable/ic_avatar_anonymous">
 
         </com.mikhaellopez.circularimageview.CircularImageView>
 

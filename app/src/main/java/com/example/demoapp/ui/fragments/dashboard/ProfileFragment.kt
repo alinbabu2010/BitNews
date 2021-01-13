@@ -181,7 +181,7 @@ class ProfileFragment : Fragment() {
             context?.let { Glide.with(it).load(data?.userImageUrl).into(binding.userImage) }
         } else {
             binding.progressProfileImage.visibility = View.VISIBLE
-            context?.let { binding.userImage.setImageResource(R.drawable.avatar_anonymous_48dp) }
+            context?.let { binding.userImage.setImageResource(R.drawable.ic_avatar_anonymous) }
             binding.progressProfileImage.visibility = View.INVISIBLE
         }
         if (firebaseResponseMessage?.isNotEmpty() == true) {
@@ -211,7 +211,7 @@ class ProfileFragment : Fragment() {
         }
 
         bottomSheetView.findViewById<ImageButton>(R.id.button_photo_remove).setOnClickListener {
-            binding.userImage.setImageResource(R.drawable.avatar_anonymous_48dp)
+            binding.userImage.setImageResource(R.drawable.ic_avatar_anonymous)
             callRemoveUserImage()
             bottomSheet?.hide()
         }
