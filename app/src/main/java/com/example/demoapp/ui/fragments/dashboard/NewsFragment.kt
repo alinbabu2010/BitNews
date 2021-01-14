@@ -124,6 +124,7 @@ class NewsFragment : Fragment() {
                 newsViewModel?.newsLiveData?.postValue(Resource.finished())
             }
             Resource.Status.ERROR -> {
+                binding.loadMoreProgressBar.visibility = View.GONE
                 binding.progressBarNews.visibility = View.GONE
                 Toast.makeText(activity, resource.message, Toast.LENGTH_LONG).show()
             }
