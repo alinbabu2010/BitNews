@@ -156,7 +156,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                 )
                 polygon.strokeColor = Color.BLUE
                 polygon.tag = "alpha"
-                map.animateCamera(CameraUpdateFactory.newLatLngZoom(bounds.center, 15.5F))
+                map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds,20))
             }
 
         }
