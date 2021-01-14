@@ -35,7 +35,7 @@ import com.example.demoapp.databinding.FragmentProfileBinding
 import com.example.demoapp.firebase.ProfileFirebase.Companion.removeUserImage
 import com.example.demoapp.firebase.ProfileFirebase.Companion.uploadImageToFirebase
 import com.example.demoapp.models.Users
-import com.example.demoapp.ui.activities.main.MapsActivity
+import com.example.demoapp.ui.activities.dashboard.MapsActivity
 import com.example.demoapp.utils.Constants.Companion.GROUP_KEY
 import com.example.demoapp.utils.Constants.Companion.NAME_STRING
 import com.example.demoapp.utils.Constants.Companion.PROFILE_IMAGE_DELETE

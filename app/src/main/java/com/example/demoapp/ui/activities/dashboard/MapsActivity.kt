@@ -1,4 +1,4 @@
-package com.example.demoapp.ui.activities.main
+package com.example.demoapp.ui.activities.dashboard
 
 import android.Manifest
 import android.content.IntentSender

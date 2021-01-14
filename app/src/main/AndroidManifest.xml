@@ -83,7 +83,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.demoapp.ui.activities.main.MapsActivity"
+            android:name="com.example.demoapp.ui.activities.dashboard.MapsActivity"
             android:label="@string/title_activity_maps"
             android:parentActivityName="com.example.demoapp.ui.activities.dashboard.DashboardActivity"
             android:launchMode="singleTop"
