@@ -6,8 +6,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.demoapp.api.Resource
 import com.example.demoapp.database.ArticlesDatabase
-import com.example.demoapp.firebase.FavoritesFirebase.Companion.retrieveDataFromFirebase
-import com.example.demoapp.firebase.FavoritesFirebase.Companion.storeDataOnFirebase
+import com.example.demoapp.firebase.FavoritesFirebase.retrieveDataFromFirebase
+import com.example.demoapp.firebase.FavoritesFirebase.storeDataOnFirebase
 import com.example.demoapp.models.Articles
 import com.example.demoapp.models.News
 import com.example.demoapp.repository.ArticleRepository
