@@ -13,7 +13,7 @@
         tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -28,13 +28,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DemoApp"
         android:usesCleartextTraffic="true">
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${google_maps_key}" />
 
         <activity
-            android:name="com.example.demoapp.ui.activities.main.SplashActivity"
+            android:name=".ui.activities.main.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
             <intent-filter>
@@ -44,7 +43,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.demoapp.ui.activities.main.MainActivity"
+            android:name=".ui.activities.main.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -53,7 +52,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.demoapp.ui.activities.dashboard.DashboardActivity"
+            android:name=".ui.activities.dashboard.DashboardActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -62,8 +61,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.demoapp.ui.activities.dashboard.ArticleActivity"
-            android:parentActivityName="com.example.demoapp.ui.activities.dashboard.DashboardActivity"
+            android:name=".ui.activities.dashboard.ArticleActivity"
+            android:parentActivityName=".ui.activities.dashboard.DashboardActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ArticleTheme">
             <intent-filter>
@@ -73,8 +72,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.demoapp.ui.activities.dashboard.ImageDetailActivity"
-            android:parentActivityName="com.example.demoapp.ui.activities.dashboard.DashboardActivity"
+            android:name=".ui.activities.dashboard.ImageDetailActivity"
+            android:parentActivityName=".ui.activities.dashboard.DashboardActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -83,21 +82,41 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.demoapp.ui.activities.dashboard.MapsActivity"
+            android:name=".ui.activities.dashboard.MapsActivity"
             android:label="@string/title_activity_maps"
-            android:parentActivityName="com.example.demoapp.ui.activities.dashboard.DashboardActivity"
             android:launchMode="singleTop"
+            android:parentActivityName=".ui.activities.dashboard.DashboardActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
+        </activity>
+        <activity
+            android:name=".ui.activities.dashboard.ChatActivity"
+            android:label="@string/chat"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.activities.dashboard.FullscreenImageActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@style/FullScreenTheme" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
 
         <meta-data
@@ -118,9 +137,10 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
-        <receiver android:name=".receivers.NotificationReceiver"/>
-        <receiver android:name=".receivers.SpeechNotificationReceiver"/>
-        <service android:name=".services.SpeechService"/>
+
+        <receiver android:name=".receivers.NotificationReceiver" />
+        <receiver android:name=".receivers.SpeechNotificationReceiver" />
+        <service android:name=".services.SpeechService" />
     </application>
 
 </manifest>
