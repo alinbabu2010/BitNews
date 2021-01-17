@@ -1,7 +1,7 @@
 package com.example.demoapp.repository
 
 import com.example.demoapp.database.UsersDAO
-import com.example.demoapp.firebase.ProfileFirebase.Companion.getDataFromFirebase
+import com.example.demoapp.firebase.ProfileFirebase.getDataFromFirebase
 import com.example.demoapp.models.Users
 
 /**

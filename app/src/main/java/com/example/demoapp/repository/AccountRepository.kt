@@ -1,7 +1,7 @@
 package com.example.demoapp.repository
 
 import com.example.demoapp.firebase.ChatFirebase.getChatPersonsId
-import com.example.demoapp.firebase.ProfileFirebase.Companion.getDataFromFirebase
+import com.example.demoapp.firebase.ProfileFirebase.getDataFromFirebase
 import com.example.demoapp.models.ChatMessage
 import com.example.demoapp.models.Users
 import com.example.demoapp.utils.Constants.Companion.MESSAGES
