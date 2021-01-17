@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.demoapp.R
 import com.example.demoapp.models.Users
-import com.example.demoapp.ui.fragments.dashboard.ChatFragment
+import com.example.demoapp.ui.fragments.chat.ChatFragment
 import com.example.demoapp.utils.Utils.Companion.loadPhoto
 import com.example.demoapp.utils.Utils.Companion.replaceFragment
 import com.firebase.ui.database.FirebaseRecyclerAdapter

@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import com.example.demoapp.R
 import com.example.demoapp.models.Users
-import com.example.demoapp.ui.fragments.dashboard.ChatUsersFragment
+import com.example.demoapp.ui.fragments.chat.ChatUsersFragment
 import com.example.demoapp.utils.Utils.Companion.addFragment
 import com.example.demoapp.utils.Utils.Companion.showAlert
 import com.example.demoapp.viewmodels.AccountsViewModel
