@@ -1,4 +1,4 @@
-package com.example.demoapp.ui.fragments.dashboard
+package com.example.demoapp.ui.fragments.chat
 
 import android.content.Intent
 import android.net.Uri
