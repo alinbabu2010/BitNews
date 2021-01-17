@@ -8,7 +8,7 @@ plugins {
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.2"
+    buildToolsVersion "30.0.3"
 
     buildFeatures {
         viewBinding true
@@ -83,5 +83,6 @@ dependencies {
     implementation 'com.google.android.libraries.places:places:2.4.0'
     implementation "androidx.room:room-ktx:2.2.6"
     kapt("androidx.room:room-compiler:2.2.6")
+    implementation 'com.firebaseui:firebase-ui-database:7.1.1'
 
 }
