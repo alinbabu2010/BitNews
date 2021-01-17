@@ -51,7 +51,7 @@ class AccountsViewModel(application: Application) : AndroidViewModel(application
      * @param user An object of class [Users]
      */
     fun createUser(email: String, password: String, user: Users) {
-        accountRepository.createUser(email, password, user){
+        accountRepository.createUser(email, password, user) {
             user.id = FirebaseAuth.getInstance().currentUser?.uid.toString()
             user.userImageUrl = "NONE"
             CoroutineScope(Dispatchers.IO).launch {
@@ -75,7 +75,7 @@ class AccountsViewModel(application: Application) : AndroidViewModel(application
      */
     fun getUserInfo(uid: String) {
         CoroutineScope(Dispatchers.IO).launch {
-            var user : Users? = null
+            var user: Users? = null
             userRepository.getCurrentUserInfo(uid) {
                 user = it
                 userData.postValue(it)
@@ -123,10 +123,10 @@ class AccountsViewModel(application: Application) : AndroidViewModel(application
      * Method to call [AccountRepository.getUserList]
      * @param options A callback to called function providing an instance of [FirebaseRecyclerOptions]
      */
-    fun getUserList(options : (FirebaseRecyclerOptions<Users>) -> Unit) {
-       accountRepository.getUserList {
-           options(it)
-       }
+    fun getUserList(options: (FirebaseRecyclerOptions<Users>) -> Unit) {
+        accountRepository.getUserList {
+            options(it)
+        }
     }
 
     /**
@@ -134,7 +134,7 @@ class AccountsViewModel(application: Application) : AndroidViewModel(application
      * @param receiverId  User id of the user to which message is send
      * @param options A callback to called function providing an instance of [FirebaseRecyclerOptions]
      */
-    fun getUserChat(receiverId : String?,options : (FirebaseRecyclerOptions<ChatMessage>) -> Unit) {
+    fun getUserChat(receiverId: String?, options: (FirebaseRecyclerOptions<ChatMessage>) -> Unit) {
         accountRepository.getUserChat(receiverId) {
             options(it)
         }
