@@ -62,5 +62,6 @@
     <string name="profile_channel_text">പ്രൊഫൈൽ വിജയകരമായി അപ്‌ഡേറ്റുചെയ്‌തു</string>
     <string name="profile_channel_name">പ്രൊഫൈൽ അറിയിപ്പുകൾ</string>
     <string name="profile_channel_description">ഉപയോക്തൃ പ്രൊഫൈൽ അപ്‌ഡേറ്റിനെക്കുറിച്ചുള്ള അറിയിപ്പ്</string>
-    <string name="service_channel_tilte">ലേഖന ഉള്ളടക്കം വായിക്കുന്നു</string>
+    <string name="service_channel_title">ലേഖന ഉള്ളടക്കം വായിക്കുന്നു</string>
+    <string name="type_message_here">സന്ദേശം ഇവിടെ ടൈപ്പുചെയ്യുക</string>
 </resources>
