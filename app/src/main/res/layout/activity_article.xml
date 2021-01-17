@@ -46,7 +46,7 @@
                 android:layout_height="?attr/actionBarSize"
                 android:visibility="visible"
                 app:layout_collapseMode="pin"
-                app:menu="@menu/logout_menu"
+                app:menu="@menu/dashboard_menu"
                 app:titleTextColor="@color/black">
 
             </com.google.android.material.appbar.MaterialToolbar>
