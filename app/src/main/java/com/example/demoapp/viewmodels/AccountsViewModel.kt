@@ -4,9 +4,11 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.example.demoapp.database.UserDatabase
+import com.example.demoapp.models.ChatMessage
 import com.example.demoapp.models.Users
 import com.example.demoapp.repository.AccountRepository
 import com.example.demoapp.repository.UserRepository
+import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -115,5 +117,26 @@ class AccountsViewModel(application: Application) : AndroidViewModel(application
             isSuccess = it
         }
         return isSuccess
+    }
+
+    /**
+     * Method to call [AccountRepository.getUserList]
+     * @param options A callback to called function providing an instance of [FirebaseRecyclerOptions]
+     */
+    fun getUserList(options : (FirebaseRecyclerOptions<Users>) -> Unit) {
+       accountRepository.getUserList {
+           options(it)
+       }
+    }
+
+    /**
+     * Method to call [AccountRepository.getUserChat]
+     * @param receiverId  User id of the user to which message is send
+     * @param options A callback to called function providing an instance of [FirebaseRecyclerOptions]
+     */
+    fun getUserChat(receiverId : String?,options : (FirebaseRecyclerOptions<ChatMessage>) -> Unit) {
+        accountRepository.getUserChat(receiverId) {
+            options(it)
+        }
     }
 }
