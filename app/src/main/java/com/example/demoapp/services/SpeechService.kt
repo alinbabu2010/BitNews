@@ -89,7 +89,7 @@ class SpeechService : Service() {
         }
         notification = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_stat_notification)
-            .setContentTitle(getString(R.string.service_channel_tilte))
+            .setContentTitle(getString(R.string.service_channel_title))
             .setColor(Color.RED)
             .setAutoCancel(true)
             .setNotificationSilent()
