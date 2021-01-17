@@ -22,6 +22,7 @@ import com.example.demoapp.services.SpeechService
 import com.example.demoapp.utils.Constants.Companion.ARTICLE
 import com.example.demoapp.utils.Constants.Companion.DATE_FORMAT_DECODE
 import com.example.demoapp.utils.Constants.Companion.DATE_FORMAT_ENCODE
+import com.example.demoapp.utils.Utils.Companion.openChat
 import com.example.demoapp.utils.Utils.Companion.showAlert
 import com.example.demoapp.viewmodels.AccountsViewModel
 import com.google.android.material.appbar.CollapsingToolbarLayout
@@ -40,7 +41,7 @@ class ArticleActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)
         val inflater: MenuInflater = menuInflater
-        inflater.inflate(R.menu.logout_menu, menu)
+        inflater.inflate(R.menu.dashboard_menu, menu)
         return true
     }
 
@@ -102,12 +103,17 @@ class ArticleActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return if (item.itemId == R.id.logout_option) {
-            val accountsViewModel = ViewModelProviders.of(this).get(AccountsViewModel::class.java)
-            showAlert(this, this, accountsViewModel)
-            true
-        } else {
-            false
+        return when (item.itemId){
+            R.id.logout_option -> {
+                val accountsViewModel = ViewModelProviders.of(this).get(AccountsViewModel::class.java)
+                showAlert(this, this, accountsViewModel)
+                true
+            }
+            R.id.chat_option -> {
+                openChat(this)
+                true
+            }
+            else -> false
         }
     }
 
