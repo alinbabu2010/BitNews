@@ -19,4 +19,8 @@
         <item name="colorPrimary">@color/primary_dark</item>
         <item name="android:windowBackground">@color/primary_light</item>
     </style>
+
+    <style name="FullScreenTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/black</item>
+    </style>
 </resources>
