@@ -2,8 +2,13 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/chat_option"
+        android:icon="@drawable/ic_chat"
+        android:title="@string/chat"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/logout_option"
         android:icon="@drawable/ic_logout"
         android:title="@string/logout_string"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 </menu>
