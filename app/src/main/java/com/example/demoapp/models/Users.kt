@@ -8,10 +8,9 @@ import androidx.room.PrimaryKey
  */
 @Entity
 data class Users(
-    @PrimaryKey var id : String,
-    var username: String?,
-    var name: String?,
-    val email: String?,
-    var userImageUrl: String?
+    @PrimaryKey var id : String = "",
+    var username: String? = null,
+    var name: String? = null,
+    val email: String? = null,
+    var userImageUrl: String? = null
 )
-
