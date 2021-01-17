@@ -74,5 +74,4 @@
     <string name="chat" translatable="false">Chat</string>
     <string name="type_message_here">Type message here</string>
     <string name="image_message" translatable="false">Image message</string>
-    <string name="title_activity_fullscreen_image" translatable="false">FullscreenActivity</string>
 </resources>
