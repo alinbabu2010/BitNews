@@ -27,5 +27,6 @@ class Constants {
         const val NOTIFICATION_ID = 100
         const val FAIL_MSG = "Fetching FCM registration token failed"
         const val MAX_RESULTS = 100
+        const val MESSAGES = "messages"
     }
 }
