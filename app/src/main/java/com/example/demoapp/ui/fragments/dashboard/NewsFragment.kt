@@ -67,6 +67,7 @@ class NewsFragment : Fragment() {
         val recyclerView: RecyclerView = binding.recyclerView
         val layoutManager = LinearLayoutManager(context)
         recyclerView.layoutManager = layoutManager
+        newsViewModel?.articles
         newsViewModel?.getFavourites()
 
         newsViewModel?.newsLiveData?.observe(viewLifecycleOwner, {
@@ -127,6 +128,7 @@ class NewsFragment : Fragment() {
                 binding.loadMoreProgressBar.visibility = View.GONE
                 binding.progressBarNews.visibility = View.GONE
                 Toast.makeText(activity, resource.message, Toast.LENGTH_LONG).show()
+                newsViewModel?.newsLiveData?.postValue(Resource.finished())
             }
             Resource.Status.LOADING -> {
                 binding.progressBarNews.visibility = View.VISIBLE
