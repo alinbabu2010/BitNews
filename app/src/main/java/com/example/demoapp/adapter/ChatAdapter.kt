@@ -53,19 +53,25 @@ class ChatAdapter(
         ChatMessage: ChatMessage
     ) {
         progressBar.visibility = ProgressBar.INVISIBLE
-        if (ChatMessage.text.isNotEmpty()) {
+        val imageUrl : String = ChatMessage.imageUrl.toString()
+        if (ChatMessage.text.isNotEmpty() && ChatMessage.imageUrl?.isNotEmpty() == true) {
+            viewHolder.messageTextView.text = ChatMessage.text
+            viewHolder.messageTextView.visibility = TextView.VISIBLE
+            activity?.let { Glide.with(it).load(imageUrl).override(500).into(viewHolder.messageImageView) }
+            viewHolder.messageImageView.visibility = ImageView.VISIBLE
+        } else if (ChatMessage.text.isNotEmpty()) {
             viewHolder.messageTextView.text = ChatMessage.text
             viewHolder.messageTextView.visibility = TextView.VISIBLE
             viewHolder.messageImageView.visibility = ImageView.GONE
         } else if (ChatMessage.imageUrl?.isBlank() == false) {
-            val imageUrl: String = ChatMessage.imageUrl.toString()
             activity?.let { Glide.with(it).load(imageUrl).override(500).into(viewHolder.messageImageView) }
-            viewHolder.messageImageView.setOnClickListener { loadPhoto(imageUrl,viewHolder.messageImageView,activity) }
             viewHolder.messageImageView.visibility = ImageView.VISIBLE
             viewHolder.messageTextView.visibility = TextView.GONE
         }
+        viewHolder.messageImageView.setOnClickListener { loadPhoto(imageUrl, viewHolder.messageImageView, activity)
+        }
         viewHolder.messengerTextView.text = ChatMessage.name
-        if (ChatMessage.photoUrl.isEmpty()) {
+        if (ChatMessage.photoUrl.isEmpty() || ChatMessage.photoUrl == "NONE") {
             viewHolder.messengerImageView.setImageDrawable(
                 activity?.let { ContextCompat.getDrawable(it, R.drawable.ic_avatar_anonymous) }
             )

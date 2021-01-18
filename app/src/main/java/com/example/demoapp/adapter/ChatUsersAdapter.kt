@@ -51,7 +51,11 @@ class ChatUsersAdapter(options: FirebaseRecyclerOptions<Users>, val activity: Fr
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
                 )
-            activity?.let { Glide.with(it).load(user.userImageUrl).into(holder.userImageView) }
+            if(user.userImageUrl == "NONE" || user.userImageUrl.isNullOrEmpty()) {
+                holder.userImageView.setImageResource(R.drawable.ic_avatar_anonymous)
+            } else {
+                activity?.let { Glide.with(it).load(user.userImageUrl).into(holder.userImageView) }
+            }
             holder.userImageView.setOnClickListener {
                 user.userImageUrl?.let { url -> loadPhoto(url, holder.userImageView, activity) }
             }
