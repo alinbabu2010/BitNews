@@ -12,7 +12,7 @@
     <ImageView
         android:id="@+id/full_imageView"
         android:layout_width="match_parent"
-        android:layout_height="500dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:contentDescription="@string/image_message"
         android:scaleType="fitXY"
