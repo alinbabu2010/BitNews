@@ -2,7 +2,6 @@ package com.example.demoapp.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.demoapp.api.Resource
 import com.example.demoapp.database.ArticlesDatabase
@@ -24,20 +23,22 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
 
     var pageCount = 1
     var isLoading = false
-    private val repository : ArticleRepository
-    var articles : LiveData<List<Articles>>
+    private val articlesDAO = ArticlesDatabase.getDatabase(application).articlesDAO()
+    private val repository = ArticleRepository(articlesDAO)
     val newsLiveData = MutableLiveData<Resource<News?>>()
     val favouriteArticles: MutableSet<Articles> = mutableSetOf()
     val favouritesLiveData : MutableLiveData<MutableSet<Articles>> by lazy {
         MutableLiveData<MutableSet<Articles>>()
     }
+    var articles = MutableLiveData<List<Articles>>()
 
-    init {
-        val articlesDAO = ArticlesDatabase.getDatabase(application).articlesDAO()
-        repository = ArticleRepository(articlesDAO)
-        articles = repository.readArticles()
+    fun getArticles(){
+        CoroutineScope(Dispatchers.IO).launch {
+            repository.readArticles {
+                articles.postValue(it)
+            }
+        }
     }
-
     /**
      * Method to get the news from API url
      * @param page To denote the API page count
@@ -105,7 +106,7 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
      * Method to add articles to room database
      * @param article An object of class [Articles]
      */
-    fun addArticles(article: Articles) {
+    fun addArticles(article: List<Articles>) {
         CoroutineScope(Dispatchers.IO).launch {
             repository.addArticles(article)
         }

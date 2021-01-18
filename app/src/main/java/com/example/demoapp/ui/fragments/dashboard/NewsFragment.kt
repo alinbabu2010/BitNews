@@ -67,7 +67,7 @@ class NewsFragment : Fragment() {
         val recyclerView: RecyclerView = binding.recyclerView
         val layoutManager = LinearLayoutManager(context)
         recyclerView.layoutManager = layoutManager
-        newsViewModel?.articles
+        newsViewModel?.getArticles()
         newsViewModel?.getFavourites()
 
         newsViewModel?.newsLiveData?.observe(viewLifecycleOwner, {
@@ -118,10 +118,8 @@ class NewsFragment : Fragment() {
             Resource.Status.SUCCESS -> {
                 binding.progressBarNews.visibility = View.GONE
                 articles = resource.data?.articles
-                articles?.forEach { article ->
-                    newsViewModel?.addArticles(article)
-                }
-                newsViewModel?.articles
+                articles?.let { newsViewModel?.addArticles(it) }
+                newsViewModel?.getArticles()
                 newsViewModel?.newsLiveData?.postValue(Resource.finished())
             }
             Resource.Status.ERROR -> {
@@ -160,11 +158,13 @@ class NewsFragment : Fragment() {
      * @param recyclerView [RecyclerView] to be set
      */
     private fun setNewsData(articleList: List<Articles>?, recyclerView: RecyclerView) {
-        if (articleList.isNullOrEmpty()) {
+        if (newsViewModel?.articles?.value.isNullOrEmpty()) {
             val count = newsViewModel?.pageCount as Int
             newsViewModel?.getNews(count)
         } else {
             articles = articleList as ArrayList<Articles>
+            println(articles)
+            binding.progressBarNews.visibility = View.INVISIBLE
             setRecyclerView(recyclerView)
         }
     }
