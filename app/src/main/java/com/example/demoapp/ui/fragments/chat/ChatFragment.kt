@@ -1,5 +1,6 @@
 package com.example.demoapp.ui.fragments.chat
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -7,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,7 +27,7 @@ class ChatFragment : Fragment() {
     private var mMessageRecyclerView: RecyclerView? = null
     private var receiverId: String? = null
     private var mFirebaseAdapter: ChatAdapter? = null
-    private lateinit var message : String
+    private var message : String = ""
 
 
     override fun onCreateView(
@@ -46,16 +46,15 @@ class ChatFragment : Fragment() {
         val layoutManager = LinearLayoutManager(context)
         layoutManager.stackFromEnd = true
         binding.sendButton.setOnClickListener {
-            sendMessage(message,receiverId)
+            message = binding.messageEditText.text.toString()
+            if(message.isNotEmpty()) sendMessage(message,receiverId)
             binding.messageEditText.setText("")
         }
         binding.addMessageImageView.setOnClickListener {
-            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
-            intent.addCategory(Intent.CATEGORY_OPENABLE)
+            val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"
             startActivityForResult(intent, REQUEST_IMAGE_CODE)
         }
-        message = binding.messageEditText.text.toString()
         setUpChatRoom(layoutManager)
     }
 
@@ -97,12 +96,10 @@ class ChatFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_IMAGE_CODE) {
-            if (resultCode == AppCompatActivity.RESULT_OK) {
-                if (data != null) {
-                    val uri: Uri? = data.data
-                    storeImageMessage(uri,message,activity)
-                }
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == REQUEST_IMAGE_CODE) {
+                val uri: Uri? = data?.data
+                storeImageMessage(uri,message,receiverId)
             }
         }
     }
