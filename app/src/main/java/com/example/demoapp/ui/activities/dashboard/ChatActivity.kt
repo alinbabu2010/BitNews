@@ -2,6 +2,8 @@ package com.example.demoapp.ui.activities.dashboard
 
 import android.os.Bundle
 import android.transition.ChangeImageTransform
+import android.transition.Slide
+import android.view.Gravity
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
@@ -24,6 +26,7 @@ class ChatActivity : AppCompatActivity() {
             requestFeature(android.view.Window.FEATURE_ACTIVITY_TRANSITIONS)
             sharedElementEnterTransition = ChangeImageTransform()
             sharedElementExitTransition  = ChangeImageTransform()
+            exitTransition = Slide(Gravity.END)
         }
         setContentView(R.layout.activity_chat)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -36,12 +39,21 @@ class ChatActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return if (item.itemId == R.id.logout_option) {
-            val accountsViewModel = ViewModelProviders.of(this).get(AccountsViewModel::class.java)
-            showAlert(this, this, accountsViewModel)
-            true
-        } else {
-            false
+        return when (item.itemId) {
+            R.id.logout_option -> {
+                val accountsViewModel = ViewModelProviders.of(this).get(AccountsViewModel::class.java)
+                showAlert(this, this, accountsViewModel)
+                true
+            }
+            android.R.id.home -> {
+                if (supportFragmentManager.backStackEntryCount > 0) {
+                    supportFragmentManager.popBackStack()
+                } else {
+                    finish()
+                }
+                true
+            }
+            else -> false
         }
     }
 
