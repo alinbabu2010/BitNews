@@ -39,8 +39,6 @@ android {
     flavorDimensions "default"
     productFlavors {
         dev {
-            applicationIdSuffix ".dev"
-            versionNameSuffix "-dev"
             buildConfigField "String","BASE_URL","\"http://newsapi.org/v2/\""
             buildConfigField "String","API_KEY" , "\"19b71eb781b0404b93feafc1badf4324\""
             manifestPlaceholders = [google_maps_key:"AIzaSyBCG-QlN584MpiWMrZMe8CpIfl7ml4L5-g"]
