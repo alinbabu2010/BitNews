@@ -41,6 +41,7 @@ import com.example.demoapp.utils.Constants.Companion.NAME_STRING
 import com.example.demoapp.utils.Constants.Companion.PROFILE_IMAGE_DELETE
 import com.example.demoapp.utils.Constants.Companion.USERNAME_STRING
 import com.example.demoapp.utils.Utils.Companion.isNetworkConnected
+import com.example.demoapp.utils.Utils.Companion.loadPhoto
 import com.example.demoapp.utils.Utils.Companion.requestPermissionRationale
 import com.example.demoapp.viewmodels.AccountsViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -105,7 +106,6 @@ class ProfileFragment : Fragment() {
         binding.usernameField.setEndIconOnClickListener {
             setEditBottomSheetDialog(USERNAME_STRING)
         }
-
         return binding.root
     }
 
@@ -179,6 +179,9 @@ class ProfileFragment : Fragment() {
         binding.emailDisplay.setText(data?.email)
         if (!data?.userImageUrl.equals("NONE")) {
             context?.let { Glide.with(it).load(data?.userImageUrl).into(binding.userImage) }
+            binding.userImage.setOnClickListener {
+                loadPhoto(data?.userImageUrl.toString(),binding.userImage, activity)
+            }
         } else {
             binding.progressProfileImage.visibility = View.VISIBLE
             context?.let { binding.userImage.setImageResource(R.drawable.ic_avatar_anonymous) }
