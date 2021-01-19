@@ -29,13 +29,12 @@ class FullscreenImageActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
         supportFinishAfterTransition()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return if (R.id.home == item.itemId) {
-            onBackPressed()
+        return if (android.R.id.home == item.itemId) {
+            supportFinishAfterTransition()
             true
         } else super.onOptionsItemSelected(item)
     }
