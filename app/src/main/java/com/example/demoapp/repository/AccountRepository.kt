@@ -43,8 +43,8 @@ class AccountRepository {
                     CoroutineScope(Dispatchers.IO).launch {
                         userRepository.insertUser(user)
                     }
+                    isSuccess(it.isSuccessful)
                 }
-                isSuccess(it.isSuccessful)
             } else {
                 isSuccess(false)
             }

@@ -38,9 +38,9 @@ class AccountsViewModel(application: Application) : AndroidViewModel(application
      * @param userName String value instance for username
      * @param password String value instance for user password
      */
-    fun signInUser(userName: String, password: String) {
+    fun signInUser(userName: String, password: String,isSuccess: (Boolean) -> Unit) {
         accountRepository.sigInUser(userName, password, userRepository) {
-            operationExecuted.postValue(it)
+            isSuccess(it)
         }
     }
 
