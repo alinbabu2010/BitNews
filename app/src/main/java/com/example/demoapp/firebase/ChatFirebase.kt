@@ -40,8 +40,7 @@ object ChatFirebase {
                     val key = databaseReference.key.toString()
                     val storageReference = FirebaseStorage.getInstance()
                         .getReference(user?.id.toString())
-                        .child(key)
-                        .child(uri?.lastPathSegment.toString())
+                        .child("messages/${uri?.lastPathSegment.toString()}")
                     uri?.let { uri ->
                         storageReference.putFile(uri).addOnSuccessListener {
                             storageReference.downloadUrl.addOnSuccessListener { task1 ->
