@@ -163,7 +163,6 @@ class NewsFragment : Fragment() {
             newsViewModel?.getNews(count)
         } else {
             articles = articleList as ArrayList<Articles>
-            println(articles)
             binding.progressBarNews.visibility = View.INVISIBLE
             setRecyclerView(recyclerView)
         }
