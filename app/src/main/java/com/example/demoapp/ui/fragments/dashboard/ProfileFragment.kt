@@ -225,13 +225,16 @@ class ProfileFragment : Fragment() {
      */
     private fun callRemoveUserImage() {
         binding.progressProfileImage.visibility = View.VISIBLE
-        removeUserImage()
-        user?.userImageUrl = "NONE"
-        user?.let {
-            accountsViewModel?.updateUserInfoOnDatabase(it) {
-                if (isNetworkConnected(context)) updateUserOnFirebase()
-                binding.progressProfileImage.visibility = View.INVISIBLE
-                Toast.makeText(context, PROFILE_IMAGE_DELETE, Toast.LENGTH_SHORT).show()
+        removeUserImage {
+            if (it) {
+                user?.userImageUrl = "NONE"
+                user?.let {
+                    accountsViewModel?.updateUserInfoOnDatabase(it) {
+                        if (isNetworkConnected(context)) updateUserOnFirebase()
+                        binding.progressProfileImage.visibility = View.INVISIBLE
+                        Toast.makeText(context, PROFILE_IMAGE_DELETE, Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
         }
     }
