@@ -32,6 +32,10 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
     }
     var articles = MutableLiveData<List<Articles>>()
 
+    /**
+     * Method to get the articles from database
+     * Post the list of articles to [NewsViewModel.articles] live data
+     */
     fun getArticles(){
         CoroutineScope(Dispatchers.IO).launch {
             repository.readArticles {
@@ -39,6 +43,7 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
+
     /**
      * Method to get the news from API url
      * @param page To denote the API page count
@@ -93,7 +98,7 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     /**
-     * Method to return set of favourites
+     * Method to get favourites articles from firebase
      */
     fun getFavourites() {
         retrieveDataFromFirebase {
