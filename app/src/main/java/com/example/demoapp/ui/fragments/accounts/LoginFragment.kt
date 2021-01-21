@@ -44,9 +44,19 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val forgotTextView = binding.forgotPassword
-        clickableText(forgotTextView,forgotTextView.length()-13,forgotTextView.length()-9, ForgotPasswordFragment())
+        clickableText(
+            forgotTextView,
+            forgotTextView.length() - 13,
+            forgotTextView.length() - 9,
+            ForgotPasswordFragment()
+        )
         val registerTextView = binding.registerRedirect
-        clickableText(registerTextView,registerTextView.length()-4,registerTextView.length(), null)
+        clickableText(
+            registerTextView,
+            registerTextView.length() - 4,
+            registerTextView.length(),
+            null
+        )
         binding.progressBar.visibility = View.INVISIBLE
         binding.loginButton.setOnClickListener {
             binding.progressBar.visibility = View.VISIBLE
@@ -59,7 +69,7 @@ class LoginFragment : Fragment() {
                     binding.progressBar.visibility = View.VISIBLE
                     loginUser(userName, password)
                 } else {
-                    Toast.makeText(context, Constants.NO_INTERNET,Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, Constants.NO_INTERNET, Toast.LENGTH_SHORT).show()
                     binding.progressBar.visibility = View.INVISIBLE
                 }
             }
@@ -73,7 +83,7 @@ class LoginFragment : Fragment() {
      * @param end End position of text to be clickable
      * @param fragment An instance of [Fragment] class
      */
-    private fun clickableText(view: TextView?,start :Int,end:Int,fragment: Fragment?) {
+    private fun clickableText(view: TextView?, start: Int, end: Int, fragment: Fragment?) {
 
         val spannableTextView = SpannableString(view?.text.toString())
         val clickableSpanTextView: ClickableSpan = object : ClickableSpan() {
@@ -90,7 +100,12 @@ class LoginFragment : Fragment() {
                 }
             }
         }
-        spannableTextView.setSpan(clickableSpanTextView, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannableTextView.setSpan(
+            clickableSpanTextView,
+            start,
+            end,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
         view?.text = spannableTextView
         view?.movementMethod = LinkMovementMethod.getInstance()
 
@@ -103,13 +118,13 @@ class LoginFragment : Fragment() {
      */
     private fun loginUser(userName: String, password: String) {
         viewModel = activity?.let { ViewModelProviders.of(it).get(AccountsViewModel::class.java) }
-        viewModel?.signInUser(userName,password) {
+        viewModel?.signInUser(userName, password) {
             if(it){
                 startActivity(Intent(context, DashboardActivity::class.java))
                 activity?.finish()
             } else {
                 binding.progressBar.visibility = View.INVISIBLE
-                Toast.makeText(context,R.string.wrong_credentials_text, Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, R.string.wrong_credentials_text, Toast.LENGTH_SHORT).show()
             }
         }
     }
