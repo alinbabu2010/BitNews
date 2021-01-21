@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.demoapp.R
 import com.example.demoapp.adapter.ChatUsersAdapter
 import com.example.demoapp.databinding.FragmentChatUsersBinding
 import com.example.demoapp.viewmodels.AccountsViewModel
@@ -25,6 +27,8 @@ class ChatUsersFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentChatUsersBinding.inflate(layoutInflater)
+        (activity as AppCompatActivity).supportActionBar?.setTitle(R.string.chat)
+        (activity as AppCompatActivity).supportActionBar?.subtitle = null
         return binding.root
     }
 

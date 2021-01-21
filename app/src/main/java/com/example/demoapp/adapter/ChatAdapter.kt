@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.demoapp.R
 import com.example.demoapp.models.ChatMessage
+import com.example.demoapp.models.Users
 import com.example.demoapp.ui.activities.dashboard.ChatActivity
 import com.example.demoapp.utils.Utils.Companion.loadPhoto
 import com.firebase.ui.database.FirebaseRecyclerAdapter
@@ -25,7 +26,9 @@ import com.mikhaellopez.circularimageview.CircularImageView
 class ChatAdapter(
     options: FirebaseRecyclerOptions<ChatMessage>,
     private val progressBar: ProgressBar,
-    private val activity: Activity?
+    private val activity: Activity?,
+    val user: Users?,
+    val currentUser: Users?
 ) : FirebaseRecyclerAdapter<ChatMessage, ChatAdapter.ChatViewHolder>(options) {
 
     class ChatViewHolder(v: View) : RecyclerView.ViewHolder(v) {
@@ -50,33 +53,40 @@ class ChatAdapter(
     override fun onBindViewHolder(
         viewHolder: ChatViewHolder,
         position: Int,
-        ChatMessage: ChatMessage
+        chatMessage: ChatMessage
     ) {
         progressBar.visibility = ProgressBar.INVISIBLE
-        val imageUrl : String = ChatMessage.imageUrl.toString()
-        if (ChatMessage.text.isNotEmpty() && ChatMessage.imageUrl?.isNotEmpty() == true) {
-            viewHolder.messageTextView.text = ChatMessage.text
+        val imageUrl : String = chatMessage.imageUrl.toString()
+        if (chatMessage.text.isNotEmpty() && chatMessage.imageUrl?.isNotEmpty() == true) {
+            viewHolder.messageTextView.text = chatMessage.text
             viewHolder.messageTextView.visibility = TextView.VISIBLE
             activity?.let { Glide.with(it).load(imageUrl).override(500).into(viewHolder.messageImageView) }
             viewHolder.messageImageView.visibility = ImageView.VISIBLE
-        } else if (ChatMessage.text.isNotEmpty()) {
-            viewHolder.messageTextView.text = ChatMessage.text
+        } else if (chatMessage.text.isNotEmpty()) {
+            viewHolder.messageTextView.text = chatMessage.text
             viewHolder.messageTextView.visibility = TextView.VISIBLE
             viewHolder.messageImageView.visibility = ImageView.GONE
-        } else if (ChatMessage.imageUrl?.isBlank() == false) {
+        } else if (chatMessage.imageUrl?.isBlank() == false) {
             activity?.let { Glide.with(it).load(imageUrl).override(500).into(viewHolder.messageImageView) }
             viewHolder.messageImageView.visibility = ImageView.VISIBLE
             viewHolder.messageTextView.visibility = TextView.GONE
         }
         viewHolder.messageImageView.setOnClickListener { loadPhoto(imageUrl, viewHolder.messageImageView, activity)
         }
-        viewHolder.messengerTextView.text = ChatMessage.name
-        if (ChatMessage.photoUrl.isEmpty() || ChatMessage.photoUrl == "NONE") {
+        var chatUser : Users? = null
+        if(chatMessage.senderId == user?.id){
+            chatUser = user
+        }
+        if(chatMessage.senderId == currentUser?.id){
+            chatUser = currentUser
+        }
+        viewHolder.messengerTextView.text = chatUser?.name
+        if (chatUser?.userImageUrl == "NONE") {
             viewHolder.messengerImageView.setImageDrawable(
                 activity?.let { ContextCompat.getDrawable(it, R.drawable.ic_avatar_anonymous) }
             )
         } else {
-            activity?.let { Glide.with(it).load(ChatMessage.photoUrl).into(viewHolder.messengerImageView) }
+            activity?.let { Glide.with(it).load(chatUser?.userImageUrl).into(viewHolder.messengerImageView) }
         }
     }
 

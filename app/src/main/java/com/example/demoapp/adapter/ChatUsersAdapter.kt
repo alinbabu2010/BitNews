@@ -62,7 +62,7 @@ class ChatUsersAdapter(options: FirebaseRecyclerOptions<Users>, val activity: Fr
             holder.userNameView.text = user.name
             holder.userLayout.setOnClickListener {
                 val bundle = Bundle()
-                bundle.putString("senderId",user.id)
+                bundle.putParcelable("receiver",user)
                 val fragment = ChatFragment()
                 fragment.arguments = bundle
                 activity?.supportFragmentManager?.let { manager ->

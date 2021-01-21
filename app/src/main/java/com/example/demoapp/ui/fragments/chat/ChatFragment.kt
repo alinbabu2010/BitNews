@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,6 +17,8 @@ import com.example.demoapp.adapter.ChatAdapter
 import com.example.demoapp.databinding.FragmentChatBinding
 import com.example.demoapp.firebase.ChatFirebase.sendMessage
 import com.example.demoapp.firebase.ChatFirebase.storeImageMessage
+import com.example.demoapp.models.Users
+import com.example.demoapp.ui.activities.dashboard.ChatActivity.Companion.user
 import com.example.demoapp.viewmodels.AccountsViewModel
 
 /**
@@ -25,7 +28,7 @@ class ChatFragment : Fragment() {
 
     private lateinit var binding: FragmentChatBinding
     private var mMessageRecyclerView: RecyclerView? = null
-    private var receiverId: String? = null
+    private var endUser: Users? = null
     private var mFirebaseAdapter: ChatAdapter? = null
     private var message : String = ""
 
@@ -35,6 +38,10 @@ class ChatFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentChatBinding.inflate(layoutInflater)
+        endUser = arguments?.getParcelable("receiver")
+        activity?.actionBar?.setDisplayShowTitleEnabled(true)
+        (activity as AppCompatActivity).supportActionBar?.title = endUser?.name
+        (activity as AppCompatActivity).supportActionBar?.subtitle = endUser?.email
         return binding.root
     }
 
@@ -42,12 +49,11 @@ class ChatFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.progressBar.visibility = ProgressBar.INVISIBLE
         mMessageRecyclerView = binding.messageRecyclerView
-        receiverId = arguments?.getString("senderId")
         val layoutManager = LinearLayoutManager(context)
         layoutManager.stackFromEnd = true
         binding.sendButton.setOnClickListener {
             message = binding.messageEditText.text.toString()
-            if(message.isNotEmpty()) sendMessage(message,receiverId)
+            if(message.isNotEmpty()) sendMessage(message, endUser?.id)
             binding.messageEditText.setText("")
         }
         binding.addMessageImageView.setOnClickListener {
@@ -64,8 +70,8 @@ class ChatFragment : Fragment() {
      */
     private fun setUpChatRoom(layoutManager: LinearLayoutManager) {
         val accountsViewModel = ViewModelProviders.of(this).get(AccountsViewModel::class.java)
-        accountsViewModel.getUserChat(receiverId) {
-            mFirebaseAdapter = ChatAdapter(it, binding.progressBar, activity)
+        accountsViewModel.getUserChat(endUser?.id) {
+            mFirebaseAdapter = ChatAdapter(it, binding.progressBar, activity, endUser, user)
         }
         val chatMessageCount = mFirebaseAdapter?.itemCount as Int
         mFirebaseAdapter?.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
@@ -99,7 +105,7 @@ class ChatFragment : Fragment() {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == REQUEST_IMAGE_CODE) {
                 val uri: Uri? = data?.data
-                storeImageMessage(uri,message,receiverId)
+                storeImageMessage(uri, message, endUser?.id)
             }
         }
     }
