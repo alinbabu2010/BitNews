@@ -59,6 +59,7 @@ class ProfileFragment : Fragment() {
     private var photoUri: Uri? = null
     private var user: Users? = null
     private var accountsViewModel: AccountsViewModel? = null
+    var bottomSheet: BottomSheetDialog? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -122,7 +123,7 @@ class ProfileFragment : Fragment() {
      * @param field A string value to denote whether the field is for editing name or username.
      */
     private fun setEditBottomSheetDialog(field: String) {
-        val bottomSheet = context?.let { BottomSheetDialog(it) }
+        bottomSheet = context?.let { BottomSheetDialog(it) }
         val bottomSheetView: View = layoutInflater.inflate(R.layout.edit_profile, container, false)
         bottomSheet?.setContentView(bottomSheetView)
         bottomSheet?.show()
@@ -180,7 +181,7 @@ class ProfileFragment : Fragment() {
         if (!data?.userImageUrl.equals("NONE")) {
             context?.let { Glide.with(it).load(data?.userImageUrl).into(binding.userImage) }
             binding.userImage.setOnClickListener {
-                loadPhoto(data?.userImageUrl.toString(),binding.userImage, activity)
+                loadPhoto(data?.userImageUrl.toString(), binding.userImage, activity)
             }
         } else {
             binding.progressProfileImage.visibility = View.VISIBLE
@@ -196,7 +197,7 @@ class ProfileFragment : Fragment() {
      * Method to set different image selection type buttons bottom sheet dialog and process the button clicks
      */
     private fun setBottomSheetDialog() {
-        val bottomSheet = context?.let { BottomSheetDialog(it) }
+        bottomSheet = context?.let { BottomSheetDialog(it) }
         val bottomSheetView: View = layoutInflater.inflate(R.layout.image_options, container, false)
         bottomSheet?.setContentView(bottomSheetView)
         bottomSheet?.show()
@@ -225,8 +226,8 @@ class ProfileFragment : Fragment() {
      */
     private fun callRemoveUserImage() {
         binding.progressProfileImage.visibility = View.VISIBLE
-        removeUserImage {
-            if (it) {
+        removeUserImage { isSuccess ->
+            if (isSuccess) {
                 user?.userImageUrl = "NONE"
                 user?.let {
                     accountsViewModel?.updateUserInfoOnDatabase(it) {
@@ -332,6 +333,11 @@ class ProfileFragment : Fragment() {
                 saveUserImage(photoUri)
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        bottomSheet?.hide()
     }
 
     private val networkManager = object : ConnectivityManager.NetworkCallback() {
