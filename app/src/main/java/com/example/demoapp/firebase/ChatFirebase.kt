@@ -30,8 +30,7 @@ object ChatFirebase {
     ) {
         val tempMessage = ChatMessage(
             text = message,
-            name = user?.username.toString(),
-            photoUrl = user?.userImageUrl.toString(),
+            senderId = user?.id.toString(),
             imageUrl = LOADING_IMAGE_URL
         )
         firebaseDatabaseReference.child(MESSAGES).child(getChatPersonsId(receiverId)).push()
@@ -46,9 +45,8 @@ object ChatFirebase {
                             storageReference.downloadUrl.addOnSuccessListener { task1 ->
                                 val chatMessage = ChatMessage(
                                     key,
+                                    user?.id.toString(),
                                     message,
-                                    user?.username.toString(),
-                                    user?.userImageUrl.toString(),
                                     task1.toString()
                                 )
                                 firebaseDatabaseReference.child(MESSAGES)
@@ -71,8 +69,7 @@ object ChatFirebase {
     fun sendMessage(message: String, receiverId: String?) {
         val chatMessage = ChatMessage(
             text = message,
-            name = user?.username.toString(),
-            photoUrl = user?.userImageUrl.toString(),
+            senderId  = user?.id.toString(),
             imageUrl = null
         )
         firebaseDatabaseReference.child(MESSAGES).child(getChatPersonsId(receiverId)).push()
