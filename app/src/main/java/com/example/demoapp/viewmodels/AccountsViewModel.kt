@@ -19,10 +19,7 @@ import kotlinx.coroutines.launch
  */
 class AccountsViewModel(application: Application) : AndroidViewModel(application) {
 
-    // LiveData for notifying whether a firebase operation executed successfully or not
-    val operationExecuted: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>()
-    }
+    val operationExecuted = MutableLiveData<Boolean>()
 
     var userData = MutableLiveData<Users?>()
     private val userRepository: UserRepository
@@ -38,9 +35,9 @@ class AccountsViewModel(application: Application) : AndroidViewModel(application
      * @param userName String value instance for username
      * @param password String value instance for user password
      */
-    fun signInUser(userName: String, password: String,isSuccess: (Boolean) -> Unit) {
+    fun signInUser(userName: String, password: String) {
         accountRepository.sigInUser(userName, password, userRepository) {
-            isSuccess(it)
+            operationExecuted.postValue(it)
         }
     }
 
