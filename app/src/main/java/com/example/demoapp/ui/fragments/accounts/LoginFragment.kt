@@ -118,14 +118,17 @@ class LoginFragment : Fragment() {
      */
     private fun loginUser(userName: String, password: String) {
         viewModel = activity?.let { ViewModelProviders.of(it).get(AccountsViewModel::class.java) }
-        viewModel?.signInUser(userName, password) {
-            if(it){
+        viewModel?.signInUser(userName, password)
+        viewModel?.operationExecuted?.observe(viewLifecycleOwner,{
+            if(it != null && it == true){
                 startActivity(Intent(context, DashboardActivity::class.java))
                 activity?.finish()
-            } else {
+            }
+            if(it != null && it == false) {
                 binding.progressBar.visibility = View.INVISIBLE
                 Toast.makeText(context, R.string.wrong_credentials_text, Toast.LENGTH_SHORT).show()
+                viewModel?.operationExecuted?.value = null
             }
-        }
+        })
     }
 }
