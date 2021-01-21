@@ -99,9 +99,9 @@ class AccountsViewModel(application: Application) : AndroidViewModel(application
      * @param user An object of class [Users]
      * @param isSuccess Boolean callback function for user info update success or not
      */
-    fun updateUserInfoOnDatabase(user: Users, isSuccess: (Boolean) -> Unit) {
+    fun updateUserInfoOnDatabase(user: Users?, isSuccess: (Boolean) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
-            userRepository.updateUser(user)
+            user?.let { userRepository.updateUser(it) }
         }
         isSuccess(true)
     }
