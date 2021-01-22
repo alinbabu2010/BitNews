@@ -17,7 +17,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.demoapp"
-        minSdkVersion 24
+        minSdkVersion 26
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -64,7 +64,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:19.6.0'
     implementation 'com.google.firebase:firebase-storage:19.2.1'
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
-    implementation 'com.google.firebase:firebase-auth:20.0.1'
+    implementation 'com.google.firebase:firebase-auth:20.0.2'
     implementation 'com.google.firebase:firebase-messaging:21.0.1'
     implementation 'com.google.firebase:firebase-crashlytics:17.3.0'
     implementation 'com.google.firebase:firebase-analytics-ktx:18.0.1'
@@ -85,5 +85,6 @@ dependencies {
     implementation "androidx.room:room-ktx:2.2.6"
     kapt("androidx.room:room-compiler:2.2.6")
     implementation 'com.firebaseui:firebase-ui-database:7.1.1'
+    implementation "androidx.work:work-runtime-ktx:2.4.0"
 
 }
