@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager
+import androidx.work.*
 import com.example.demoapp.R
 import com.example.demoapp.adapter.PageAdapter
 import com.example.demoapp.ui.fragments.dashboard.NewsFragment
@@ -17,9 +18,13 @@ import com.example.demoapp.utils.Utils.Companion.addFragment
 import com.example.demoapp.utils.Utils.Companion.openChat
 import com.example.demoapp.utils.Utils.Companion.showAlert
 import com.example.demoapp.viewmodels.AccountsViewModel
+import com.example.demoapp.viewmodels.NewsViewModel
+import com.example.demoapp.workers.NewsWorker
+import com.example.demoapp.workers.NewsWorker.Companion.WORK_NAME
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.messaging.FirebaseMessaging
+import java.time.Duration
 
 
 /**
@@ -27,6 +32,8 @@ import com.google.firebase.messaging.FirebaseMessaging
  */
 
 class DashboardActivity : AppCompatActivity() {
+
+    private var newsViewModel: NewsViewModel? = null
 
     /**
      * Overriding [onCreateOptionsMenu] to create the options menu
@@ -41,9 +48,11 @@ class DashboardActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
+        newsViewModel = ViewModelProviders.of(this).get(NewsViewModel::class.java)
         addFragment(NewsFragment(), R.id.dashboard_viewpager, supportFragmentManager)
         addTabLayout()
         getFirebaseToken()
+        setupRecurringWork()
     }
 
     /**
@@ -84,6 +93,24 @@ class DashboardActivity : AppCompatActivity() {
             tabLayout.getTabAt(i)?.icon = ContextCompat.getDrawable(this, image[i])
         }
     }
+
+    /**
+     * Setup WorkManager background job to 'fetch' new network data daily.
+     */
+    private fun setupRecurringWork() {
+        val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).setRequiresBatteryNotLow(true).build()
+        val task = PeriodicWorkRequestBuilder<NewsWorker>(Duration.ofMinutes(15)).setConstraints(constraints).build()
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+            WORK_NAME,
+            ExistingPeriodicWorkPolicy.KEEP,
+            task)
+        WorkManager.getInstance(this).getWorkInfoByIdLiveData(task.id).observe(this,{ info ->
+            if (info != null && info.state.isFinished) {
+                newsViewModel?.getArticles()
+            }
+        })
+    }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId){
