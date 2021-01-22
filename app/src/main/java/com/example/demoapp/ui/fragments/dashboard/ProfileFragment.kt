@@ -32,15 +32,16 @@ import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.example.demoapp.R
 import com.example.demoapp.databinding.FragmentProfileBinding
-import com.example.demoapp.firebase.ProfileFirebase.Companion.removeUserImage
-import com.example.demoapp.firebase.ProfileFirebase.Companion.uploadImageToFirebase
+import com.example.demoapp.firebase.ProfileFirebase.removeUserImage
+import com.example.demoapp.firebase.ProfileFirebase.uploadImageToFirebase
 import com.example.demoapp.models.Users
-import com.example.demoapp.ui.activities.main.MapsActivity
+import com.example.demoapp.ui.activities.dashboard.MapsActivity
 import com.example.demoapp.utils.Constants.Companion.GROUP_KEY
 import com.example.demoapp.utils.Constants.Companion.NAME_STRING
 import com.example.demoapp.utils.Constants.Companion.PROFILE_IMAGE_DELETE
 import com.example.demoapp.utils.Constants.Companion.USERNAME_STRING
 import com.example.demoapp.utils.Utils.Companion.isNetworkConnected
+import com.example.demoapp.utils.Utils.Companion.loadPhoto
 import com.example.demoapp.utils.Utils.Companion.requestPermissionRationale
 import com.example.demoapp.viewmodels.AccountsViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -58,6 +59,7 @@ class ProfileFragment : Fragment() {
     private var photoUri: Uri? = null
     private var user: Users? = null
     private var accountsViewModel: AccountsViewModel? = null
+    var bottomSheet: BottomSheetDialog? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -105,7 +107,6 @@ class ProfileFragment : Fragment() {
         binding.usernameField.setEndIconOnClickListener {
             setEditBottomSheetDialog(USERNAME_STRING)
         }
-
         return binding.root
     }
 
@@ -122,7 +123,7 @@ class ProfileFragment : Fragment() {
      * @param field A string value to denote whether the field is for editing name or username.
      */
     private fun setEditBottomSheetDialog(field: String) {
-        val bottomSheet = context?.let { BottomSheetDialog(it) }
+        bottomSheet = context?.let { BottomSheetDialog(it) }
         val bottomSheetView: View = layoutInflater.inflate(R.layout.edit_profile, container, false)
         bottomSheet?.setContentView(bottomSheetView)
         bottomSheet?.show()
@@ -179,9 +180,12 @@ class ProfileFragment : Fragment() {
         binding.emailDisplay.setText(data?.email)
         if (!data?.userImageUrl.equals("NONE")) {
             context?.let { Glide.with(it).load(data?.userImageUrl).into(binding.userImage) }
+            binding.userImage.setOnClickListener {
+                loadPhoto(data?.userImageUrl.toString(), binding.userImage, activity)
+            }
         } else {
             binding.progressProfileImage.visibility = View.VISIBLE
-            context?.let { binding.userImage.setImageResource(R.drawable.avatar_anonymous_48dp) }
+            context?.let { binding.userImage.setImageResource(R.drawable.ic_avatar_anonymous) }
             binding.progressProfileImage.visibility = View.INVISIBLE
         }
         if (firebaseResponseMessage?.isNotEmpty() == true) {
@@ -193,7 +197,7 @@ class ProfileFragment : Fragment() {
      * Method to set different image selection type buttons bottom sheet dialog and process the button clicks
      */
     private fun setBottomSheetDialog() {
-        val bottomSheet = context?.let { BottomSheetDialog(it) }
+        bottomSheet = context?.let { BottomSheetDialog(it) }
         val bottomSheetView: View = layoutInflater.inflate(R.layout.image_options, container, false)
         bottomSheet?.setContentView(bottomSheetView)
         bottomSheet?.show()
@@ -211,7 +215,7 @@ class ProfileFragment : Fragment() {
         }
 
         bottomSheetView.findViewById<ImageButton>(R.id.button_photo_remove).setOnClickListener {
-            binding.userImage.setImageResource(R.drawable.avatar_anonymous_48dp)
+            binding.userImage.setImageResource(R.drawable.ic_avatar_anonymous)
             callRemoveUserImage()
             bottomSheet?.hide()
         }
@@ -222,13 +226,16 @@ class ProfileFragment : Fragment() {
      */
     private fun callRemoveUserImage() {
         binding.progressProfileImage.visibility = View.VISIBLE
-        removeUserImage()
-        user?.userImageUrl = "NONE"
-        user?.let {
-            accountsViewModel?.updateUserInfoOnDatabase(it) {
-                if (isNetworkConnected(context)) updateUserOnFirebase()
-                binding.progressProfileImage.visibility = View.INVISIBLE
-                Toast.makeText(context, PROFILE_IMAGE_DELETE, Toast.LENGTH_SHORT).show()
+        removeUserImage { isSuccess ->
+            if (isSuccess) {
+                user?.userImageUrl = "NONE"
+                user?.let {
+                    accountsViewModel?.updateUserInfoOnDatabase(it) {
+                        if (isNetworkConnected(context)) updateUserOnFirebase()
+                        binding.progressProfileImage.visibility = View.INVISIBLE
+                        Toast.makeText(context, PROFILE_IMAGE_DELETE, Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
         }
     }
@@ -326,6 +333,11 @@ class ProfileFragment : Fragment() {
                 saveUserImage(photoUri)
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        bottomSheet?.hide()
     }
 
     private val networkManager = object : ConnectivityManager.NetworkCallback() {

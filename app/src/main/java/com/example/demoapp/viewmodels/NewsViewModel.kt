@@ -2,12 +2,11 @@ package com.example.demoapp.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.demoapp.api.Resource
 import com.example.demoapp.database.ArticlesDatabase
-import com.example.demoapp.firebase.FavoritesFirebase.Companion.retrieveDataFromFirebase
-import com.example.demoapp.firebase.FavoritesFirebase.Companion.storeDataOnFirebase
+import com.example.demoapp.firebase.FavoritesFirebase.retrieveDataFromFirebase
+import com.example.demoapp.firebase.FavoritesFirebase.storeDataOnFirebase
 import com.example.demoapp.models.Articles
 import com.example.demoapp.models.News
 import com.example.demoapp.repository.ArticleRepository
@@ -24,18 +23,25 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
 
     var pageCount = 1
     var isLoading = false
-    private val repository : ArticleRepository
-    var articles : LiveData<List<Articles>>
+    private val articlesDAO = ArticlesDatabase.getDatabase(application).articlesDAO()
+    private val repository = ArticleRepository(articlesDAO)
     val newsLiveData = MutableLiveData<Resource<News?>>()
     val favouriteArticles: MutableSet<Articles> = mutableSetOf()
     val favouritesLiveData : MutableLiveData<MutableSet<Articles>> by lazy {
         MutableLiveData<MutableSet<Articles>>()
     }
+    var articles = MutableLiveData<List<Articles>>()
 
-    init {
-        val articlesDAO = ArticlesDatabase.getDatabase(application).articlesDAO()
-        repository = ArticleRepository(articlesDAO)
-        articles = repository.readArticles()
+    /**
+     * Method to get the articles from database
+     * Post the list of articles to [NewsViewModel.articles] live data
+     */
+    fun getArticles(){
+        CoroutineScope(Dispatchers.IO).launch {
+            repository.readArticles {
+                articles.postValue(it)
+            }
+        }
     }
 
     /**
@@ -92,7 +98,7 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     /**
-     * Method to return set of favourites
+     * Method to get favourites articles from firebase
      */
     fun getFavourites() {
         retrieveDataFromFirebase {
@@ -105,7 +111,7 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
      * Method to add articles to room database
      * @param article An object of class [Articles]
      */
-    fun addArticles(article: Articles) {
+    fun addArticles(article: List<Articles>) {
         CoroutineScope(Dispatchers.IO).launch {
             repository.addArticles(article)
         }

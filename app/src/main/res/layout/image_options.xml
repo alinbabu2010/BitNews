@@ -26,12 +26,12 @@
         android:layout_marginTop="32dp"
         android:background="@drawable/shape"
         android:contentDescription="@string/delete_icon"
-        android:src="@drawable/icons8_trash_48"
+        android:src="@drawable/ic_trash"
         app:layout_constraintEnd_toStartOf="@+id/button_camera"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_profile"
-        tools:srcCompat="@drawable/icons8_trash_48" />
+        tools:srcCompat="@drawable/ic_trash" />
 
     <ImageButton
         android:id="@+id/button_camera"
@@ -40,12 +40,12 @@
         android:layout_marginTop="32dp"
         android:background="@drawable/shape"
         android:contentDescription="@string/camera_image"
-        android:src="@drawable/icons8_google_images_48"
+        android:src="@drawable/ic_google_images"
         app:layout_constraintEnd_toStartOf="@+id/button_gallery"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/button_photo_remove"
         app:layout_constraintTop_toBottomOf="@+id/textView_profile"
-        tools:srcCompat="@drawable/icons8_google_images_48" />
+        tools:srcCompat="@drawable/ic_google_images" />
 
     <ImageButton
         android:id="@+id/button_gallery"
@@ -54,12 +54,12 @@
         android:layout_marginTop="32dp"
         android:background="@drawable/shape"
         android:contentDescription="@string/gallery_icon"
-        android:src="@drawable/icons8_google_photos_48"
+        android:src="@drawable/ic_google_photos"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/button_camera"
         app:layout_constraintTop_toBottomOf="@+id/textView_profile"
-        tools:srcCompat="@drawable/icons8_google_photos_48" />
+        tools:srcCompat="@drawable/ic_google_photos" />
 
     <TextView
         android:id="@+id/textView_remove"

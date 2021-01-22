@@ -59,15 +59,32 @@
         android:textStyle="normal"
         android:typeface="normal" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto_condensed_regular"
-        android:text="@string/article"
-        android:textColor="@color/primary_dark"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:typeface="normal" />
+    <LinearLayout
+        android:layout_width="346dp"
+        android:layout_height="31dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="281dp"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/roboto_condensed_regular"
+            android:text="@string/article"
+            android:textColor="@color/primary_dark"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:typeface="normal" />
+
+        <ImageButton
+            android:id="@+id/ttsButton"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:layout_weight="1"
+            android:background="#03FFFFFF"
+            android:contentDescription="@string/article"
+            android:tint="@color/secondary_dark"
+            app:srcCompat="@drawable/ic_speech" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/news_content"

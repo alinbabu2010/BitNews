@@ -58,7 +58,7 @@
     <string name="storage_camera_permission">Please enable storage and camera permission in app settings</string>
     <string name="search_title">Search</string>
     <string name="enter_name">Enter your name</string>
-    <string name="profile_update" >Profile updated successfully</string>
+    <string name="profile_update">Profile updated successfully</string>
     <string name="profile_unsuccessful">Profile update unsuccessful</string>
     <string name="channel_name">News Notification</string>
     <string name="channel_description">Notify users after news update</string>
@@ -70,4 +70,8 @@
     <string name="profile_channel_text">Profile updated successfully</string>
     <string name="profile_channel_name">Profile Notifications</string>
     <string name="profile_channel_description">Notification about user profile update</string>
+    <string name="service_channel_title">Reading article content</string>
+    <string name="chat" translatable="false">Chat</string>
+    <string name="type_message_here">Type message here</string>
+    <string name="image_message" translatable="false">Image message</string>
 </resources>

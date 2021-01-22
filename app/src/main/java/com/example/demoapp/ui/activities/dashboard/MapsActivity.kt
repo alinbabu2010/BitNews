@@ -1,4 +1,4 @@
-package com.example.demoapp.ui.activities.main
+package com.example.demoapp.ui.activities.dashboard
 
 import android.Manifest
 import android.content.IntentSender
@@ -129,17 +129,34 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         if (query?.isNotEmpty() == true) {
             val geocoder = Geocoder(this)
             try {
-                addressList = geocoder.getFromLocationName(query, 1)
+                addressList = geocoder.getFromLocationName(query, 10)
             } catch (e: IOException) {
                 e.printStackTrace()
             }
-            if (addressList?.isNullOrEmpty() == true){
+            if (addressList?.isNullOrEmpty() == true) {
                 Toast.makeText(this, "Couldn't find the place", Toast.LENGTH_SHORT).show()
-            } 
-            else {
+            } else {
                 val address = addressList[0]
-                val latLng = LatLng(address.latitude, address.longitude)
-                map.animateCamera(CameraUpdateFactory.newLatLng(latLng))
+                val builder = LatLngBounds.Builder()
+                val coordinatesList = listOf(
+                    LatLng(address.latitude + 0.004, address.longitude + 0.004),
+                    LatLng(address.latitude + 0.004, address.longitude - 0.004),
+                    LatLng(address.latitude - 0.004, address.longitude - 0.004),
+                    LatLng(address.latitude - 0.004, address.longitude + 0.004)
+                )
+                coordinatesList.forEach {
+                    builder.include(it)
+                }
+                val bounds = builder.build()
+                val polygon = map.addPolygon(
+                    PolygonOptions()
+                        .strokeWidth(1.5F)
+                        .clickable(true)
+                        .addAll(coordinatesList)
+                )
+                polygon.strokeColor = Color.BLUE
+                polygon.tag = "alpha"
+                map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds,20))
             }
 
         }
@@ -166,24 +183,26 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                 .draggable(true)
         )
         val lastKnownLocation = lastLocation?.let {
-            LatLng(it.latitude,it.longitude)
+            LatLng(it.latitude, it.longitude)
         }
-        var polygon = addPolyLine(lastKnownLocation,location)
-        map.setOnMarkerDragListener(object : GoogleMap.OnMarkerDragListener{
+        var polygon = addPolyLine(lastKnownLocation, location)
+        map.setOnMarkerDragListener(object : GoogleMap.OnMarkerDragListener {
             override fun onMarkerDragStart(marker: Marker?) {
                 polygon?.remove()
                 marker?.hideInfoWindow()
             }
+
             override fun onMarkerDrag(marker: Marker?) {
                 polygon?.remove()
                 marker?.hideInfoWindow()
             }
+
             override fun onMarkerDragEnd(marker: Marker?) {
                 marker?.let {
                     polygon?.remove()
                     it.title = getAddress(it.position)
                     it.showInfoWindow()
-                    polygon = addPolyLine(lastKnownLocation,it.position)
+                    polygon = addPolyLine(lastKnownLocation, it.position)
                 }
             }
         })
@@ -199,9 +218,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
      * @return An instance of [Polygon]
      */
     private fun addPolyLine(lastKnownLocation: LatLng?, location: LatLng): Polygon? {
-        val polygon = map.addPolygon(PolygonOptions()
-            .clickable(true)
-            .add(lastKnownLocation,location))
+        val polygon = map.addPolygon(
+            PolygonOptions()
+                .clickable(true)
+                .add(lastKnownLocation, location)
+        )
         polygon.strokeColor = Color.RED
         return polygon
     }
@@ -231,8 +252,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                 Toast.makeText(baseContext, R.string.permission_denied, Toast.LENGTH_SHORT).show()
                 requestPermissionRationale(applicationContext, this, R.string.location_permission)
             }
-        }
-        else {
+        } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         }
     }
@@ -338,6 +358,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                 searchLocation(query)
                 return false
             }
+
             override fun onQueryTextChange(newText: String?): Boolean {
                 return false
             }

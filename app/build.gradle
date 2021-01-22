@@ -4,11 +4,12 @@ plugins {
     id 'kotlin-parcelize'
     id 'com.google.gms.google-services'
     id 'kotlin-kapt'
+    id 'com.google.firebase.crashlytics'
 }
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.2"
+    buildToolsVersion "30.0.3"
 
     buildFeatures {
         viewBinding true
@@ -39,8 +40,6 @@ android {
     flavorDimensions "default"
     productFlavors {
         dev {
-            applicationIdSuffix ".dev"
-            versionNameSuffix "-dev"
             buildConfigField "String","BASE_URL","\"http://newsapi.org/v2/\""
             buildConfigField "String","API_KEY" , "\"19b71eb781b0404b93feafc1badf4324\""
             manifestPlaceholders = [google_maps_key:"AIzaSyBCG-QlN584MpiWMrZMe8CpIfl7ml4L5-g"]
@@ -67,6 +66,8 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
     implementation 'com.google.firebase:firebase-auth:20.0.1'
     implementation 'com.google.firebase:firebase-messaging:21.0.1'
+    implementation 'com.google.firebase:firebase-crashlytics:17.3.0'
+    implementation 'com.google.firebase:firebase-analytics-ktx:18.0.1'
     testImplementation 'junit:junit:4.13.1'
     implementation 'android.arch.lifecycle:extensions:1.1.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
@@ -83,5 +84,6 @@ dependencies {
     implementation 'com.google.android.libraries.places:places:2.4.0'
     implementation "androidx.room:room-ktx:2.2.6"
     kapt("androidx.room:room-compiler:2.2.6")
+    implementation 'com.firebaseui:firebase-ui-database:7.1.1'
 
 }

@@ -4,9 +4,11 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.example.demoapp.database.UserDatabase
+import com.example.demoapp.models.ChatMessage
 import com.example.demoapp.models.Users
 import com.example.demoapp.repository.AccountRepository
 import com.example.demoapp.repository.UserRepository
+import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,10 +19,7 @@ import kotlinx.coroutines.launch
  */
 class AccountsViewModel(application: Application) : AndroidViewModel(application) {
 
-    // LiveData for notifying whether a firebase operation executed successfully or not
-    val operationExecuted: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>()
-    }
+    val operationExecuted = MutableLiveData<Boolean>()
 
     var userData = MutableLiveData<Users?>()
     private val userRepository: UserRepository
@@ -49,7 +48,7 @@ class AccountsViewModel(application: Application) : AndroidViewModel(application
      * @param user An object of class [Users]
      */
     fun createUser(email: String, password: String, user: Users) {
-        accountRepository.createUser(email, password, user){
+        accountRepository.createUser(email, password, user) {
             user.id = FirebaseAuth.getInstance().currentUser?.uid.toString()
             user.userImageUrl = "NONE"
             CoroutineScope(Dispatchers.IO).launch {
@@ -73,7 +72,7 @@ class AccountsViewModel(application: Application) : AndroidViewModel(application
      */
     fun getUserInfo(uid: String) {
         CoroutineScope(Dispatchers.IO).launch {
-            var user : Users? = null
+            var user: Users? = null
             userRepository.getCurrentUserInfo(uid) {
                 user = it
                 userData.postValue(it)
@@ -97,9 +96,9 @@ class AccountsViewModel(application: Application) : AndroidViewModel(application
      * @param user An object of class [Users]
      * @param isSuccess Boolean callback function for user info update success or not
      */
-    fun updateUserInfoOnDatabase(user: Users, isSuccess: (Boolean) -> Unit) {
+    fun updateUserInfoOnDatabase(user: Users?, isSuccess: (Boolean) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
-            userRepository.updateUser(user)
+            user?.let { userRepository.updateUser(it) }
         }
         isSuccess(true)
     }
@@ -115,5 +114,26 @@ class AccountsViewModel(application: Application) : AndroidViewModel(application
             isSuccess = it
         }
         return isSuccess
+    }
+
+    /**
+     * Method to call [AccountRepository.getUserList]
+     * @param options A callback to called function providing an instance of [FirebaseRecyclerOptions]
+     */
+    fun getUserList(options: (FirebaseRecyclerOptions<Users>) -> Unit) {
+        accountRepository.getUserList {
+            options(it)
+        }
+    }
+
+    /**
+     * Method to call [AccountRepository.getUserChat]
+     * @param receiverId  User id of the user to which message is send
+     * @param options A callback to called function providing an instance of [FirebaseRecyclerOptions]
+     */
+    fun getUserChat(receiverId: String?, options: (FirebaseRecyclerOptions<ChatMessage>) -> Unit) {
+        accountRepository.getUserChat(receiverId) {
+            options(it)
+        }
     }
 }

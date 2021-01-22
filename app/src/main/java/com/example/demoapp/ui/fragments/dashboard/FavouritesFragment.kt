@@ -45,7 +45,8 @@ class FavouritesFragment : Fragment() {
 
         newsViewModel?.favouritesLiveData?.observe(viewLifecycleOwner, {
             val articles = newsViewModel?.favouriteArticles
-            if (firebaseError!=null) Toast.makeText(context, firebaseError,Toast.LENGTH_SHORT).show()
+            if (firebaseError != null) Toast.makeText(context, firebaseError, Toast.LENGTH_SHORT)
+                .show()
             if (articles.isNullOrEmpty()) {
                 view.findViewById<TextView>(R.id.empty_textView)?.visibility = View.VISIBLE
             } else {

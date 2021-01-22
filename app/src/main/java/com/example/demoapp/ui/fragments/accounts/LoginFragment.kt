@@ -9,19 +9,17 @@ import android.text.style.ClickableSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.demoapp.R
+import com.example.demoapp.databinding.FragmentLoginBinding
 import com.example.demoapp.ui.activities.dashboard.DashboardActivity
 import com.example.demoapp.utils.Constants
-import com.example.demoapp.utils.Utils.Companion.isNetworkConnected
+import com.example.demoapp.utils.Utils
 import com.example.demoapp.utils.Utils.Companion.replaceFragment
 import com.example.demoapp.viewmodels.AccountsViewModel
-import com.google.android.material.textfield.TextInputEditText
 
 
 /**
@@ -30,44 +28,52 @@ import com.google.android.material.textfield.TextInputEditText
 class LoginFragment : Fragment() {
 
     private var viewModel : AccountsViewModel? = null
+    lateinit var binding : FragmentLoginBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         activity?.actionBar?.setDisplayShowTitleEnabled(true)
         activity?.title = getString(R.string.login_string)
+        binding = FragmentLoginBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        // Inflate the layout for this fragment
-        val inflatedView = inflater.inflate(R.layout.fragment_login, container, false)
-
-        val forgotTextView = inflatedView.findViewById<TextView>(R.id.forgot_password)
-        clickableText(forgotTextView,forgotTextView.length()-13,forgotTextView.length()-9, ForgotPasswordFragment())
-
-        val registerTextView = inflatedView.findViewById<TextView>(R.id.register_redirect)
-        clickableText(registerTextView,registerTextView.length()-4,registerTextView.length(), null)
-
-        val progressBar : ProgressBar = inflatedView.findViewById(R.id.progressBar)
-        progressBar.visibility = View.INVISIBLE
-
-        inflatedView.findViewById<Button>(R.id.login_button).setOnClickListener {
-            val userName =
-                inflatedView.findViewById<TextInputEditText>(R.id.username_input).text.toString()
-            val password =
-                inflatedView.findViewById<TextInputEditText>(R.id.password_input).text.toString()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val forgotTextView = binding.forgotPassword
+        clickableText(
+            forgotTextView,
+            forgotTextView.length() - 13,
+            forgotTextView.length() - 9,
+            ForgotPasswordFragment()
+        )
+        val registerTextView = binding.registerRedirect
+        clickableText(
+            registerTextView,
+            registerTextView.length() - 4,
+            registerTextView.length(),
+            null
+        )
+        binding.progressBar.visibility = View.INVISIBLE
+        binding.loginButton.setOnClickListener {
+            binding.progressBar.visibility = View.VISIBLE
+            val userName = binding.usernameInput.text.toString()
+            val password = binding.passwordInput.text.toString()
             if (userName.isBlank() && password.isBlank()) {
                 Toast.makeText(context, R.string.field_empty_text, Toast.LENGTH_SHORT).show()
             } else {
-                progressBar.visibility = View.VISIBLE
-                if(isNetworkConnected(context)) {
-                   loginUser(userName, password,progressBar)
+                if(Utils.isNetworkConnected(context)) {
+                    binding.progressBar.visibility = View.VISIBLE
+                    loginUser(userName, password)
                 } else {
-                    Toast.makeText(context, Constants.NO_INTERNET,Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, Constants.NO_INTERNET, Toast.LENGTH_SHORT).show()
+                    binding.progressBar.visibility = View.INVISIBLE
                 }
             }
         }
-        return inflatedView
     }
 
     /**
@@ -77,7 +83,7 @@ class LoginFragment : Fragment() {
      * @param end End position of text to be clickable
      * @param fragment An instance of [Fragment] class
      */
-    private fun clickableText(view: TextView?,start :Int,end:Int,fragment: Fragment?) {
+    private fun clickableText(view: TextView?, start: Int, end: Int, fragment: Fragment?) {
 
         val spannableTextView = SpannableString(view?.text.toString())
         val clickableSpanTextView: ClickableSpan = object : ClickableSpan() {
@@ -94,7 +100,12 @@ class LoginFragment : Fragment() {
                 }
             }
         }
-        spannableTextView.setSpan(clickableSpanTextView, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannableTextView.setSpan(
+            clickableSpanTextView,
+            start,
+            end,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
         view?.text = spannableTextView
         view?.movementMethod = LinkMovementMethod.getInstance()
 
@@ -104,18 +115,19 @@ class LoginFragment : Fragment() {
      * Method to check user provided login credentials and move to [DashboardActivity] if it is true
      * @param userName String value instance for username
      * @param password String value instance for user password
-     * @param progressBar A variable to access fragment [ProgressBar]
      */
-    private fun loginUser(userName: String, password: String, progressBar: ProgressBar) {
+    private fun loginUser(userName: String, password: String) {
         viewModel = activity?.let { ViewModelProviders.of(it).get(AccountsViewModel::class.java) }
-        viewModel?.signInUser(userName,password)
-        viewModel?.operationExecuted?.observe(viewLifecycleOwner, {
-            if(it){
+        viewModel?.signInUser(userName, password)
+        viewModel?.operationExecuted?.observe(viewLifecycleOwner,{
+            if(it != null && it == true){
                 startActivity(Intent(context, DashboardActivity::class.java))
                 activity?.finish()
-            } else {
-                progressBar.visibility = View.INVISIBLE
-                Toast.makeText(context,R.string.wrong_credentials_text, Toast.LENGTH_LONG).show()
+            }
+            if(it != null && it == false) {
+                binding.progressBar.visibility = View.INVISIBLE
+                Toast.makeText(context, R.string.wrong_credentials_text, Toast.LENGTH_SHORT).show()
+                viewModel?.operationExecuted?.value = null
             }
         })
     }

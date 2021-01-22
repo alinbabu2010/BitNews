@@ -32,4 +32,7 @@
         <item name="colorControlNormal">@color/black</item>
     </style>
 
+    <style name="FullScreenTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/black</item>
+    </style>
 </resources>

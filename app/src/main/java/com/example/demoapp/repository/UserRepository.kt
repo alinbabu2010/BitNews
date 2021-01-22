@@ -1,8 +1,11 @@
 package com.example.demoapp.repository
 
 import com.example.demoapp.database.UsersDAO
-import com.example.demoapp.firebase.ProfileFirebase.Companion.getDataFromFirebase
+import com.example.demoapp.firebase.ProfileFirebase.getDataFromFirebase
 import com.example.demoapp.models.Users
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 /**
  * Repository class for handling user info
@@ -19,6 +22,7 @@ class UserRepository(private  val usersDAO: UsersDAO) {
         val user = usersDAO.getUserInfo(id)
         if (user == null) {
             getDataFromFirebase {
+                CoroutineScope(Dispatchers.IO).launch { insertUser(it) }
                 data(it)
             }
         } else data(user)

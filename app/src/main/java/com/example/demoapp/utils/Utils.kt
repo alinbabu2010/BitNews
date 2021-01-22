@@ -1,6 +1,7 @@
 package com.example.demoapp.utils
 
 import android.app.Activity
+import android.app.ActivityOptions
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -9,6 +10,7 @@ import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -16,6 +18,8 @@ import androidx.fragment.app.FragmentManager
 import com.example.demoapp.R
 import com.example.demoapp.models.Articles
 import com.example.demoapp.ui.activities.dashboard.ArticleActivity
+import com.example.demoapp.ui.activities.dashboard.ChatActivity
+import com.example.demoapp.ui.activities.dashboard.FullscreenImageActivity
 import com.example.demoapp.ui.activities.dashboard.ImageDetailActivity
 import com.example.demoapp.ui.activities.main.MainActivity
 import com.example.demoapp.utils.Constants.Companion.ARTICLE
@@ -159,6 +163,29 @@ class Utils {
             val alertDialog: AlertDialog? = builder?.create()
             alertDialog?.setCancelable(false)
             alertDialog?.show()
+        }
+
+        /**
+         * Function to start chat activity
+         * @param context  Access to the [Context] the calling function activity
+         */
+        fun openChat(context: Context) {
+            val intent = Intent(context, ChatActivity::class.java)
+            ContextCompat.startActivity(context, intent, Bundle.EMPTY)
+        }
+
+        /**
+         * Function to view image in full screen as new activity
+         * @param imageUrl Url of the image to be loaded
+         * @param messageImageView Image view of the image to be loaded
+         * @param activity Activity instance of the calling fragment
+         */
+        fun loadPhoto(imageUrl: String, messageImageView: ImageView, activity: Activity?) {
+            val intent = Intent(activity, FullscreenImageActivity::class.java)
+            val transitionName = activity?.getString(R.string.image_message)
+            val options = ActivityOptions.makeSceneTransitionAnimation(activity, messageImageView,transitionName)
+            intent.putExtra("image",imageUrl)
+            activity?.let { ContextCompat.startActivity(it, intent,options.toBundle()) }
         }
     }
 }

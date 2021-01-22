@@ -62,4 +62,6 @@
     <string name="profile_channel_name">إخطارات الملف الشخصي</string>
     <string name="profile_channel_text">تم تحديث الملف الشخصي بنجاح</string>
     <string name="profile_channel_title">تحديث الملف الشخصي</string>
+    <string name="service_channel_title">قراءة محتوى المقال</string>
+    <string name="type_message_here">اكتب الرسالة هنا</string>
 </resources>

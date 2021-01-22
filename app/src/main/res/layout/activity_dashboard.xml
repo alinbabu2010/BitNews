@@ -63,7 +63,7 @@
         android:layout_height="126dp"
         android:text="@string/fui_no_internet"
         android:visibility="gone"
-        app:drawableTopCompat="@drawable/no_wifi"
+        app:drawableTopCompat="@drawable/ic_no_wifi"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

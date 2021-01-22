@@ -1,6 +1,5 @@
 package com.example.demoapp.repository
 
-import androidx.lifecycle.LiveData
 import com.example.demoapp.api.APIResponse
 import com.example.demoapp.api.Resource
 import com.example.demoapp.api.RetrofitManager
@@ -17,7 +16,9 @@ class ArticleRepository(private val articlesDAO: ArticlesDAO) {
      * Method to read articles from database
      * @return List of [Articles] as a LiveData
      */
-    fun readArticles(): LiveData<List<Articles>> = articlesDAO.getAllArticles()
+    fun readArticles(option: (List<Articles>) -> Unit) {
+        option(articlesDAO.getAllArticles())
+    }
 
     /**
      * Method to get articles from NewsAPI.org
@@ -44,7 +45,7 @@ class ArticleRepository(private val articlesDAO: ArticlesDAO) {
      * Method to add articles to database
      * @param articles An object of class [Articles]
      */
-    suspend fun addArticles(articles: Articles) {
+    suspend fun addArticles(articles: List<Articles>) {
         articlesDAO.addArticle(articles)
     }
 }
