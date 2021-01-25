@@ -11,6 +11,12 @@ android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
 
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            variant.getPackageApplication().outputDirectory = new File("D:/DemoApp/apk")
+        }
+    }
+
     buildFeatures {
         viewBinding true
     }
