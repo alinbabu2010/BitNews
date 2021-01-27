@@ -29,27 +29,29 @@ lintDebug:
     - kube
   stage: build
   script:
-    - ./gradlew -Pci --console=plain :app:lintDebug -PbuildDir=lint
+    - ./gradlew -Pci --console=plain :app:lintDevDebug -PbuildDir=lint
+    - ./gradlew -Pci --console=plain :app:lintProductionDebug -PbuildDir=lint
 
-assembleDevDebug:
+assembleDebug:
   tags : 
     - kube
   stage: build
   script:
-    - ./gradlew assembleDevDebug
+    - ./gradlew assembleDebug
   artifacts:
     paths:
-    - app/build/dev/
+    - app/build/debug/
     
-assembleProductionDebug:
+assembleRelease:
   tags : 
     - kube
   stage: build
   script:
-    - ./gradlew assembleProductionDebug
+    - ./gradlew assembleRelease
   artifacts:
     paths:
-    - app/build/production/
+    - app/build/release/    
+
 
 debugTests:
   tags : 
