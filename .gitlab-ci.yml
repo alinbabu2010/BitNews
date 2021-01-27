@@ -26,14 +26,14 @@ stages:
 
 lintDebug:
   tags : 
-    - demo
+    - kube
   stage: build
   script:
     - ./gradlew -Pci --console=plain :app:lintDebug -PbuildDir=lint
 
 assembleDebug:
   tags : 
-    - demo
+    - kube
   stage: build
   script:
     - ./gradlew assembleDebug
@@ -43,7 +43,7 @@ assembleDebug:
 
 debugTests:
   tags : 
-    - demo
+    - kube
   stage: test
   script:
     - ./gradlew -Pci --console=plain :app:testDebug
