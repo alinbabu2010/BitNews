@@ -58,4 +58,4 @@ debugTests:
     - kube
   stage: test
   script:
-    - ./gradlew -Pci --console=plain :app:testDebug
+    - ./gradlew -Pci --console=plain :app:testDebugUnitTest
