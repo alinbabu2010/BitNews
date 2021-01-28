@@ -58,10 +58,10 @@ assembleRelease:
   script:
   - echo $KEY_STORE_FILE | base64 -d > my.keystore
   - ./gradlew assembleRelease
-    -Pandroid.injected.signing.store.file=$(pwd)/my.keystore
-    -Pandroid.injected.signing.store.password=$KEY_STORE_PASSWORD
-    -Pandroid.injected.signing.key.alias=$KEY_ALIAS
-    -Pandroid.injected.signing.key.password=$KEY_PASSWORD
+      -Pandroid.injected.signing.store.file=$(pwd)/my.keystore
+      -Pandroid.injected.signing.store.password=$KEY_STORE_PASSWORD
+      -Pandroid.injected.signing.key.alias=$KEY_ALIAS
+      -Pandroid.injected.signing.key.password=$KEY_PASSWORD
   artifacts:
     paths:
     - app/build/release/    
