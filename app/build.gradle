@@ -14,7 +14,7 @@ android {
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
             outputFileName = "${globalScope.project.name}-${variant.versionName}_${output.baseName}.apk"
-            variant.getPackageApplication().outputDirectory = new File("D:/DemoApp/apk/")
+            variant.getPackageApplicationProvider().get().outputDirectory  = new File("D:/DemoApp/apk/")
         }
     }
 
