@@ -93,15 +93,18 @@ class ImageDetailActivity : AppCompatActivity() {
         val builder = AlertDialog.Builder(this, R.style.DialogBoxTheme)
         builder.setTitle(R.string.storage_option)
         builder.setIcon(android.R.drawable.ic_menu_save)
-        var storageType = String()
+        var storageType = ""
         builder.setSingleChoiceItems(storageOptions, -1) { _: DialogInterface, index: Int ->
             storageType = storageOptions[index]
         }
         builder.setPositiveButton(R.string.ok_string){ _: DialogInterface, _: Int ->
-            progressBar?.visibility = View.VISIBLE
-            setDirectory(storageType)
+            if(storageType.isNotEmpty()) {
+                progressBar?.visibility = View.VISIBLE
+                setDirectory(storageType)
+            }
         }
         val alertDialog: AlertDialog = builder.create()
+        alertDialog.setCanceledOnTouchOutside(true)
         alertDialog.setCancelable(false)
         alertDialog.show()
     }
