@@ -13,8 +13,7 @@ android {
 
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
-            outputFileName = "${globalScope.project.name}-${variant.versionName}_${output.baseName}.apk"
-            variant.getPackageApplicationProvider().get().outputDirectory  = new File("D:/DemoApp/apk/")
+            outputFileName = "bitNews-${output.baseName}_${variant.versionName}.apk"
         }
     }
 
