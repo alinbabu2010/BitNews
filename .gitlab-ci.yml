@@ -1,0 +1,67 @@
+image: openjdk:8-jdk
+
+variables:
+  ANDROID_COMPILE_SDK: "30"
+  ANDROID_BUILD_TOOLS: "30.0.2"
+  ANDROID_SDK_TOOLS:   "4333796"
+
+before_script:
+  - apt-get --quiet update --yes
+  - apt-get --quiet install --yes wget tar unzip lib32stdc++6 lib32z1
+  - wget --quiet --output-document=android-sdk.zip https://dl.google.com/android/repository/sdk-tools-linux-${ANDROID_SDK_TOOLS}.zip
+  - unzip -d android-sdk-linux android-sdk.zip
+  - echo y | android-sdk-linux/tools/bin/sdkmanager "platforms;android-${ANDROID_COMPILE_SDK}" >/dev/null
+  - echo y | android-sdk-linux/tools/bin/sdkmanager "platform-tools" >/dev/null
+  - echo y | android-sdk-linux/tools/bin/sdkmanager "build-tools;${ANDROID_BUILD_TOOLS}" >/dev/null
+  - export ANDROID_HOME=$PWD/android-sdk-linux
+  - export PATH=$PATH:$PWD/android-sdk-linux/platform-tools/
+  - chmod +x ./gradlew
+  - set +o pipefail
+  - yes | android-sdk-linux/tools/bin/sdkmanager --licenses
+  - set -o pipefail
+
+stages:
+  - build
+  - test
+  - release
+
+lintDebug:
+  tags : 
+    - kube
+  stage: build
+  script:
+    - ./gradlew -Pci --console=plain :app:lintDevDebug -PbuildDir=lint
+    - ./gradlew -Pci --console=plain :app:lintProductionDebug -PbuildDir=lint
+
+assembleDebug:
+  tags : 
+    - kube
+  stage: build
+  script:
+    - ./gradlew assembleDebug
+  artifacts:
+    paths:
+    - app/dev/debug/
+    
+
+debugTests:
+  tags : 
+    - kube
+  stage: test
+  script:
+    - ./gradlew -Pci --console=plain :app:testDevDebugUnitTest
+    
+assembleRelease:
+  tags :
+   - kube
+  stage: release
+  script:
+   - echo $KEYSTORE_FILE | base64 -d > my.keystore
+   - ./gradlew assembleRelease
+      -Pandroid.injected.signing.store.file=$(pwd)/my.keystore
+      -Pandroid.injected.signing.store.password=$KEYSTORE_PASSWORD
+      -Pandroid.injected.signing.key.alias=$KEY_ALIAS
+      -Pandroid.injected.signing.key.password=$KEY_PASSWORD
+  artifacts:
+    paths:
+    - app/build/outputs/apk/production/release

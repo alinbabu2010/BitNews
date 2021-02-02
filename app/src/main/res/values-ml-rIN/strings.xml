@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ഡെമോ അപ്ലിക്കേഷൻ</string>
     <string name="email_string">ഇമെയിൽ</string>
     <string name="login_string">ലോഗിൻ</string>
     <string name="password_text">പാസ്വേഡ്</string>

@@ -9,6 +9,7 @@ import android.text.style.ClickableSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -46,9 +47,13 @@ class RegisterFragment : Fragment() {
         binding.registerProgressBar.visibility = View.INVISIBLE
         binding.registerButton.setOnClickListener {
             binding.registerProgressBar.visibility = View.VISIBLE
+            activity?.window?.setFlags(
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
             if(isNetworkConnected(context)) {
                 if (validateForm()) registerUser()
             } else {
+                activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
                 Toast.makeText(context, Constants.NO_INTERNET,Toast.LENGTH_SHORT).show()
             }
 
@@ -149,10 +154,12 @@ class RegisterFragment : Fragment() {
         viewModel?.operationExecuted?.observe(viewLifecycleOwner, {
             if (it) {
                 binding.registerProgressBar.visibility = View.INVISIBLE
+                activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
                 startActivity(Intent(context, DashboardActivity::class.java))
                 activity?.finish()
             } else {
                 binding.registerProgressBar.visibility = View.INVISIBLE
+                activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
                 if (firebaseError != null) {
                     Toast.makeText(context, firebaseError, Toast.LENGTH_SHORT).show()
                 }

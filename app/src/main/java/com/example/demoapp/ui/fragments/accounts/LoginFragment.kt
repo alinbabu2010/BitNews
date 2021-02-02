@@ -9,6 +9,7 @@ import android.text.style.ClickableSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -60,6 +61,8 @@ class LoginFragment : Fragment() {
         binding.progressBar.visibility = View.INVISIBLE
         binding.loginButton.setOnClickListener {
             binding.progressBar.visibility = View.VISIBLE
+            activity?.window?.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
             val userName = binding.usernameInput.text.toString()
             val password = binding.passwordInput.text.toString()
             if (userName.isBlank() && password.isBlank()) {
@@ -71,6 +74,7 @@ class LoginFragment : Fragment() {
                 } else {
                     Toast.makeText(context, Constants.NO_INTERNET, Toast.LENGTH_SHORT).show()
                     binding.progressBar.visibility = View.INVISIBLE
+                    activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
                 }
             }
         }
@@ -126,6 +130,7 @@ class LoginFragment : Fragment() {
             }
             if(it != null && it == false) {
                 binding.progressBar.visibility = View.INVISIBLE
+                activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
                 Toast.makeText(context, R.string.wrong_credentials_text, Toast.LENGTH_SHORT).show()
                 viewModel?.operationExecuted?.value = null
             }

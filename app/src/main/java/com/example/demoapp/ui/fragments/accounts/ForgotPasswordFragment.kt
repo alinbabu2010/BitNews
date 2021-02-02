@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.Toast
@@ -40,6 +41,9 @@ class ForgotPasswordFragment : Fragment() {
             val email =
                 inflatedView.findViewById<TextInputEditText>(R.id.email_input).text.toString()
             resetProgressBar.visibility = View.VISIBLE
+            activity?.window?.setFlags(
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
             resetPassword(email, resetProgressBar)
 
         }
@@ -58,6 +62,7 @@ class ForgotPasswordFragment : Fragment() {
             viewModel?.operationExecuted?.observe(viewLifecycleOwner, {
                 if (it) {
                     resetProgressBar.visibility = View.INVISIBLE
+                    activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
                     Toast.makeText(context, R.string.password_reset, Toast.LENGTH_SHORT).show()
                     fragmentManager?.popBackStack()
                 } else {
@@ -68,6 +73,7 @@ class ForgotPasswordFragment : Fragment() {
             })
         } else {
             resetProgressBar.visibility = View.INVISIBLE
+            activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
             Toast.makeText(context, R.string.invalid_message, Toast.LENGTH_SHORT).show()
         }
     }
