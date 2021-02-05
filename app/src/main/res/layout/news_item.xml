@@ -37,7 +37,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
-                android:contextClickable="true"
                 android:focusable="true"
                 android:fontFamily="@font/roboto_condensed_regular"
                 android:lineSpacingExtra="8sp"
@@ -84,7 +83,6 @@
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/roboto_condensed_regular"
                 android:lineSpacingMultiplier="0"
-                android:singleLine="true"
                 android:textColor="@color/secondary_dark" />
         </LinearLayout>
 
@@ -98,9 +96,8 @@
             android:gravity="center_vertical|end"
             android:orientation="horizontal">
 
-            <RadioButton
+            <CheckBox
                 android:id="@+id/favourites_button"
-                style="@android:style/Widget.Material.Light.CompoundButton.RadioButton"
                 android:layout_width="41dp"
                 android:layout_height="match_parent"
                 android:button="@drawable/sl_favourite_24dp"
