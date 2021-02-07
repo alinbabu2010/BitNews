@@ -39,7 +39,7 @@ class FavouritesAdapter(
         val newsAuthor: TextView = view.findViewById(R.id.author_textview)
         val newsDate: TextView = view.findViewById(R.id.publish_textview)
         val newsLiked: CheckBox = view.findViewById(R.id.favourites_button)
-        val shareNews: ImageButton = view.findViewById(R.id.share_button_fav)
+        val shareNews: ImageButton = view.findViewById(R.id.share_button)
         val context: Context = view.context
     }
 
@@ -48,7 +48,7 @@ class FavouritesAdapter(
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavouritesViewHolder {
         val adapterLayout = LayoutInflater.from(parent.context).inflate(
-            R.layout.favnews_item,
+            R.layout.news_item,
             parent,
             false
         )
