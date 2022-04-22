@@ -33,7 +33,7 @@ class FirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onMessageReceived(p0: RemoteMessage) {
         super.onMessageReceived(p0)
-        var pendingIntent: PendingIntent? = null
+        var pendingIntent: PendingIntent?
         p0.let { message ->
             notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             //Setting up Notification channels for android O and above
@@ -69,7 +69,7 @@ class FirebaseMessagingService : FirebaseMessagingService() {
         val adminChannelName = getString(R.string.push_notification_channel_id)
         val adminChannelDescription = getString(R.string.push_notification_channel_description)
 
-        val adminChannel: NotificationChannel =
+        val adminChannel =
             NotificationChannel(CHANNEL_ID, adminChannelName, NotificationManager.IMPORTANCE_LOW)
         adminChannel.description = adminChannelDescription
         adminChannel.enableLights(true)
