@@ -73,9 +73,10 @@ class ImageDetailActivity : AppCompatActivity() {
                     val query = DownloadManager.Query().setFilterById(id)
                     val cursor: Cursor = downloadManager.query(query)
                     cursor.moveToFirst()
-                    if (cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)) == DownloadManager.STATUS_SUCCESSFUL) {
+                    if (cursor.getInt(cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_STATUS)) == DownloadManager.STATUS_SUCCESSFUL) {
                         progressBar?.visibility = View.INVISIBLE
-                        Toast.makeText(context, R.string.download_image_success, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, R.string.download_image_success, Toast.LENGTH_SHORT)
+                            .show()
                     }
                     cursor.close()
                 }
