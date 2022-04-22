@@ -14,7 +14,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.demoapp.R
 import com.example.demoapp.models.Articles
@@ -105,7 +105,7 @@ class ArticleActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId){
             R.id.logout_option -> {
-                val accountsViewModel = ViewModelProviders.of(this).get(AccountsViewModel::class.java)
+                val accountsViewModel = ViewModelProvider(this).get(AccountsViewModel::class.java)
                 showAlert(this, this, accountsViewModel)
                 true
             }

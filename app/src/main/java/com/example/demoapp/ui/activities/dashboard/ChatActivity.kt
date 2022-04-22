@@ -6,7 +6,7 @@ import android.transition.Slide
 import android.view.Gravity
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.example.demoapp.R
 import com.example.demoapp.models.Users
 import com.example.demoapp.ui.fragments.chat.ChatUsersFragment
@@ -31,7 +31,7 @@ class ChatActivity : AppCompatActivity() {
         setContentView(R.layout.activity_chat)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         addFragment(ChatUsersFragment(), R.id.chat_layout, supportFragmentManager)
-        val accountsViewModel = ViewModelProviders.of(this).get(AccountsViewModel::class.java)
+        val accountsViewModel = ViewModelProvider(this).get(AccountsViewModel::class.java)
         accountsViewModel.getUserInfo(FirebaseAuth.getInstance().currentUser?.uid.toString())
         accountsViewModel.userData.observe(this) {
             user = it
@@ -41,7 +41,7 @@ class ChatActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.logout_option -> {
-                val accountsViewModel = ViewModelProviders.of(this).get(AccountsViewModel::class.java)
+                val accountsViewModel = ViewModelProvider(this).get(AccountsViewModel::class.java)
                 showAlert(this, this, accountsViewModel)
                 true
             }

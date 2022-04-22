@@ -28,7 +28,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker.checkSelfPermission
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.demoapp.R
 import com.example.demoapp.databinding.FragmentProfileBinding
@@ -68,7 +68,7 @@ class ProfileFragment : Fragment() {
 
         this.container = container
         binding = FragmentProfileBinding.inflate(inflater, container, false)
-        accountsViewModel = ViewModelProviders.of(this).get(AccountsViewModel::class.java)
+        accountsViewModel = ViewModelProvider(this).get(AccountsViewModel::class.java)
         accountsViewModel?.getUserInfo(FirebaseAuth.getInstance().currentUser?.uid.toString())
         accountsViewModel?.userData?.observe(viewLifecycleOwner) {
             setProfileData(it)

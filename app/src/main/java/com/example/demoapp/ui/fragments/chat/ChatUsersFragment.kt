@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.demoapp.R
@@ -35,7 +35,7 @@ class ChatUsersFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val layoutManager = LinearLayoutManager(context)
-        val accountsViewModel = ViewModelProviders.of(this).get(AccountsViewModel::class.java)
+        val accountsViewModel = ViewModelProvider(this).get(AccountsViewModel::class.java)
         accountsViewModel.getUserList {
             adapter = ChatUsersAdapter(it,activity)
         }

@@ -13,7 +13,7 @@ import android.view.WindowManager
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.example.demoapp.R
 import com.example.demoapp.databinding.FragmentLoginBinding
 import com.example.demoapp.ui.activities.dashboard.DashboardActivity
@@ -121,7 +121,7 @@ class LoginFragment : Fragment() {
      * @param password String value instance for user password
      */
     private fun loginUser(userName: String, password: String) {
-        viewModel = activity?.let { ViewModelProviders.of(it).get(AccountsViewModel::class.java) }
+        viewModel = activity?.let { ViewModelProvider(it).get(AccountsViewModel::class.java) }
         viewModel?.signInUser(userName, password)
         viewModel?.operationExecuted?.observe(viewLifecycleOwner) {
             if (it != null && it == true) {

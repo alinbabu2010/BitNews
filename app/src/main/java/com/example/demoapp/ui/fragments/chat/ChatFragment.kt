@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.demoapp.adapter.ChatAdapter
@@ -69,7 +69,7 @@ class ChatFragment : Fragment() {
      * @param layoutManager An instance of [LinearLayoutManager] for recyclerView setup
      */
     private fun setUpChatRoom(layoutManager: LinearLayoutManager) {
-        val accountsViewModel = ViewModelProviders.of(this).get(AccountsViewModel::class.java)
+        val accountsViewModel = ViewModelProvider(this).get(AccountsViewModel::class.java)
         accountsViewModel.getUserChat(endUser?.id) {
             mFirebaseAdapter = ChatAdapter(it, binding.progressBar, activity, endUser, user)
         }
