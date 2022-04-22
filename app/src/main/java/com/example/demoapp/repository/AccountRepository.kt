@@ -21,7 +21,6 @@ import kotlinx.coroutines.launch
 class AccountRepository {
 
     private val getAuthInstance = FirebaseAuth.getInstance()
-    private var isSuccess = false
     var user: Users? = null
 
     /**
