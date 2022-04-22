@@ -50,10 +50,8 @@ class NewsWorker(val context: Context, workerParams: WorkerParameters) : Worker(
      * Method to notify user about news update
      */
     private fun notifyUser() {
-        var pendingIntent: PendingIntent? = null
-        var clearPendingIntent: PendingIntent? = null
         val intent = Intent(context, DashboardActivity::class.java)
-        pendingIntent = PendingIntent.getActivity(
+        val pendingIntent = PendingIntent.getActivity(
             context,
             0,
             intent,
@@ -63,7 +61,7 @@ class NewsWorker(val context: Context, workerParams: WorkerParameters) : Worker(
             action = Intent.ACTION_DELETE
             putExtra("notificationId", Constants.NOTIFICATION_ID)
         }
-        clearPendingIntent = PendingIntent.getBroadcast(
+        val clearPendingIntent = PendingIntent.getBroadcast(
             context,
             0,
             clearIntent,
