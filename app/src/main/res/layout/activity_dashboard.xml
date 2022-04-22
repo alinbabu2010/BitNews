@@ -31,29 +31,13 @@
             app:tabMode="fixed"
             app:tabRippleColor="@color/secondary_light"
             app:tabTextAppearance="@style/tablayout_style"
-            app:tabTextColor="@color/secondary_dark">
+            app:tabTextColor="@color/secondary_dark" />
 
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:enabled="true" />
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:enabled="true" />
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:enabled="true" />
-
-        </com.google.android.material.tabs.TabLayout>
-
-        <androidx.viewpager.widget.ViewPager
+        <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/dashboard_viewpager"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
     </LinearLayout>
 
     <TextView

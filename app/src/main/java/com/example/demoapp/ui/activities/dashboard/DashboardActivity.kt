@@ -8,13 +8,12 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
-import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.widget.ViewPager2
 import androidx.work.*
 import com.example.demoapp.R
 import com.example.demoapp.adapter.PageAdapter
-import com.example.demoapp.ui.fragments.dashboard.NewsFragment
 import com.example.demoapp.utils.Constants.Companion.FAIL_MSG
-import com.example.demoapp.utils.Utils.Companion.addFragment
+import com.example.demoapp.utils.DashboardTabs
 import com.example.demoapp.utils.Utils.Companion.openChat
 import com.example.demoapp.utils.Utils.Companion.showAlert
 import com.example.demoapp.viewmodels.AccountsViewModel
@@ -23,6 +22,7 @@ import com.example.demoapp.workers.NewsWorker
 import com.example.demoapp.workers.NewsWorker.Companion.WORK_NAME
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.messaging.FirebaseMessaging
 import java.time.Duration
 
@@ -49,7 +49,6 @@ class DashboardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
         newsViewModel = ViewModelProvider(this).get(NewsViewModel::class.java)
-        addFragment(NewsFragment(), R.id.dashboard_viewpager, supportFragmentManager)
         addTabLayout()
         getFirebaseToken()
         setupRecurringWork()
@@ -61,12 +60,12 @@ class DashboardActivity : AppCompatActivity() {
     private fun getFirebaseToken() {
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
-                Log.i(TAG,FAIL_MSG, task.exception)
+                Log.i(TAG, FAIL_MSG, task.exception)
                 return@OnCompleteListener
             }
             // Get new FCM registration token
             val token = task.result
-            Log.d(TAG,token)
+            Log.d(TAG, token)
         })
     }
 
@@ -74,32 +73,43 @@ class DashboardActivity : AppCompatActivity() {
      * Method to add tab layout to the activity
      */
     private fun addTabLayout() {
-        val image =
-            intArrayOf(R.drawable.ic_news, R.drawable.ic_favourite_outlined, R.drawable.ic_profile)
+
         val tabLayout: TabLayout = findViewById(R.id.tab_layout)
-        val viewPager: ViewPager = findViewById(R.id.dashboard_viewpager)
-        val tabTitles = arrayOf(
-            getString(R.string.news_title),
-            getString(R.string.favourite_title),
-            getString(R.string.profile_text)
-        )
+        val viewPager: ViewPager2 = findViewById(R.id.dashboard_viewpager)
 
         // Set the adapter for each tab item
-        val pageAdapter = PageAdapter(supportFragmentManager, tabLayout.tabCount, tabTitles)
+        val pageAdapter =
+            PageAdapter(supportFragmentManager, this.lifecycle, DashboardTabs.values().size)
         viewPager.adapter = pageAdapter
-        tabLayout.TabView(this)
-        tabLayout.setupWithViewPager(viewPager)
-        for (i in 0..tabLayout.tabCount) {
-            tabLayout.getTabAt(i)?.icon = ContextCompat.getDrawable(this, image[i])
-        }
+
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            when (position) {
+                DashboardTabs.NEWS.ordinal -> {
+                    tab.text = getString(R.string.news_title)
+                    tab.icon = ContextCompat.getDrawable(this, R.drawable.ic_news)
+                }
+                DashboardTabs.FAVOURITES.ordinal -> {
+                    tab.text = getString(R.string.favourite_title)
+                    tab.icon = ContextCompat.getDrawable(this, R.drawable.ic_favourite_outlined)
+                }
+                DashboardTabs.PROFILE.ordinal -> {
+                    tab.text = getString(R.string.profile_text)
+                    tab.icon = ContextCompat.getDrawable(this, R.drawable.ic_profile)
+                }
+            }
+        }.attach()
+
     }
 
     /**
      * Setup WorkManager background job to 'fetch' new network data daily.
      */
     private fun setupRecurringWork() {
-        val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).setRequiresBatteryNotLow(true).build()
-        val task = PeriodicWorkRequestBuilder<NewsWorker>(Duration.ofMinutes(15)).setConstraints(constraints).build()
+        val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED)
+            .setRequiresBatteryNotLow(true).build()
+        val task = PeriodicWorkRequestBuilder<NewsWorker>(Duration.ofMinutes(15)).setConstraints(
+            constraints
+        ).build()
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(
             WORK_NAME,
             ExistingPeriodicWorkPolicy.KEEP,
@@ -114,7 +124,7 @@ class DashboardActivity : AppCompatActivity() {
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId){
+        return when (item.itemId) {
             R.id.logout_option -> {
                 val accountsViewModel = ViewModelProvider(this).get(AccountsViewModel::class.java)
                 showAlert(this, this, accountsViewModel)
@@ -128,8 +138,7 @@ class DashboardActivity : AppCompatActivity() {
         }
     }
 
-    companion object
-    {
+    companion object {
         private const val TAG = "DashboardActivity"
     }
 }
