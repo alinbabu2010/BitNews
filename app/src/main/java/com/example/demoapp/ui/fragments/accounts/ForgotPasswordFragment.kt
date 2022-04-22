@@ -64,7 +64,7 @@ class ForgotPasswordFragment : Fragment() {
                     resetProgressBar.visibility = View.INVISIBLE
                     activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
                     Toast.makeText(context, R.string.password_reset, Toast.LENGTH_SHORT).show()
-                    fragmentManager?.popBackStack()
+                    parentFragmentManager.popBackStack()
                 } else {
                     resetProgressBar.visibility = View.INVISIBLE
                     Toast.makeText(context, firebaseError, Toast.LENGTH_SHORT).show()

@@ -124,7 +124,7 @@ class RegisterFragment : Fragment() {
                 replaceFragment(
                     LoginFragment(),
                     R.id.fragment_container,
-                    fragmentManager
+                    parentFragmentManager
                 )
             }
         }
