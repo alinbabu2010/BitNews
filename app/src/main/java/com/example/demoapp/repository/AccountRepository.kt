@@ -76,19 +76,18 @@ class AccountRepository {
     /**
      * Method to reset user password
      * @param email A string value instance to hold user email address
-     * @return Returns a boolean denoting the operation is success or not
+     * @param isSuccess A boolean callback function notify action is success or not
      */
-    fun resetPassword(email: String): Boolean {
+    fun resetPassword(email: String, isSuccess: (Boolean) -> Unit) {
         firebaseError = null
         val validUser = getAuthInstance.sendPasswordResetEmail(email)
         validUser.addOnCompleteListener { task ->
-            if (task.isSuccessful) isSuccess = task.isSuccessful
+            if (task.isSuccessful) isSuccess(task.isSuccessful)
             else {
                 firebaseError = task.exception?.message
-                isSuccess = false
+                isSuccess(false)
             }
         }
-        return isSuccess
     }
 
     /**

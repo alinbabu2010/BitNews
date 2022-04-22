@@ -63,7 +63,9 @@ class AccountsViewModel(application: Application) : AndroidViewModel(application
      * @param email String value instance for user email address
      */
     fun resetPassword(email: String) {
-        operationExecuted.value = accountRepository.resetPassword(email)
+        accountRepository.resetPassword(email) {
+            operationExecuted.value = it
+        }
     }
 
     /**
