@@ -72,18 +72,18 @@ class NewsFragment : Fragment() {
         newsViewModel?.getArticles()
         newsViewModel?.getFavourites()
 
-        newsViewModel?.newsLiveData?.observe(viewLifecycleOwner, {
+        newsViewModel?.newsLiveData?.observe(viewLifecycleOwner) {
             checkNewsStatus(recyclerView, it)
-        })
+        }
 
-        newsViewModel?.articles?.observe(viewLifecycleOwner, {
+        newsViewModel?.articles?.observe(viewLifecycleOwner) {
             setNewsData(it, recyclerView)
-        })
+        }
 
-        newsViewModel?.favouritesLiveData?.observe(viewLifecycleOwner, {
+        newsViewModel?.favouritesLiveData?.observe(viewLifecycleOwner) {
             recyclerView.adapter?.notifyDataSetChanged()
             onCreate(savedInstanceState)
-        })
+        }
 
         with(binding.swipeRefresh) {
             setProgressBackgroundColorSchemeColor(Color.YELLOW)
@@ -315,8 +315,7 @@ class NewsFragment : Fragment() {
                 dateFilter =
                     article?.filter { it.publishedDate?.equals(publishedDate.toString()) == true } as ArrayList<Articles>?
             }
-            val distinctNewsFilter: ArrayList<Articles>?
-            distinctNewsFilter = when {
+            val distinctNewsFilter: ArrayList<Articles>? = when {
                 (sourceFilter?.isEmpty() == true) -> dateFilter
                 (publishedDate?.isEmpty() == true) -> sourceFilter
                 else -> dateFilter?.filter { it.source?.name == sourceName.toString() } as ArrayList<Articles>?

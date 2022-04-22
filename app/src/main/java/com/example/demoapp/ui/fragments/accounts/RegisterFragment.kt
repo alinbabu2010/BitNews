@@ -151,7 +151,7 @@ class RegisterFragment : Fragment() {
         val user = Users("",username, name, email,null)
         viewModel = activity?.let { ViewModelProviders.of(it).get(AccountsViewModel::class.java) }
         viewModel?.createUser(email, password, user)
-        viewModel?.operationExecuted?.observe(viewLifecycleOwner, {
+        viewModel?.operationExecuted?.observe(viewLifecycleOwner) {
             if (it) {
                 binding.registerProgressBar.visibility = View.INVISIBLE
                 activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
@@ -164,6 +164,6 @@ class RegisterFragment : Fragment() {
                     Toast.makeText(context, firebaseError, Toast.LENGTH_SHORT).show()
                 }
             }
-        })
+        }
     }
 }
