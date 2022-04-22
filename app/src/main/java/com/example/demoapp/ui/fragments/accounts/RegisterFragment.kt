@@ -13,7 +13,7 @@ import android.view.WindowManager
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.example.demoapp.R
 import com.example.demoapp.databinding.FragmentRegisterBinding
 import com.example.demoapp.models.Users
@@ -149,7 +149,7 @@ class RegisterFragment : Fragment() {
         val email = binding.emailInputSignUp.text.toString()
         val password = binding.passwordInputSignUp.text.toString()
         val user = Users("",username, name, email,null)
-        viewModel = activity?.let { ViewModelProviders.of(it).get(AccountsViewModel::class.java) }
+        viewModel = activity?.let { ViewModelProvider(it).get(AccountsViewModel::class.java) }
         viewModel?.createUser(email, password, user)
         viewModel?.operationExecuted?.observe(viewLifecycleOwner) {
             if (it) {

@@ -9,7 +9,7 @@ import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.example.demoapp.R
 import com.example.demoapp.utils.Constants.Companion.EMAIL_PATTERN
 import com.example.demoapp.utils.Utils.Companion.firebaseError
@@ -57,7 +57,7 @@ class ForgotPasswordFragment : Fragment() {
      */
     private fun resetPassword(email: String, resetProgressBar: ProgressBar) {
         if (email.matches(EMAIL_PATTERN.toRegex())) {
-            viewModel = activity?.let { ViewModelProviders.of(it).get(AccountsViewModel::class.java) }
+            viewModel = activity?.let { ViewModelProvider(it).get(AccountsViewModel::class.java) }
             viewModel?.resetPassword(email)
             viewModel?.operationExecuted?.observe(viewLifecycleOwner) {
                 if (it) {

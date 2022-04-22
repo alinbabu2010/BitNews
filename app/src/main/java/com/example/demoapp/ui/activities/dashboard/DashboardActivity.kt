@@ -7,7 +7,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
 import androidx.work.*
 import com.example.demoapp.R
@@ -48,7 +48,7 @@ class DashboardActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
-        newsViewModel = ViewModelProviders.of(this).get(NewsViewModel::class.java)
+        newsViewModel = ViewModelProvider(this).get(NewsViewModel::class.java)
         addFragment(NewsFragment(), R.id.dashboard_viewpager, supportFragmentManager)
         addTabLayout()
         getFirebaseToken()
@@ -116,7 +116,7 @@ class DashboardActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId){
             R.id.logout_option -> {
-                val accountsViewModel = ViewModelProviders.of(this).get(AccountsViewModel::class.java)
+                val accountsViewModel = ViewModelProvider(this).get(AccountsViewModel::class.java)
                 showAlert(this, this, accountsViewModel)
                 true
             }
