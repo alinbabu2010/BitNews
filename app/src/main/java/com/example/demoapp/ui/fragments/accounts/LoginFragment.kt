@@ -96,11 +96,11 @@ class LoginFragment : Fragment() {
                     replaceFragment(
                         fragment,
                         R.id.fragment_container,
-                        fragmentManager
+                        parentFragmentManager
                     )
                 }
                 else {
-                    fragmentManager?.popBackStack()
+                    parentFragmentManager.popBackStack()
                 }
             }
         }
