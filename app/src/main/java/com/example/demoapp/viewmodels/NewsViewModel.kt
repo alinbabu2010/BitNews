@@ -27,7 +27,7 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
     private val repository = ArticleRepository(articlesDAO)
     val newsLiveData = MutableLiveData<Resource<News?>>()
     val favouriteArticles: MutableSet<Articles> = mutableSetOf()
-    val favouritesLiveData : MutableLiveData<MutableSet<Articles>> by lazy {
+    val favouritesLiveData: MutableLiveData<MutableSet<Articles>> by lazy {
         MutableLiveData<MutableSet<Articles>>()
     }
     var articles = MutableLiveData<List<Articles>>()
@@ -36,7 +36,7 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
      * Method to get the articles from database
      * Post the list of articles to [NewsViewModel.articles] live data
      */
-    fun getArticles(){
+    fun getArticles() {
         CoroutineScope(Dispatchers.IO).launch {
             repository.readArticles {
                 articles.postValue(it)
@@ -48,8 +48,8 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
      * Method to get the news from API url
      * @param page To denote the API page count
      */
-    fun getNews(page : Int) {
-        repository.getArticles(page){
+    fun getNews(page: Int) {
+        repository.getArticles(page) {
             newsLiveData.postValue(it)
         }
     }
@@ -91,8 +91,8 @@ class NewsViewModel(application: Application) : AndroidViewModel(application) {
      */
     fun isFavouriteNews(article: Articles?): Boolean {
         var isFavourite = false
-        favouritesLiveData.value?.forEach{
-            if(it.title == article?.title) isFavourite = true
+        favouritesLiveData.value?.forEach {
+            if (it.title == article?.title) isFavourite = true
         }
         return isFavourite
     }

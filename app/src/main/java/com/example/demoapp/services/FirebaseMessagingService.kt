@@ -35,7 +35,8 @@ class FirebaseMessagingService : FirebaseMessagingService() {
         super.onMessageReceived(p0)
         var pendingIntent: PendingIntent?
         p0.let { message ->
-            notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             //Setting up Notification channels for android O and above
             setupNotificationChannels()
             val intent = Intent(applicationContext, ArticleActivity::class.java)
@@ -56,7 +57,8 @@ class FirebaseMessagingService : FirebaseMessagingService() {
                 .setContentTitle(message.data["title"])
                 .setContentText(message.data["message"])
                 .setContentIntent(pendingIntent)
-            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val notificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.notify(notificationId, notificationBuilder.build())
         }
     }

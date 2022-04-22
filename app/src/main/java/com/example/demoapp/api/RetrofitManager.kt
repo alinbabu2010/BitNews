@@ -30,9 +30,9 @@ object RetrofitManager {
      * @param page To denote the API page count
      * @param resource Callback to function call by passing APIResponse object
      */
-    fun getNewsData( page : Int ,resource: (APIResponse<News>) -> Unit ){
-        val call = getAPIService.getNews(BuildConfig.API_KEY, keyWord,sortBy,page,numberOfResult)
-        loadData(call){
+    fun getNewsData(page: Int, resource: (APIResponse<News>) -> Unit) {
+        val call = getAPIService.getNews(BuildConfig.API_KEY, keyWord, sortBy, page, numberOfResult)
+        loadData(call) {
             resource(it)
         }
     }
@@ -51,6 +51,7 @@ object RetrofitManager {
                     apiResponse(APIResponse.Error(ErrorUtils().parseError(response)))
                 }
             }
+
             override fun onFailure(call: Call<T>, t: Throwable) {
                 apiResponse(APIResponse.Failure(t))
             }

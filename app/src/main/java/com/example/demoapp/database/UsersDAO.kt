@@ -10,11 +10,11 @@ interface UsersDAO {
     fun insertUser(user: Users)
 
     @Query("SELECT * FROM Users WHERE id=:id")
-    fun getUserInfo(id:String) : Users?
+    fun getUserInfo(id: String): Users?
 
     @Update
     fun updateUser(user: Users)
 
     @Query("DELETE FROM Users WHERE id=:id")
-    fun deleteUser(id:String)
+    fun deleteUser(id: String)
 }

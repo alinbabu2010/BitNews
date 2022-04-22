@@ -43,7 +43,8 @@ class ForgotPasswordFragment : Fragment() {
             resetProgressBar.visibility = View.VISIBLE
             activity?.window?.setFlags(
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+            )
             resetPassword(email, resetProgressBar)
 
         }

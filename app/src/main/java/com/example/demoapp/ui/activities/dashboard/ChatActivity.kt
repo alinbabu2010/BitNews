@@ -25,7 +25,7 @@ class ChatActivity : AppCompatActivity() {
         with(window) {
             requestFeature(android.view.Window.FEATURE_ACTIVITY_TRANSITIONS)
             sharedElementEnterTransition = ChangeImageTransform()
-            sharedElementExitTransition  = ChangeImageTransform()
+            sharedElementExitTransition = ChangeImageTransform()
             exitTransition = Slide(Gravity.END)
         }
         setContentView(R.layout.activity_chat)
@@ -58,6 +58,6 @@ class ChatActivity : AppCompatActivity() {
     }
 
     companion object {
-        var user : Users? = null
+        var user: Users? = null
     }
 }

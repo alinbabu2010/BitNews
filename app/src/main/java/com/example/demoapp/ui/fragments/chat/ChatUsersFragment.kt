@@ -19,8 +19,8 @@ import com.example.demoapp.viewmodels.AccountsViewModel
  */
 class ChatUsersFragment : Fragment() {
 
-    private lateinit var binding : FragmentChatUsersBinding
-    private var adapter : ChatUsersAdapter? = null
+    private lateinit var binding: FragmentChatUsersBinding
+    private var adapter: ChatUsersAdapter? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,7 +37,7 @@ class ChatUsersFragment : Fragment() {
         val layoutManager = LinearLayoutManager(context)
         val accountsViewModel = ViewModelProvider(this).get(AccountsViewModel::class.java)
         accountsViewModel.getUserList {
-            adapter = ChatUsersAdapter(it,activity)
+            adapter = ChatUsersAdapter(it, activity)
         }
         val chatMessageCount = adapter?.itemCount as Int
         adapter?.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {

@@ -56,28 +56,33 @@ class ChatAdapter(
         chatMessage: ChatMessage
     ) {
         progressBar.visibility = ProgressBar.INVISIBLE
-        val imageUrl : String = chatMessage.imageUrl.toString()
+        val imageUrl: String = chatMessage.imageUrl.toString()
         if (chatMessage.text.isNotEmpty() && chatMessage.imageUrl?.isNotEmpty() == true) {
             viewHolder.messageTextView.text = chatMessage.text
             viewHolder.messageTextView.visibility = TextView.VISIBLE
-            activity?.let { Glide.with(it).load(imageUrl).override(500).into(viewHolder.messageImageView) }
+            activity?.let {
+                Glide.with(it).load(imageUrl).override(500).into(viewHolder.messageImageView)
+            }
             viewHolder.messageImageView.visibility = ImageView.VISIBLE
         } else if (chatMessage.text.isNotEmpty()) {
             viewHolder.messageTextView.text = chatMessage.text
             viewHolder.messageTextView.visibility = TextView.VISIBLE
             viewHolder.messageImageView.visibility = ImageView.GONE
         } else if (chatMessage.imageUrl?.isBlank() == false) {
-            activity?.let { Glide.with(it).load(imageUrl).override(500).into(viewHolder.messageImageView) }
+            activity?.let {
+                Glide.with(it).load(imageUrl).override(500).into(viewHolder.messageImageView)
+            }
             viewHolder.messageImageView.visibility = ImageView.VISIBLE
             viewHolder.messageTextView.visibility = TextView.GONE
         }
-        viewHolder.messageImageView.setOnClickListener { loadPhoto(imageUrl, viewHolder.messageImageView, activity)
+        viewHolder.messageImageView.setOnClickListener {
+            loadPhoto(imageUrl, viewHolder.messageImageView, activity)
         }
-        var chatUser : Users? = null
-        if(chatMessage.senderId == user?.id){
+        var chatUser: Users? = null
+        if (chatMessage.senderId == user?.id) {
             chatUser = user
         }
-        if(chatMessage.senderId == currentUser?.id){
+        if (chatMessage.senderId == currentUser?.id) {
             chatUser = currentUser
         }
         viewHolder.messengerTextView.text = chatUser?.name
@@ -86,7 +91,9 @@ class ChatAdapter(
                 activity?.let { ContextCompat.getDrawable(it, R.drawable.ic_avatar_anonymous) }
             )
         } else {
-            activity?.let { Glide.with(it).load(chatUser?.userImageUrl).into(viewHolder.messengerImageView) }
+            activity?.let {
+                Glide.with(it).load(chatUser?.userImageUrl).into(viewHolder.messengerImageView)
+            }
         }
     }
 

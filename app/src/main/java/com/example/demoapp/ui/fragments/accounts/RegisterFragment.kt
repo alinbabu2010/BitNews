@@ -49,12 +49,13 @@ class RegisterFragment : Fragment() {
             binding.registerProgressBar.visibility = View.VISIBLE
             activity?.window?.setFlags(
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-            if(isNetworkConnected(context)) {
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+            )
+            if (isNetworkConnected(context)) {
                 if (validateForm()) registerUser()
             } else {
                 activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
-                Toast.makeText(context, Constants.NO_INTERNET,Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, Constants.NO_INTERNET, Toast.LENGTH_SHORT).show()
             }
 
         }
@@ -148,7 +149,7 @@ class RegisterFragment : Fragment() {
         val name = binding.nameInputSignUp.text.toString()
         val email = binding.emailInputSignUp.text.toString()
         val password = binding.passwordInputSignUp.text.toString()
-        val user = Users("",username, name, email,null)
+        val user = Users("", username, name, email, null)
         viewModel = activity?.let { ViewModelProvider(it).get(AccountsViewModel::class.java) }
         viewModel?.createUser(email, password, user)
         viewModel?.operationExecuted?.observe(viewLifecycleOwner) {

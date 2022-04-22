@@ -129,7 +129,7 @@ class AccountRepository {
      * @param receiverId  User id of the user to which message is send
      * @param options A callback to called function providing an instance of [FirebaseRecyclerOptions]
      */
-    fun getUserChat(receiverId : String?,options: (FirebaseRecyclerOptions<ChatMessage>) -> Unit) {
+    fun getUserChat(receiverId: String?, options: (FirebaseRecyclerOptions<ChatMessage>) -> Unit) {
         val mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference(MESSAGES)
         val parser: SnapshotParser<ChatMessage> = SnapshotParser<ChatMessage> { dataSnapshot ->
             val friendlyMessage: ChatMessage? = dataSnapshot.getValue(ChatMessage::class.java)
@@ -137,6 +137,8 @@ class AccountRepository {
             friendlyMessage as ChatMessage
         }
         val messagesRef = mFirebaseDatabaseReference.child(getChatPersonsId(receiverId))
-        options(FirebaseRecyclerOptions.Builder<ChatMessage>().setQuery(messagesRef, parser).build())
+        options(
+            FirebaseRecyclerOptions.Builder<ChatMessage>().setQuery(messagesRef, parser).build()
+        )
     }
 }

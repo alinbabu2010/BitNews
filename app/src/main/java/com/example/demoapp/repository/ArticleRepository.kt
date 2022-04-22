@@ -25,18 +25,18 @@ class ArticleRepository(private val articlesDAO: ArticlesDAO) {
      * @param page To denote the API page count
      * @param response A callback function to pass [APIResponse] of [News]
      */
-    fun getArticles(page:Int, response: (Resource<News>) -> Unit) {
+    fun getArticles(page: Int, response: (Resource<News>) -> Unit) {
         RetrofitManager.getNewsData(page) {
             when (it) {
                 is APIResponse.Success -> {
-                    if(page > 1) {
+                    if (page > 1) {
                         response(Resource.loadMore(it.data))
                     } else {
                         response(Resource.success(it.data as News))
                     }
                 }
                 is APIResponse.Error -> response(Resource.error(it.error))
-                is APIResponse.Failure ->response(Resource.failure(it.exception))
+                is APIResponse.Failure -> response(Resource.failure(it.exception))
             }
         }
     }

@@ -10,7 +10,8 @@ import kotlinx.parcelize.Parcelize
 /**
  * Data class for each news article
  */
-@Entity @Parcelize
+@Entity
+@Parcelize
 data class Articles(
     @Embedded @SerializedName("source") val source: Source? = Source(),
     @SerializedName("author") val author: String? = "",

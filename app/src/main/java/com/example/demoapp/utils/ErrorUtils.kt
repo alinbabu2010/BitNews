@@ -11,7 +11,7 @@ import java.io.IOException
 /**
  * Utility class for parsing error response
  */
-class  ErrorUtils {
+class ErrorUtils {
 
     /**
      * Method to parse error response

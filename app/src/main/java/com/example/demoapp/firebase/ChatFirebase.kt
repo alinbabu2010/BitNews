@@ -69,7 +69,7 @@ object ChatFirebase {
     fun sendMessage(message: String, receiverId: String?) {
         val chatMessage = ChatMessage(
             text = message,
-            senderId  = user?.id.toString(),
+            senderId = user?.id.toString(),
             imageUrl = null
         )
         firebaseDatabaseReference.child(MESSAGES).child(getChatPersonsId(receiverId)).push()
