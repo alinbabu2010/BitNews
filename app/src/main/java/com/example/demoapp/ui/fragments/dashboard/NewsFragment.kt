@@ -340,11 +340,9 @@ class NewsFragment : Fragment() {
      * Method to notify user about news update
      */
     private fun notifyUser() {
-        var pendingIntent: PendingIntent? = null
-        var clearPendingIntent: PendingIntent? = null
         createChannel()
         val intent = Intent(this.activity, DashboardActivity::class.java)
-        pendingIntent = PendingIntent.getActivity(
+        val pendingIntent = PendingIntent.getActivity(
             context,
             0,
             intent,
@@ -354,7 +352,7 @@ class NewsFragment : Fragment() {
             action = Intent.ACTION_DELETE
             putExtra("notificationId", NOTIFICATION_ID)
         }
-        clearPendingIntent = PendingIntent.getBroadcast(
+        val clearPendingIntent = PendingIntent.getBroadcast(
             context,
             0,
             clearIntent,
