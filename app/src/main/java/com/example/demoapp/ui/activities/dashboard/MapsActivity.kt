@@ -76,16 +76,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         map.setOnMarkerClickListener(this)
         map.setInfoWindowAdapter(object : GoogleMap.InfoWindowAdapter {
 
-            override fun getInfoWindow(marker: Marker?): View? {
+            override fun getInfoWindow(marker: Marker): View? {
                 return null
             }
 
-            override fun getInfoContents(marker: Marker?): View? {
+            override fun getInfoContents(marker: Marker): View? {
                 var view: View? = null
                 try {
                     view = View.inflate(this@MapsActivity, R.layout.map_info_window, null)
                     val addressTxt: TextView = view.findViewById(R.id.addressTxt)
-                    addressTxt.text = marker?.title
+                    addressTxt.text = marker.title
                 } catch (e: Exception) {
                     Log.i(TAG, "getInfoContents: ${e.message}")
                 }
@@ -97,7 +97,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         setMapLongClick(map)
     }
 
-    override fun onMarkerClick(p0: Marker?) = false
+    override fun onMarkerClick(p0: Marker) = false
 
     /**
      * Method to get place name from location coordinates
@@ -187,19 +187,19 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         }
         var polygon = addPolyLine(lastKnownLocation, location)
         map.setOnMarkerDragListener(object : GoogleMap.OnMarkerDragListener {
-            override fun onMarkerDragStart(marker: Marker?) {
-                polygon?.remove()
-                marker?.hideInfoWindow()
+            override fun onMarkerDragStart(marker: Marker) {
+                polygon.remove()
+                marker.hideInfoWindow()
             }
 
-            override fun onMarkerDrag(marker: Marker?) {
-                polygon?.remove()
-                marker?.hideInfoWindow()
+            override fun onMarkerDrag(marker: Marker) {
+                polygon.remove()
+                marker.hideInfoWindow()
             }
 
-            override fun onMarkerDragEnd(marker: Marker?) {
-                marker?.let {
-                    polygon?.remove()
+            override fun onMarkerDragEnd(marker: Marker) {
+                marker.also {
+                    polygon.remove()
                     it.title = getAddress(it.position)
                     it.showInfoWindow()
                     polygon = addPolyLine(lastKnownLocation, it.position)
@@ -217,7 +217,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
      * @param location An instance of [LatLng] containing latitude and longitude of location
      * @return An instance of [Polygon]
      */
-    private fun addPolyLine(lastKnownLocation: LatLng?, location: LatLng): Polygon? {
+    private fun addPolyLine(lastKnownLocation: LatLng?, location: LatLng): Polygon {
         val polygon = map.addPolygon(
             PolygonOptions()
                 .clickable(true)
