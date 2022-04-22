@@ -7,6 +7,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.demoapp.ui.fragments.dashboard.FavouritesFragment
 import com.example.demoapp.ui.fragments.dashboard.NewsFragment
 import com.example.demoapp.ui.fragments.dashboard.ProfileFragment
+import com.example.demoapp.utils.DashboardTabs
 
 /**
  * Adapter class for ViewPager
@@ -24,9 +25,9 @@ class PageAdapter(
     override fun createFragment(position: Int): Fragment {
         lateinit var fragment: Fragment
         when (position) {
-            0 -> fragment = NewsFragment()
-            1 -> fragment = FavouritesFragment()
-            2 -> fragment = ProfileFragment()
+            DashboardTabs.NEWS.ordinal -> fragment = NewsFragment()
+            DashboardTabs.FAVOURITES.ordinal -> fragment = FavouritesFragment()
+            DashboardTabs.PROFILE.ordinal -> fragment = ProfileFragment()
         }
         return fragment
     }
