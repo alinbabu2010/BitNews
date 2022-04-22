@@ -53,25 +53,23 @@ class NewsWorker(val context: Context, workerParams: WorkerParameters) : Worker(
     private fun notifyUser() {
         var pendingIntent: PendingIntent? = null
         var clearPendingIntent: PendingIntent? = null
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val intent = Intent(context, DashboardActivity::class.java)
-            pendingIntent = PendingIntent.getActivity(
-                context,
-                0,
-                intent,
-                PendingIntent.FLAG_IMMUTABLE
-            )
-            val clearIntent = Intent(context, NotificationReceiver::class.java).apply {
-                action = Intent.ACTION_DELETE
-                putExtra("notificationId", Constants.NOTIFICATION_ID)
-            }
-            clearPendingIntent = PendingIntent.getBroadcast(
-                context,
-                0,
-                clearIntent,
-                PendingIntent.FLAG_IMMUTABLE
-            )
+        val intent = Intent(context, DashboardActivity::class.java)
+        pendingIntent = PendingIntent.getActivity(
+            context,
+            0,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE
+        )
+        val clearIntent = Intent(context, NotificationReceiver::class.java).apply {
+            action = Intent.ACTION_DELETE
+            putExtra("notificationId", Constants.NOTIFICATION_ID)
         }
+        clearPendingIntent = PendingIntent.getBroadcast(
+            context,
+            0,
+            clearIntent,
+            PendingIntent.FLAG_IMMUTABLE
+        )
         val notificationBuilder = NotificationCompat.Builder(context, EVENT_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_stat_notification)
             .setContentTitle(context.getString(R.string.channel_title))
