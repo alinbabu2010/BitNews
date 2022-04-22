@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -30,8 +31,15 @@ class ChatFragment : Fragment() {
     private var mMessageRecyclerView: RecyclerView? = null
     private var endUser: Users? = null
     private var mFirebaseAdapter: ChatAdapter? = null
-    private var message : String = ""
+    private var message: String = ""
 
+    private val activityResultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == Activity.RESULT_OK) {
+                val uri: Uri? = it.data?.data
+                storeImageMessage(uri, message, endUser?.id)
+            }
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,13 +61,13 @@ class ChatFragment : Fragment() {
         layoutManager.stackFromEnd = true
         binding.sendButton.setOnClickListener {
             message = binding.messageEditText.text.toString()
-            if(message.isNotEmpty()) sendMessage(message, endUser?.id)
+            if (message.isNotEmpty()) sendMessage(message, endUser?.id)
             binding.messageEditText.setText("")
         }
         binding.addMessageImageView.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"
-            startActivityForResult(intent, REQUEST_IMAGE_CODE)
+            activityResultLauncher.launch(intent)
         }
         setUpChatRoom(layoutManager)
     }
@@ -100,17 +108,4 @@ class ChatFragment : Fragment() {
         mFirebaseAdapter?.startListening()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == REQUEST_IMAGE_CODE) {
-                val uri: Uri? = data?.data
-                storeImageMessage(uri, message, endUser?.id)
-            }
-        }
-    }
-
-    companion object {
-        private const val REQUEST_IMAGE_CODE = 200
-    }
 }
