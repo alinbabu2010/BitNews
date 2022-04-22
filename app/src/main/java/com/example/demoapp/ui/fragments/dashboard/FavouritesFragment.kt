@@ -1,5 +1,6 @@
 package com.example.demoapp.ui.fragments.dashboard
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -34,6 +35,7 @@ class FavouritesFragment : Fragment() {
     }
 
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         super.onViewCreated(view, savedInstanceState)
@@ -71,6 +73,7 @@ class FavouritesFragment : Fragment() {
      * @param recyclerView An instance of [RecyclerView]
      * @param newsViewModel An instance of viewModel [NewsViewModel]
      */
+    @SuppressLint("NotifyDataSetChanged")
     private fun loadRecyclerView(recyclerView: RecyclerView, newsViewModel: NewsViewModel?) {
         with(recyclerView) {
             layoutManager = LinearLayoutManager(context)

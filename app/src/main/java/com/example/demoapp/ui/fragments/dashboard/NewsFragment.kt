@@ -1,5 +1,6 @@
 package com.example.demoapp.ui.fragments.dashboard
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -61,6 +62,7 @@ class NewsFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         newsViewModel = activity?.let { ViewModelProviders.of(it).get(NewsViewModel::class.java) }
@@ -113,6 +115,7 @@ class NewsFragment : Fragment() {
      * @param recyclerView An instance of [RecyclerView] of the [NewsFragment]
      * @param resource An instance of [Resource] for news response
      */
+    @SuppressLint("NotifyDataSetChanged")
     private fun checkNewsStatus(recyclerView: RecyclerView, resource: Resource<News?>) {
         when (resource.status) {
             Resource.Status.SUCCESS -> {

@@ -1,5 +1,6 @@
 package com.example.demoapp.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -58,6 +59,7 @@ class FavouritesAdapter(
     /**
      * Replace the contents of a view from news ArrayList (invoked by the layout manager)
      */
+    @SuppressLint("NotifyDataSetChanged")
     override fun onBindViewHolder(holder: FavouritesViewHolder, position: Int) {
         val articles = newsViewModel?.favouritesLiveData?.value
         val item = articles?.toMutableList()?.get(position)
