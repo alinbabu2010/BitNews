@@ -340,26 +340,24 @@ class NewsFragment : Fragment() {
     private fun notifyUser() {
         var pendingIntent: PendingIntent? = null
         var clearPendingIntent: PendingIntent? = null
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            createChannel()
-            val intent = Intent(this.activity, DashboardActivity::class.java)
-            pendingIntent = PendingIntent.getActivity(
-                context,
-                0,
-                intent,
-                PendingIntent.FLAG_IMMUTABLE
-            )
-            val clearIntent = Intent(context, NotificationReceiver::class.java).apply {
-                action = Intent.ACTION_DELETE
-                putExtra("notificationId", NOTIFICATION_ID)
-            }
-            clearPendingIntent = PendingIntent.getBroadcast(
-                context,
-                0,
-                clearIntent,
-                PendingIntent.FLAG_IMMUTABLE
-            )
+        createChannel()
+        val intent = Intent(this.activity, DashboardActivity::class.java)
+        pendingIntent = PendingIntent.getActivity(
+            context,
+            0,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE
+        )
+        val clearIntent = Intent(context, NotificationReceiver::class.java).apply {
+            action = Intent.ACTION_DELETE
+            putExtra("notificationId", NOTIFICATION_ID)
         }
+        clearPendingIntent = PendingIntent.getBroadcast(
+            context,
+            0,
+            clearIntent,
+            PendingIntent.FLAG_IMMUTABLE
+        )
         val notificationBuilder = context?.let { NotificationCompat.Builder(it, EVENT_CHANNEL_ID) }
             ?.setSmallIcon(R.drawable.ic_stat_notification)
             ?.setContentTitle(getString(R.string.channel_title))

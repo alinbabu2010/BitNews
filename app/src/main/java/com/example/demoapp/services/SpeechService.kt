@@ -76,16 +76,14 @@ class SpeechService : Service() {
     private fun setUpNotification(action: String, icon: Int) {
         var pendingIntentStop: PendingIntent? = null
         var pendingIntentPauseOrPlay: PendingIntent? = null
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            createChannel()
-            pendingIntentStop = Intent(this, SpeechNotificationReceiver::class.java).let {
-                it.action = ACTION_STOP
-                PendingIntent.getBroadcast(this, 0, it, PendingIntent.FLAG_IMMUTABLE)
-            }
-            pendingIntentPauseOrPlay = Intent(this, SpeechNotificationReceiver::class.java).let {
-                it.action = action
-                PendingIntent.getBroadcast(this, 0, it, PendingIntent.FLAG_IMMUTABLE)
-            }
+        createChannel()
+        pendingIntentStop = Intent(this, SpeechNotificationReceiver::class.java).let {
+            it.action = ACTION_STOP
+            PendingIntent.getBroadcast(this, 0, it, PendingIntent.FLAG_IMMUTABLE)
+        }
+        pendingIntentPauseOrPlay = Intent(this, SpeechNotificationReceiver::class.java).let {
+            it.action = action
+            PendingIntent.getBroadcast(this, 0, it, PendingIntent.FLAG_IMMUTABLE)
         }
         notification = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_stat_notification)

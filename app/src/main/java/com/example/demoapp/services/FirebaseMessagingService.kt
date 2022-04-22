@@ -37,21 +37,19 @@ class FirebaseMessagingService : FirebaseMessagingService() {
         p0.let { message ->
             notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             //Setting up Notification channels for android O and above
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                setupNotificationChannels()
-                val intent = Intent(applicationContext, ArticleActivity::class.java)
-                val article = message.data["articles"]
-                val gson = GsonBuilder().setPrettyPrinting().create()
-                val articles = gson.fromJson(article, Articles::class.java)
-                println(articles)
-                intent.putExtra(ARTICLE, articles)
-                pendingIntent = PendingIntent.getActivity(
-                    applicationContext,
-                    0,
-                    intent,
-                    PendingIntent.FLAG_IMMUTABLE
-                )
-            }
+            setupNotificationChannels()
+            val intent = Intent(applicationContext, ArticleActivity::class.java)
+            val article = message.data["articles"]
+            val gson = GsonBuilder().setPrettyPrinting().create()
+            val articles = gson.fromJson(article, Articles::class.java)
+            println(articles)
+            intent.putExtra(ARTICLE, articles)
+            pendingIntent = PendingIntent.getActivity(
+                applicationContext,
+                0,
+                intent,
+                PendingIntent.FLAG_IMMUTABLE
+            )
             val notificationId = Random.nextInt(60000)
             val notificationBuilder = NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_stat_notification)

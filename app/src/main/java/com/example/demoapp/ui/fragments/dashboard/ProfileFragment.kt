@@ -370,9 +370,7 @@ class ProfileFragment : Fragment() {
      * Method to notify user about news update
      */
     private fun notifyUser() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            createChannel()
-        }
+        createChannel()
 
         val notification = context?.let { NotificationCompat.Builder(it, PROFILE_CHANNEL_ID) }
             ?.setSmallIcon(R.drawable.ic_stat_notification)
