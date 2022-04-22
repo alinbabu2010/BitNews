@@ -54,8 +54,8 @@ class SpeechService : Service() {
                         stopService(intent)
                     }
 
-                    override fun onError(utteranceId: String?) {
-                        Log.e(TAG, "onError: $utteranceId")
+                    @Deprecated("Deprecated in Java")
+                    override fun onError(p0: String?) {
                     }
                 })
             }
@@ -74,14 +74,12 @@ class SpeechService : Service() {
      * @param icon Resource drawable id
      */
     private fun setUpNotification(action: String, icon: Int) {
-        var pendingIntentStop: PendingIntent? = null
-        var pendingIntentPauseOrPlay: PendingIntent? = null
         createChannel()
-        pendingIntentStop = Intent(this, SpeechNotificationReceiver::class.java).let {
+        val pendingIntentStop = Intent(this, SpeechNotificationReceiver::class.java).let {
             it.action = ACTION_STOP
             PendingIntent.getBroadcast(this, 0, it, PendingIntent.FLAG_IMMUTABLE)
         }
-        pendingIntentPauseOrPlay = Intent(this, SpeechNotificationReceiver::class.java).let {
+        val pendingIntentPauseOrPlay = Intent(this, SpeechNotificationReceiver::class.java).let {
             it.action = action
             PendingIntent.getBroadcast(this, 0, it, PendingIntent.FLAG_IMMUTABLE)
         }
@@ -90,7 +88,6 @@ class SpeechService : Service() {
             .setContentTitle(getString(R.string.service_channel_title))
             .setColor(Color.RED)
             .setAutoCancel(true)
-            .setNotificationSilent()
             .addAction(icon, "Pause", pendingIntentPauseOrPlay)
             .addAction(R.drawable.ic_stop, "Stop", pendingIntentStop)
             .setStyle(
