@@ -80,11 +80,11 @@ class SpeechService : Service() {
             createChannel()
             pendingIntentStop = Intent(this, SpeechNotificationReceiver::class.java).let {
                 it.action = ACTION_STOP
-                PendingIntent.getBroadcast(this, 0, it, 0)
+                PendingIntent.getBroadcast(this, 0, it, PendingIntent.FLAG_IMMUTABLE)
             }
             pendingIntentPauseOrPlay = Intent(this, SpeechNotificationReceiver::class.java).let {
                 it.action = action
-                PendingIntent.getBroadcast(this, 0, it, 0)
+                PendingIntent.getBroadcast(this, 0, it, PendingIntent.FLAG_IMMUTABLE)
             }
         }
         notification = NotificationCompat.Builder(this, CHANNEL_ID)

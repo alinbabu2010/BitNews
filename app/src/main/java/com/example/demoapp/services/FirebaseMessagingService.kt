@@ -49,7 +49,7 @@ class FirebaseMessagingService : FirebaseMessagingService() {
                     applicationContext,
                     0,
                     intent,
-                    PendingIntent.FLAG_UPDATE_CURRENT
+                    PendingIntent.FLAG_IMMUTABLE
                 )
             }
             val notificationId = Random.nextInt(60000)

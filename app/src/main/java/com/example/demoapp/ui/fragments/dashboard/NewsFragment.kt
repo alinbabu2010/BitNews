@@ -347,7 +347,7 @@ class NewsFragment : Fragment() {
                 context,
                 0,
                 intent,
-                PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_IMMUTABLE
             )
             val clearIntent = Intent(context, NotificationReceiver::class.java).apply {
                 action = Intent.ACTION_DELETE
@@ -357,7 +357,7 @@ class NewsFragment : Fragment() {
                 context,
                 0,
                 clearIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_IMMUTABLE
             )
         }
         val notificationBuilder = context?.let { NotificationCompat.Builder(it, EVENT_CHANNEL_ID) }
