@@ -22,6 +22,7 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -61,6 +62,46 @@ class ProfileFragment : Fragment() {
     private var accountsViewModel: AccountsViewModel? = null
     private var bottomSheet: BottomSheetDialog? = null
 
+    private val requestMultiplePermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+            if (it[Manifest.permission.CAMERA] == true && it[Manifest.permission.WRITE_EXTERNAL_STORAGE] == true) {
+                takePictureIntent()
+            } else {
+                if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) ||
+                    shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                ) {
+                    Toast.makeText(context, R.string.permission_denied, Toast.LENGTH_SHORT).show()
+                    requestPermissionRationale(
+                        context,
+                        activity?.parent,
+                        R.string.storage_camera_permission
+                    )
+                }
+            }
+        }
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+            if (it) {
+                startActivity(Intent(context, MapsActivity::class.java))
+            } else {
+                Toast.makeText(context, R.string.permission_denied, Toast.LENGTH_SHORT).show()
+                requestPermissionRationale(context, activity, R.string.location_permission)
+            }
+        }
+
+    private val takePictureIntentLauncher =
+        registerForActivityResult(ActivityResultContracts.TakePicture()) {
+            if (it) saveUserImage(photoUri)
+        }
+
+    private val activityResultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == Activity.RESULT_OK) {
+                saveUserImage(it.data?.data)
+            }
+        }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -91,10 +132,7 @@ class ProfileFragment : Fragment() {
                 )
             }
             if (permission != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(
-                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                    LOCATION_REQUEST_CODE
-                )
+                requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
             } else {
                 startActivity(Intent(context, MapsActivity::class.java))
             }
@@ -210,7 +248,7 @@ class ProfileFragment : Fragment() {
         bottomSheetView.findViewById<ImageButton>(R.id.button_gallery).setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"
-            startActivityForResult(intent, STORAGE_REQUEST_CODE)
+            activityResultLauncher.launch(intent)
             bottomSheet?.hide()
         }
 
@@ -256,11 +294,11 @@ class ProfileFragment : Fragment() {
         if (cameraPermission == PackageManager.PERMISSION_GRANTED && storagePermission == PackageManager.PERMISSION_GRANTED) {
             takePictureIntent()
         } else {
-            requestPermissions(
+            requestMultiplePermissionLauncher.launch(
                 arrayOf(
                     Manifest.permission.CAMERA,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ), STORAGE_REQUEST_CODE
+                )
             )
         }
     }
@@ -284,55 +322,8 @@ class ProfileFragment : Fragment() {
      * Method to open camera intent to take picture
      */
     private fun takePictureIntent() {
-        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         photoUri = createImageFile()
-        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
-        startActivityForResult(takePictureIntent, IMAGE_CAPTURE_CODE)
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        if (requestCode == STORAGE_REQUEST_CODE) {
-            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED)) {
-                takePictureIntent()
-            } else {
-                if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) || shouldShowRequestPermissionRationale(
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                    )
-                ) {
-                    Toast.makeText(context, R.string.permission_denied, Toast.LENGTH_SHORT).show()
-                    requestPermissionRationale(
-                        context,
-                        activity?.parent,
-                        R.string.storage_camera_permission
-                    )
-                }
-            }
-        } else if (requestCode == LOCATION_REQUEST_CODE) {
-            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                startActivity(Intent(context, MapsActivity::class.java))
-            } else {
-                Toast.makeText(context, R.string.permission_denied, Toast.LENGTH_SHORT).show()
-                requestPermissionRationale(context, activity, R.string.location_permission)
-            }
-        } else {
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == STORAGE_REQUEST_CODE) {
-                saveUserImage(data?.data)
-            }
-            if (requestCode == IMAGE_CAPTURE_CODE) {
-                saveUserImage(photoUri)
-            }
-        }
+        takePictureIntentLauncher.launch(photoUri)
     }
 
     override fun onDestroyView() {
@@ -410,10 +401,7 @@ class ProfileFragment : Fragment() {
     }
 
     companion object {
-        private const val STORAGE_REQUEST_CODE = 200
         var firebaseResponseMessage: String? = null
-        private const val IMAGE_CAPTURE_CODE = 100
-        private const val LOCATION_REQUEST_CODE = 300
         private const val PROFILE_CHANNEL_ID = "PROFILE_CHANNEL_ID"
     }
 
