@@ -1,5 +1,6 @@
 package com.example.demoapp.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -61,6 +62,7 @@ class NewsAdapter(
     /**
      * Replace the contents of a view from news ArrayList (invoked by the layout manager)
      */
+    @SuppressLint("NotifyDataSetChanged")
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
         val item = news?.get(position)
         Glide.with(holder.context).load(item?.imageUrl).override(800).into(holder.newsImage)
