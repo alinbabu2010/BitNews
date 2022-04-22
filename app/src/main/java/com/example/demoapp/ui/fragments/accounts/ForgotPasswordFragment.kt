@@ -59,7 +59,7 @@ class ForgotPasswordFragment : Fragment() {
         if (email.matches(EMAIL_PATTERN.toRegex())) {
             viewModel = activity?.let { ViewModelProviders.of(it).get(AccountsViewModel::class.java) }
             viewModel?.resetPassword(email)
-            viewModel?.operationExecuted?.observe(viewLifecycleOwner, {
+            viewModel?.operationExecuted?.observe(viewLifecycleOwner) {
                 if (it) {
                     resetProgressBar.visibility = View.INVISIBLE
                     activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
@@ -70,7 +70,7 @@ class ForgotPasswordFragment : Fragment() {
                     Toast.makeText(context, firebaseError, Toast.LENGTH_SHORT).show()
                 }
 
-            })
+            }
         } else {
             resetProgressBar.visibility = View.INVISIBLE
             activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)

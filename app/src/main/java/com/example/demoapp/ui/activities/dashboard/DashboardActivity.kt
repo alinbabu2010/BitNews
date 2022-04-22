@@ -103,12 +103,13 @@ class DashboardActivity : AppCompatActivity() {
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(
             WORK_NAME,
             ExistingPeriodicWorkPolicy.KEEP,
-            task)
-        WorkManager.getInstance(this).getWorkInfoByIdLiveData(task.id).observe(this,{ info ->
+            task
+        )
+        WorkManager.getInstance(this).getWorkInfoByIdLiveData(task.id).observe(this) { info ->
             if (info != null && info.state.isFinished) {
                 newsViewModel?.getArticles()
             }
-        })
+        }
     }
 
 

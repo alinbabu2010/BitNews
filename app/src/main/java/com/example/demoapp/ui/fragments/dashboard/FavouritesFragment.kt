@@ -45,7 +45,7 @@ class FavouritesFragment : Fragment() {
         val recyclerView: RecyclerView = view.findViewById(R.id.fragment_view)
         loadRecyclerView(recyclerView, newsViewModel)
 
-        newsViewModel?.favouritesLiveData?.observe(viewLifecycleOwner, {
+        newsViewModel?.favouritesLiveData?.observe(viewLifecycleOwner) {
             val articles = newsViewModel?.favouriteArticles
             if (firebaseError != null) Toast.makeText(context, firebaseError, Toast.LENGTH_SHORT)
                 .show()
@@ -55,7 +55,7 @@ class FavouritesFragment : Fragment() {
                 view.findViewById<TextView>(R.id.empty_textView)?.visibility = View.INVISIBLE
             }
             recyclerView.adapter?.notifyDataSetChanged()
-        })
+        }
 
         // Refresh on swipe by calling recycler view
         val refreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.swipeRefresh)

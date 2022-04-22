@@ -59,7 +59,7 @@ class ProfileFragment : Fragment() {
     private var photoUri: Uri? = null
     private var user: Users? = null
     private var accountsViewModel: AccountsViewModel? = null
-    var bottomSheet: BottomSheetDialog? = null
+    private var bottomSheet: BottomSheetDialog? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -70,10 +70,10 @@ class ProfileFragment : Fragment() {
         binding = FragmentProfileBinding.inflate(inflater, container, false)
         accountsViewModel = ViewModelProviders.of(this).get(AccountsViewModel::class.java)
         accountsViewModel?.getUserInfo(FirebaseAuth.getInstance().currentUser?.uid.toString())
-        accountsViewModel?.userData?.observe(viewLifecycleOwner, {
+        accountsViewModel?.userData?.observe(viewLifecycleOwner) {
             setProfileData(it)
             user = it
-        })
+        }
 
         val connectivityManager =
             context?.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager

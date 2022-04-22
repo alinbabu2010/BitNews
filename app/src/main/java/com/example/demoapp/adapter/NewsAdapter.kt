@@ -88,7 +88,7 @@ class NewsAdapter(
         holder.newsLiked.isChecked = newsViewModel?.isFavouriteNews(item) == true
 
         holder.newsLiked.setOnClickListener {
-            if(holder.newsLiked.isChecked == true ) {
+            if (holder.newsLiked.isChecked) {
                 newsViewModel?.addToFavourites(item)
                 notifyDataSetChanged()
             } else {

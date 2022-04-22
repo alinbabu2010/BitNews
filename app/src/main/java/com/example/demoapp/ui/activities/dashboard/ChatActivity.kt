@@ -33,9 +33,9 @@ class ChatActivity : AppCompatActivity() {
         addFragment(ChatUsersFragment(), R.id.chat_layout, supportFragmentManager)
         val accountsViewModel = ViewModelProviders.of(this).get(AccountsViewModel::class.java)
         accountsViewModel.getUserInfo(FirebaseAuth.getInstance().currentUser?.uid.toString())
-        accountsViewModel.userData.observe(this, {
+        accountsViewModel.userData.observe(this) {
             user = it
-        })
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

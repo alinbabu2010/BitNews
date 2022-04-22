@@ -28,8 +28,8 @@ import com.example.demoapp.viewmodels.AccountsViewModel
  */
 class LoginFragment : Fragment() {
 
-    private var viewModel : AccountsViewModel? = null
-    lateinit var binding : FragmentLoginBinding
+    private var viewModel: AccountsViewModel? = null
+    private lateinit var binding: FragmentLoginBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -123,17 +123,17 @@ class LoginFragment : Fragment() {
     private fun loginUser(userName: String, password: String) {
         viewModel = activity?.let { ViewModelProviders.of(it).get(AccountsViewModel::class.java) }
         viewModel?.signInUser(userName, password)
-        viewModel?.operationExecuted?.observe(viewLifecycleOwner,{
-            if(it != null && it == true){
+        viewModel?.operationExecuted?.observe(viewLifecycleOwner) {
+            if (it != null && it == true) {
                 startActivity(Intent(context, DashboardActivity::class.java))
                 activity?.finish()
             }
-            if(it != null && it == false) {
+            if (it != null && it == false) {
                 binding.progressBar.visibility = View.INVISIBLE
                 activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
                 Toast.makeText(context, R.string.wrong_credentials_text, Toast.LENGTH_SHORT).show()
                 viewModel?.operationExecuted?.value = null
             }
-        })
+        }
     }
 }

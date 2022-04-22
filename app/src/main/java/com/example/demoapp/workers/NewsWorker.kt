@@ -4,7 +4,6 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.Worker
@@ -87,7 +86,12 @@ class NewsWorker(val context: Context, workerParams: WorkerParameters) : Worker(
                 clearPendingIntent
             )
         val notificationManagerCompat = NotificationManagerCompat.from(context)
-        notificationBuilder?.let { notificationManagerCompat.notify(Constants.NOTIFICATION_ID, it.build()) }
+        notificationBuilder.let {
+            notificationManagerCompat.notify(
+                Constants.NOTIFICATION_ID,
+                it.build()
+            )
+        }
     }
 
     companion object {

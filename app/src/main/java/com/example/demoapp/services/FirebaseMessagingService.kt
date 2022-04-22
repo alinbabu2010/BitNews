@@ -69,8 +69,8 @@ class FirebaseMessagingService : FirebaseMessagingService() {
         val adminChannelName = getString(R.string.push_notification_channel_id)
         val adminChannelDescription = getString(R.string.push_notification_channel_description)
 
-        val adminChannel: NotificationChannel
-        adminChannel = NotificationChannel(CHANNEL_ID, adminChannelName, NotificationManager.IMPORTANCE_LOW)
+        val adminChannel: NotificationChannel =
+            NotificationChannel(CHANNEL_ID, adminChannelName, NotificationManager.IMPORTANCE_LOW)
         adminChannel.description = adminChannelDescription
         adminChannel.enableLights(true)
         adminChannel.lightColor = Color.RED
