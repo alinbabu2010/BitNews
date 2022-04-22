@@ -54,7 +54,7 @@
             style="@android:style/Widget.DeviceDefault.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/fui_cancel"
+            android:text="@string/places_cancel"
             android:textColor="@color/secondary_dark" />
 
     </LinearLayout>

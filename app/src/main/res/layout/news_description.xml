@@ -82,8 +82,8 @@
             android:layout_weight="1"
             android:background="#03FFFFFF"
             android:contentDescription="@string/article"
-            android:tint="@color/secondary_dark"
-            app:srcCompat="@drawable/ic_speech" />
+            app:srcCompat="@drawable/ic_speech"
+            app:tint="@color/secondary_dark" />
     </LinearLayout>
 
     <TextView

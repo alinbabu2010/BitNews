@@ -48,7 +48,7 @@
             android:contentDescription="@string/fui_button_text_send"
             android:scaleType="center"
             android:src="@drawable/ic_send"
-            android:tint="@color/secondary_dark" />
+            ads:tint="@color/secondary_dark" />
 
     </LinearLayout>
 

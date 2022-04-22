@@ -109,8 +109,8 @@
                 android:layout_height="match_parent"
                 android:background="#00FFFFFF"
                 android:contentDescription="@string/share_button"
-                android:tint="@color/secondary_dark"
-                app:srcCompat="?attr/actionModeShareDrawable" />
+                app:srcCompat="?attr/actionModeShareDrawable"
+                app:tint="@color/secondary_dark" />
 
         </LinearLayout>
 
