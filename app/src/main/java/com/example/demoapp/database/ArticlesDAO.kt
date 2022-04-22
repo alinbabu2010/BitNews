@@ -13,6 +13,6 @@ interface ArticlesDAO {
     suspend fun addArticle(articles: List<Articles>)
 
     @Query("SELECT * FROM `Articles`")
-    fun getAllArticles() : List<Articles>
+    fun getAllArticles(): List<Articles>
 
 }

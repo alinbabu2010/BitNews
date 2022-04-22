@@ -35,12 +35,12 @@ import java.io.File
  */
 class ImageDetailActivity : AppCompatActivity() {
 
-    private var progressBar : ProgressBar? = null
-    private var url =  String()
-    private var directory : File? = null
-    private var downloadId : Long = 0
-    private var fileName =  "news_image"
-    private val storageOptions  = arrayOf("Internal", "External", "Private")
+    private var progressBar: ProgressBar? = null
+    private var url = String()
+    private var directory: File? = null
+    private var downloadId: Long = 0
+    private var fileName = "news_image"
+    private val storageOptions = arrayOf("Internal", "External", "Private")
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         super.onCreateOptionsMenu(menu)
@@ -69,7 +69,7 @@ class ImageDetailActivity : AppCompatActivity() {
             override fun onReceive(context: Context, intent: Intent) {
                 val downloadManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
                 val id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, 0)
-                if (downloadId==id) {
+                if (downloadId == id) {
                     val query = DownloadManager.Query().setFilterById(id)
                     val cursor: Cursor = downloadManager.query(query)
                     cursor.moveToFirst()
@@ -98,8 +98,8 @@ class ImageDetailActivity : AppCompatActivity() {
         builder.setSingleChoiceItems(storageOptions, -1) { _: DialogInterface, index: Int ->
             storageType = storageOptions[index]
         }
-        builder.setPositiveButton(R.string.ok_string){ _: DialogInterface, _: Int ->
-            if(storageType.isNotEmpty()) {
+        builder.setPositiveButton(R.string.ok_string) { _: DialogInterface, _: Int ->
+            if (storageType.isNotEmpty()) {
                 progressBar?.visibility = View.VISIBLE
                 setDirectory(storageType)
             }
@@ -144,8 +144,7 @@ class ImageDetailActivity : AppCompatActivity() {
                 arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
                 PERMISSION_REQUEST_CODE
             )
-        }
-        else downloadImage(url)
+        } else downloadImage(url)
     }
 
     override fun onRequestPermissionsResult(
@@ -158,10 +157,13 @@ class ImageDetailActivity : AppCompatActivity() {
                 downloadImage(url)
             } else {
                 Toast.makeText(baseContext, R.string.permission_denied, Toast.LENGTH_SHORT).show()
-                requestPermissionRationale(applicationContext,this, R.string.storage_camera_permission)
+                requestPermissionRationale(
+                    applicationContext,
+                    this,
+                    R.string.storage_camera_permission
+                )
             }
-        }
-        else {
+        } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         }
     }
@@ -180,13 +182,17 @@ class ImageDetailActivity : AppCompatActivity() {
             setDescription(getString(R.string.download_article_image))
             setMimeType("*/*")
             setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-            setDestinationInExternalFilesDir(applicationContext, directory.toString(),"$fileName.jpg")
+            setDestinationInExternalFilesDir(
+                applicationContext,
+                directory.toString(),
+                "$fileName.jpg"
+            )
         }
         downloadId = downloadManager.enqueue(request)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId){
+        return when (item.itemId) {
             R.id.logout_option -> {
                 val accountsViewModel = ViewModelProvider(this).get(AccountsViewModel::class.java)
                 showAlert(this, this, accountsViewModel)

@@ -61,14 +61,16 @@ class LoginFragment : Fragment() {
         binding.progressBar.visibility = View.INVISIBLE
         binding.loginButton.setOnClickListener {
             binding.progressBar.visibility = View.VISIBLE
-            activity?.window?.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+            activity?.window?.setFlags(
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+            )
             val userName = binding.usernameInput.text.toString()
             val password = binding.passwordInput.text.toString()
             if (userName.isBlank() && password.isBlank()) {
                 Toast.makeText(context, R.string.field_empty_text, Toast.LENGTH_SHORT).show()
             } else {
-                if(Utils.isNetworkConnected(context)) {
+                if (Utils.isNetworkConnected(context)) {
                     binding.progressBar.visibility = View.VISIBLE
                     loginUser(userName, password)
                 } else {
@@ -98,8 +100,7 @@ class LoginFragment : Fragment() {
                         R.id.fragment_container,
                         parentFragmentManager
                     )
-                }
-                else {
+                } else {
                     parentFragmentManager.popBackStack()
                 }
             }

@@ -8,9 +8,10 @@ import kotlinx.parcelize.Parcelize
 /**
  * Data class for users
  */
-@Entity @Parcelize
+@Entity
+@Parcelize
 data class Users(
-    @PrimaryKey var id : String = "",
+    @PrimaryKey var id: String = "",
     var username: String? = null,
     var name: String? = null,
     val email: String? = null,

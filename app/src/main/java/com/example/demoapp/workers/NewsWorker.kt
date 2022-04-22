@@ -23,7 +23,8 @@ import kotlinx.coroutines.launch
 /**
  * Worker class for updating news data
  */
-class NewsWorker(val context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
+class NewsWorker(val context: Context, workerParams: WorkerParameters) :
+    Worker(context, workerParams) {
 
     private val articlesDAO = ArticlesDatabase.getDatabase(applicationContext).articlesDAO()
     private val repository = ArticleRepository(articlesDAO)
@@ -31,8 +32,8 @@ class NewsWorker(val context: Context, workerParams: WorkerParameters) : Worker(
     override fun doWork(): Result {
         val articles = ArrayList<Articles>()
         try {
-            repository.getArticles(1){ resource ->
-                if(resource.status == Resource.Status.SUCCESS ) {
+            repository.getArticles(1) { resource ->
+                if (resource.status == Resource.Status.SUCCESS) {
                     resource.data?.articles?.let { articles.addAll(it) }
                     CoroutineScope(Dispatchers.IO).launch {
                         repository.addArticles(articles)
@@ -43,7 +44,7 @@ class NewsWorker(val context: Context, workerParams: WorkerParameters) : Worker(
         } catch (e: Exception) {
             return Result.retry()
         }
-       return Result.success()
+        return Result.success()
     }
 
     /**

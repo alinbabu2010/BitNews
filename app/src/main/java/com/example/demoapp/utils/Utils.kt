@@ -183,9 +183,13 @@ class Utils {
         fun loadPhoto(imageUrl: String, messageImageView: ImageView, activity: Activity?) {
             val intent = Intent(activity, FullscreenImageActivity::class.java)
             val transitionName = activity?.getString(R.string.image_message)
-            val options = ActivityOptions.makeSceneTransitionAnimation(activity, messageImageView,transitionName)
-            intent.putExtra("image",imageUrl)
-            activity?.let { ContextCompat.startActivity(it, intent,options.toBundle()) }
+            val options = ActivityOptions.makeSceneTransitionAnimation(
+                activity,
+                messageImageView,
+                transitionName
+            )
+            intent.putExtra("image", imageUrl)
+            activity?.let { ContextCompat.startActivity(it, intent, options.toBundle()) }
         }
     }
 }

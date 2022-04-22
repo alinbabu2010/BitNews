@@ -58,7 +58,7 @@ class ArticleActivity : AppCompatActivity() {
         val newsContent: TextView = findViewById(R.id.news_content)
         val toolbar: Toolbar? = findViewById(R.id.toolbar)
         val openNews: Button = findViewById(R.id.open_button)
-        val textToSpeechButton : ImageButton = findViewById(R.id.ttsButton)
+        val textToSpeechButton: ImageButton = findViewById(R.id.ttsButton)
 
         Glide.with(applicationContext).load(article?.imageUrl).override(800).into(newsImage)
         newsDesc.text = article?.description.toString()
@@ -103,7 +103,7 @@ class ArticleActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId){
+        return when (item.itemId) {
             R.id.logout_option -> {
                 val accountsViewModel = ViewModelProvider(this).get(AccountsViewModel::class.java)
                 showAlert(this, this, accountsViewModel)

@@ -25,7 +25,7 @@ class ChatUsersAdapter(options: FirebaseRecyclerOptions<Users>, val activity: Fr
     class ChatUserViewModel(view: View) : RecyclerView.ViewHolder(view) {
         val userImageView: CircularImageView = itemView.findViewById(R.id.user_imageView)
         val userNameView: TextView = itemView.findViewById(R.id.user_nameView)
-        val userLayout : LinearLayout = itemView.findViewById(R.id.user_layout)
+        val userLayout: LinearLayout = itemView.findViewById(R.id.user_layout)
     }
 
 
@@ -44,14 +44,14 @@ class ChatUsersAdapter(options: FirebaseRecyclerOptions<Users>, val activity: Fr
     }
 
     override fun onBindViewHolder(holder: ChatUserViewModel, position: Int, user: Users) {
-        if(user.id != FirebaseAuth.getInstance().currentUser?.uid) {
+        if (user.id != FirebaseAuth.getInstance().currentUser?.uid) {
             holder.itemView.visibility = View.VISIBLE
             holder.itemView.layoutParams =
                 RecyclerView.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
                 )
-            if(user.userImageUrl == "NONE" || user.userImageUrl.isNullOrEmpty()) {
+            if (user.userImageUrl == "NONE" || user.userImageUrl.isNullOrEmpty()) {
                 holder.userImageView.setImageResource(R.drawable.ic_avatar_anonymous)
             } else {
                 activity?.let { Glide.with(it).load(user.userImageUrl).into(holder.userImageView) }
@@ -62,7 +62,7 @@ class ChatUsersAdapter(options: FirebaseRecyclerOptions<Users>, val activity: Fr
             holder.userNameView.text = user.name
             holder.userLayout.setOnClickListener {
                 val bundle = Bundle()
-                bundle.putParcelable("receiver",user)
+                bundle.putParcelable("receiver", user)
                 val fragment = ChatFragment()
                 fragment.arguments = bundle
                 activity?.supportFragmentManager?.let { manager ->

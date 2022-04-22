@@ -24,7 +24,7 @@ class FullscreenImageActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         val imageUrl = intent.getStringExtra("image")
-        val messageImageView : ImageView = findViewById(R.id.full_imageView)
+        val messageImageView: ImageView = findViewById(R.id.full_imageView)
         Glide.with(this).load(imageUrl).into(messageImageView)
     }
 

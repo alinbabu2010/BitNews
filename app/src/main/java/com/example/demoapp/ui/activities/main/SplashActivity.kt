@@ -19,7 +19,7 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-        with(FirebaseDatabase.getInstance()){
+        with(FirebaseDatabase.getInstance()) {
             setPersistenceEnabled(true)
             getReference(FAVOURITES).keepSynced(true)
         }

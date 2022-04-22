@@ -15,7 +15,7 @@ class Constants {
         const val EMAIL_PATTERN = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"
         const val USERS = "Users"
         const val DATE_FORMAT_ENCODE = "yyyy-MM-dd'T'HH:mm:ss'Z'"
-        const val DATE_FORMAT_DECODE ="MMM dd, y hh:mm a"
+        const val DATE_FORMAT_DECODE = "MMM dd, y hh:mm a"
         const val NOT_FOUND = "Item not found"
         const val SERVER_ERROR = "Sorry, Server error occurred"
         const val NETWORK_FAILURE = "Network failure"

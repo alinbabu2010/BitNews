@@ -93,9 +93,10 @@ object ProfileFirebase {
      * Method to remove user image from firebase
      * @param isSuccess A callback to calling function to know operation has succeeded or not
      */
-    fun removeUserImage(isSuccess : (Boolean) -> Unit) {
+    fun removeUserImage(isSuccess: (Boolean) -> Unit) {
         val getCurrentUser = FirebaseAuth.getInstance().currentUser?.uid
-        val storageRef = mStorageRef.child(getCurrentUser.toString()).child("images/$getCurrentUser.jpg")
+        val storageRef =
+            mStorageRef.child(getCurrentUser.toString()).child("images/$getCurrentUser.jpg")
         storageRef.delete().addOnCompleteListener {
             isSuccess(it.isSuccessful)
         }

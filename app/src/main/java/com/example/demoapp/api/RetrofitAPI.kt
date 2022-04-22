@@ -14,10 +14,10 @@ interface RetrofitAPI {
     @GET("everything")
     fun getNews(
         @Header("Authorization") key: String,
-        @Query("q") topic : String,
-        @Query("sortBy") sortBy : String,
-        @Query("page") page : Int,
-        @Query("pageSize") size : Int
+        @Query("q") topic: String,
+        @Query("sortBy") sortBy: String,
+        @Query("page") page: Int,
+        @Query("pageSize") size: Int
     ): Call<News>
 
 }
