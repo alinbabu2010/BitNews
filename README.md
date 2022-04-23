@@ -1,3 +1,3 @@
-# Demo App
+# BitNews App
 
-A demo android app build during the android training phases.
+An android application for reading bitcopin releated news from newsapi.org
