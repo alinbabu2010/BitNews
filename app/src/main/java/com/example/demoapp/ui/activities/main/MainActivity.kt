@@ -2,6 +2,7 @@ package com.example.demoapp.ui.activities.main
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.demoapp.R
 import com.example.demoapp.ui.fragments.accounts.RegisterFragment
 import com.example.demoapp.utils.Utils.Companion.addFragment
@@ -12,6 +13,7 @@ import com.example.demoapp.utils.Utils.Companion.addFragment
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        installSplashScreen()
         setContentView(R.layout.activity_main)
 
         // Adding login fragment to activity layout
