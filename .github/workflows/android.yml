@@ -44,6 +44,5 @@ jobs:
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:
-       name: assets
-       path: |
-         ${{ github.workspace }}/app/build/outputs/bundle/release
+        name: app
+        path: app/build/outputs/apk/release/bitnews-production_v1.apk
