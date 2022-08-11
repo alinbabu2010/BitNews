@@ -32,17 +32,16 @@ jobs:
        fileName: "android_keystore.keystore"
        encodedString: ${{ secrets.KEYSTORE_FILE }}
  
-    - name: Build & deploy Android release
-      run: bash ./gradlew assembleRelease --stacktrace
+    - name: Genrate release build 
+      run: ./gradlew assembleRelease --stacktrace
       env:
        KEYSTORE_FILE: ${{ steps.android_keystore.outputs.filePath }}
        STORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
        KEY_ALIAS: ${{ secrets.KEY_ALIAS}}
        KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-       ANDROID_JSON_KEY_FILE: ${{ steps.service_account_json_file.outputs.filePath }}
  
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:
         name: app
-        path: app/build/outputs/apk/release/bitnews-production_v1.apk
+        path: app/build/outputs/apk/production/release
