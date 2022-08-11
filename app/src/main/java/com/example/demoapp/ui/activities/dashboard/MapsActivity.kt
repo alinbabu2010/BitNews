@@ -133,7 +133,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             } catch (e: IOException) {
                 e.printStackTrace()
             }
-            if (addressList?.isNullOrEmpty() == true) {
+            if (addressList.isNullOrEmpty()) {
                 Toast.makeText(this, "Couldn't find the place", Toast.LENGTH_SHORT).show()
             } else {
                 val address = addressList[0]
