@@ -1,3 +1,3 @@
 # BitNews App
 
-An android application for reading bitcopin releated news from newsapi.org
+An android application for reading bitcoin related news from newsapi.org
