@@ -96,6 +96,7 @@
             android:launchMode="singleTop"
             android:parentActivityName=".ui.activities.dashboard.DashboardActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/Theme.DemoApp"
             tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
