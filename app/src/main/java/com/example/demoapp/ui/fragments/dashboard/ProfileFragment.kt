@@ -12,7 +12,6 @@ import android.graphics.Color
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
@@ -23,7 +22,6 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
@@ -242,20 +240,20 @@ class ProfileFragment : Fragment() {
 
         bottomSheetView.findViewById<ImageButton>(R.id.button_camera).setOnClickListener {
             checkAppPermissions()
-            bottomSheet?.hide()
+            bottomSheet?.dismiss()
         }
 
         bottomSheetView.findViewById<ImageButton>(R.id.button_gallery).setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"
             activityResultLauncher.launch(intent)
-            bottomSheet?.hide()
+            bottomSheet?.dismiss()
         }
 
         bottomSheetView.findViewById<ImageButton>(R.id.button_photo_remove).setOnClickListener {
             binding.userImage.setImageResource(R.drawable.ic_avatar_anonymous)
             callRemoveUserImage()
-            bottomSheet?.hide()
+            bottomSheet?.dismiss()
         }
     }
 
@@ -381,7 +379,6 @@ class ProfileFragment : Fragment() {
     /**
      * Method to create notification channel
      */
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun createChannel() {
         val channelName = activity?.getString(R.string.profile_channel_name)
         val channel = NotificationChannel(
