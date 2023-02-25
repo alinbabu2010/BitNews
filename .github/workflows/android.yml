@@ -45,3 +45,19 @@ jobs:
       with:
         name: app
         path: app/build/outputs/apk/production/release
+
+  upload-build:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: app
+      - name: Upload artifact to Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{secrets.FIREBASE_APP_ID_ANDROID}}
+          serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
+          groups: bitnews-test
+          file: app/build/outputs/apk/production/release
