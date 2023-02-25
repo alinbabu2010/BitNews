@@ -60,4 +60,4 @@ jobs:
           appId: ${{secrets.FIREBASE_APP_ID_ANDROID}}
           serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
           groups: bitnews-test
-          file: app/build/outputs/apk/production/release
+          file: bitNews-production-release_1.0.apk
