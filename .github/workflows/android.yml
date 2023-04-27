@@ -35,10 +35,10 @@ jobs:
     - name: Genrate release build 
       run: ./gradlew assembleRelease
         -Pandroid.injected.signing.store.file=${{ steps.android_keystore.outputs.filePath }}
-        -Pandroid.injected.signing.store.password=$KEYSTORE_PASSWORD
-        -Pandroid.injected.signing.key.alias=$KEY_ALIAS
-        -Pandroid.injected.signing.key.password=$KEY_PASSWORD
- 
+        -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }}
+        -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS}}
+        -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
+        
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:
