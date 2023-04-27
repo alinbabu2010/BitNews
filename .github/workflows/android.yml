@@ -32,8 +32,8 @@ jobs:
        fileName: "android_keystore.keystore"
        encodedString: ${{ secrets.KEYSTORE_FILE }}
  
-    - name: Genrate release build 
-      run: ./gradlew assembleRelease
+    - name: Generate release build
+      run: ./gradlew assembleproductionRelease
         -Pandroid.injected.signing.store.file=${{ steps.android_keystore.outputs.filePath }}
         -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }}
         -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS}}
