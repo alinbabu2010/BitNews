@@ -51,8 +51,6 @@ jobs:
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v3
-        with:
-          name: app
       - name: Upload artifact to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
